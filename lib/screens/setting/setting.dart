@@ -25,13 +25,11 @@ class _StateSetting extends State<Setting> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     setName();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 800),
-      vsync: this,
-    );
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
-    );
+    _animationController = AnimationController(duration: const Duration(milliseconds: 800), vsync: this);
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _animationController, curve: Curves.easeInOut));
     _animationController.forward();
   }
 
@@ -49,11 +47,7 @@ class _StateSetting extends State<Setting> with TickerProviderStateMixin {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              primaryColor,
-              primaryColor.withOpacity(0.8),
-              Colors.grey.shade50,
-            ],
+            colors: [primaryColor, primaryColor.withOpacity(0.8), Colors.grey.shade50],
           ),
         ),
         child: SafeArea(
@@ -86,22 +80,10 @@ class _StateSetting extends State<Setting> with TickerProviderStateMixin {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Colors.white.withOpacity(0.2),
-            Colors.white.withOpacity(0.1),
-          ],
+          colors: [Colors.white.withOpacity(0.2), Colors.white.withOpacity(0.1)],
         ),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.3),
-          width: 1,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
+        border: Border.all(color: Colors.white.withOpacity(0.3), width: 1),
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 20, offset: const Offset(0, 10))],
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(24),
@@ -122,26 +104,13 @@ class _StateSetting extends State<Setting> with TickerProviderStateMixin {
                       gradient: LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
-                        colors: [
-                          Colors.white.withOpacity(0.9),
-                          Colors.white.withOpacity(0.7),
-                        ],
+                        colors: [Colors.white.withOpacity(0.9), Colors.white.withOpacity(0.7)],
                       ),
                       boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 15,
-                          offset: const Offset(0, 5),
-                        ),
+                        BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 15, offset: const Offset(0, 5)),
                       ],
                     ),
-                    child: Center(
-                      child: Icon(
-                        Icons.person,
-                        size: 35,
-                        color: primaryColor,
-                      ),
-                    ),
+                    child: Center(child: Icon(Icons.person, size: 35, color: primaryColor)),
                   ),
                 ),
                 const SizedBox(width: 20),
@@ -164,10 +133,7 @@ class _StateSetting extends State<Setting> with TickerProviderStateMixin {
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: Colors.white.withOpacity(0.3),
-                            width: 1,
-                          ),
+                          border: Border.all(color: Colors.white.withOpacity(0.3), width: 1),
                         ),
                         child: Text(
                           userTokenID,
@@ -181,11 +147,7 @@ class _StateSetting extends State<Setting> with TickerProviderStateMixin {
                     ],
                   ),
                 ),
-                Icon(
-                  Icons.edit_rounded,
-                  color: Colors.white.withOpacity(0.8),
-                  size: 20,
-                ),
+                Icon(Icons.edit_rounded, color: Colors.white.withOpacity(0.8), size: 20),
               ],
             ),
           ),
@@ -274,12 +236,7 @@ class _StateSetting extends State<Setting> with TickerProviderStateMixin {
         borderRadius: BorderRadius.circular(20),
         color: Colors.white,
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-            spreadRadius: 0,
-          ),
+          BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 20, offset: const Offset(0, 8), spreadRadius: 0),
         ],
       ),
       child: Material(
@@ -294,10 +251,7 @@ class _StateSetting extends State<Setting> with TickerProviderStateMixin {
               gradient: LinearGradient(
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
-                colors: [
-                  Colors.white,
-                  item.gradient[0].withOpacity(0.05),
-                ],
+                colors: [Colors.white, item.gradient[0].withOpacity(0.05)],
               ),
             ),
             child: Row(
@@ -313,18 +267,10 @@ class _StateSetting extends State<Setting> with TickerProviderStateMixin {
                     ),
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
-                      BoxShadow(
-                        color: item.gradient[1].withOpacity(0.3),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
-                      ),
+                      BoxShadow(color: item.gradient[1].withOpacity(0.3), blurRadius: 12, offset: const Offset(0, 4)),
                     ],
                   ),
-                  child: Icon(
-                    item.icon,
-                    color: Colors.white,
-                    size: 28,
-                  ),
+                  child: Icon(item.icon, color: Colors.white, size: 28),
                 ),
                 const SizedBox(width: 20),
                 Expanded(
@@ -343,11 +289,7 @@ class _StateSetting extends State<Setting> with TickerProviderStateMixin {
                       const SizedBox(height: 4),
                       Text(
                         item.subtitle,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey.shade600,
-                          fontWeight: FontWeight.w400,
-                        ),
+                        style: TextStyle(fontSize: 14, color: Colors.grey.shade600, fontWeight: FontWeight.w400),
                       ),
                     ],
                   ),
@@ -355,15 +297,8 @@ class _StateSetting extends State<Setting> with TickerProviderStateMixin {
                 Container(
                   width: 36,
                   height: 36,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    size: 16,
-                    color: Colors.grey.shade600,
-                  ),
+                  decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: BorderRadius.circular(12)),
+                  child: Icon(Icons.arrow_forward_ios_rounded, size: 16, color: Colors.grey.shade600),
                 ),
               ],
             ),
@@ -377,7 +312,8 @@ class _StateSetting extends State<Setting> with TickerProviderStateMixin {
     var shareLink1 =
         'With Roobai application you can get best offers & deals from top online shopping sites. https://apps.apple.com/in/app/roobai-instant-loot-deals/id1329408096';
 
-    var shareLink = 'With Roobai application you can get best offers & deals from top online shopping sites. https://play.google.com/store/apps/details?id=com.roobai';
+    var shareLink =
+        'With Roobai application you can get best offers & deals from top online shopping sites. https://play.google.com/store/apps/details?id=com.roobai';
 
     // if (Platform.isAndroid) {
     //   FlutterShare.share(title: 'Roobai App', linkUrl: shareLink.toString(), chooserTitle: "Roobai");
@@ -387,12 +323,7 @@ class _StateSetting extends State<Setting> with TickerProviderStateMixin {
   }
 
   void launchEmailSubmission() async {
-    final Email email = Email(
-      body: '',
-      subject: 'Roobai feedback ',
-      recipients: ['admin@roobai.com'],
-      isHTML: false,
-    );
+    final Email email = Email(body: '', subject: 'Roobai feedback ', recipients: ['admin@roobai.com'], isHTML: false);
 
     await FlutterEmailSender.send(email);
     String platformResponse;
@@ -416,13 +347,7 @@ class _StateSetting extends State<Setting> with TickerProviderStateMixin {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24),
               color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  blurRadius: 30,
-                  offset: const Offset(0, 15),
-                ),
-              ],
+              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 30, offset: const Offset(0, 15))],
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(24),
@@ -437,34 +362,21 @@ class _StateSetting extends State<Setting> with TickerProviderStateMixin {
                           width: 40,
                           height: 40,
                           decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [primaryColor, primaryColor.withOpacity(0.8)],
-                            ),
+                            gradient: LinearGradient(colors: [primaryColor, primaryColor.withOpacity(0.8)]),
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: const Icon(
-                            Icons.edit_rounded,
-                            color: Colors.white,
-                            size: 20,
-                          ),
+                          child: const Icon(Icons.edit_rounded, color: Colors.white, size: 20),
                         ),
                         const SizedBox(width: 16),
                         const Expanded(
                           child: Text(
                             'Update Your Name',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                            ),
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
                           ),
                         ),
                         IconButton(
                           onPressed: () => Navigator.pop(context),
-                          icon: Icon(
-                            Icons.close_rounded,
-                            color: Colors.grey.shade400,
-                          ),
+                          icon: Icon(Icons.close_rounded, color: Colors.grey.shade400),
                         ),
                       ],
                     ),
@@ -473,30 +385,18 @@ class _StateSetting extends State<Setting> with TickerProviderStateMixin {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16),
                         color: Colors.grey.shade50,
-                        border: Border.all(
-                          color: Colors.grey.shade200,
-                          width: 1,
-                        ),
+                        border: Border.all(color: Colors.grey.shade200, width: 1),
                       ),
                       child: TextField(
                         controller: nameControler,
                         onChanged: (value) => name = value,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                         decoration: InputDecoration(
                           hintText: 'Enter your name',
-                          hintStyle: TextStyle(
-                            color: Colors.grey.shade500,
-                            fontSize: 16,
-                          ),
+                          hintStyle: TextStyle(color: Colors.grey.shade500, fontSize: 16),
                           border: InputBorder.none,
                           contentPadding: const EdgeInsets.all(20),
-                          prefixIcon: Icon(
-                            Icons.person_outline_rounded,
-                            color: Colors.grey.shade500,
-                          ),
+                          prefixIcon: Icon(Icons.person_outline_rounded, color: Colors.grey.shade500),
                         ),
                       ),
                     ),
@@ -508,17 +408,11 @@ class _StateSetting extends State<Setting> with TickerProviderStateMixin {
                             onPressed: () => Navigator.pop(context),
                             style: TextButton.styleFrom(
                               padding: const EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                             ),
                             child: Text(
                               'Cancel',
-                              style: TextStyle(
-                                color: Colors.grey.shade600,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
+                              style: TextStyle(color: Colors.grey.shade600, fontSize: 16, fontWeight: FontWeight.w600),
                             ),
                           ),
                         ),
@@ -532,9 +426,7 @@ class _StateSetting extends State<Setting> with TickerProviderStateMixin {
                                     content: const Text('Please enter your name'),
                                     backgroundColor: Colors.red.shade400,
                                     behavior: SnackBarBehavior.floating,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                   ),
                                 );
                               } else {
@@ -552,9 +444,7 @@ class _StateSetting extends State<Setting> with TickerProviderStateMixin {
                                     content: const Text('Name updated successfully!'),
                                     backgroundColor: Colors.green.shade400,
                                     behavior: SnackBarBehavior.floating,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                   ),
                                 );
                               }
@@ -563,18 +453,10 @@ class _StateSetting extends State<Setting> with TickerProviderStateMixin {
                               backgroundColor: primaryColor,
                               foregroundColor: Colors.white,
                               padding: const EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                               elevation: 0,
                             ),
-                            child: const Text(
-                              'Save',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+                            child: const Text('Save', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                           ),
                         ),
                       ],
@@ -596,13 +478,9 @@ class _StateSetting extends State<Setting> with TickerProviderStateMixin {
   String name = '';
   String comments = '';
 
-  IOSOptions _getIOSOptions() => const IOSOptions(
-        accountName: 'roobai',
-      );
+  IOSOptions _getIOSOptions() => const IOSOptions(accountName: 'roobai');
 
-  AndroidOptions _getAndroidOptions() => const AndroidOptions(
-        encryptedSharedPreferences: true,
-      );
+  AndroidOptions _getAndroidOptions() => const AndroidOptions(encryptedSharedPreferences: true);
 
   String userTokenID = "roobai.com";
 
@@ -619,10 +497,7 @@ class _StateSetting extends State<Setting> with TickerProviderStateMixin {
 
   void _launchURL(BuildContext context, String url) async {
     try {
-      if (!await launchUrl(
-        Uri.parse(url),
-        mode: LaunchMode.externalApplication,
-      )) {
+      if (!await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication)) {
         throw 'Could not launch $url';
       }
     } catch (e) {

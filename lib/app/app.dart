@@ -1,9 +1,7 @@
-
 import 'package:flutter/material.dart';
-
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:roobai/app/route.dart';
-
+import 'package:roobai/core/theme/theme.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -22,6 +20,7 @@ class App extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       routerConfig: Routes().router,
+      theme: theme(),
     );
   }
 }

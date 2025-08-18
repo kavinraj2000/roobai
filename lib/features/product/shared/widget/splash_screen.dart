@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:roobai/screens/mainscreen/homepage/home.dart';
-
+import 'package:go_router/go_router.dart';
+import 'package:roobai/app/route_names.dart';
+import 'package:roobai/core/theme/constants.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -11,23 +12,27 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<double> _opacityAnim;
+  late Animation<double> _fadeAnim;
+  late Animation<Offset> _slideAnim;
 
   @override
   void initState() {
     super.initState();
 
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 2),
-    );
-    _opacityAnim = Tween(begin: 0.0, end: 1.0).animate(_controller);
+    _controller = AnimationController(vsync: this, duration: const Duration(seconds: 2));
+    _fadeAnim = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
+    _slideAnim = Tween<Offset>(
+      begin: const Offset(0, 0.3),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+
     _controller.forward();
 
-    Future.delayed(const Duration(seconds: 3), () {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const HomePage()),
-      );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(const Duration(seconds: 2), () {
+        if (!mounted) return;
+        context.goNamed(RouteName.mainScreen);
+      });
     });
   }
 
@@ -40,47 +45,31 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.purple,
+      backgroundColor: primaryColor,
       body: Center(
         child: FadeTransition(
-          opacity: _opacityAnim,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(
-                'assets/icons/logo.png',
-                width: 120,
-                height: 120,
-                fit: BoxFit.contain,
-              ),
-              const SizedBox(height: 24),
-              const Text(
-                '',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 2,
+          opacity: _fadeAnim,
+          child: SlideTransition(
+            position: _slideAnim,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 24),
+                Image.asset('assets/icons/logo.png', width: 120, height: 120),
+                Text(
+                  'Roobai',
+                  style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold, letterSpacing: 2),
                 ),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'Your ultimate shopping app',
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 16,
-                  fontStyle: FontStyle.italic,
+                SizedBox(height: 8),
+                Text(
+                  'Your ultimate shopping app',
+                  style: TextStyle(color: Colors.white70, fontSize: 16, fontStyle: FontStyle.italic),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 }
-
-
-
-// Main entry point
-

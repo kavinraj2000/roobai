@@ -1,12 +1,5 @@
-
-
-
-
 import 'package:flutter/material.dart';
 import 'package:roobai/app/app.dart';
-
-
-
 
 // Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 //   await Firebase.initializeApp();
@@ -23,13 +16,8 @@ void main() async {
     //   create: (_) => AuthRepository(),
     //   child: BlocProvider(
     //     create: (context) => LoginBloc(context.read<AuthRepository>())..add(LoginCheckStatus()),
-      App(),
-      );
-    // ),
+    App(),
+  );
+  // ),
   // );
 }
-
-
-
-
-

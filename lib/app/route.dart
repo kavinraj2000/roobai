@@ -4,22 +4,17 @@ import 'package:logger/logger.dart';
 import 'package:roobai/app/route_names.dart';
 import 'package:roobai/features/product/shared/widget/splash_screen.dart';
 import 'package:roobai/screens/category/view/category.dart';
-import 'package:roobai/screens/deal_finder/body.dart';
-import 'package:roobai/screens/deal_finder/dealfinder/view/dealdinderview.dart';
 import 'package:roobai/screens/deal_finder/dealfinder/view/delfinder.dart';
 import 'package:roobai/screens/joinus/view/mobile/joinus_mobile_view.dart';
 import 'package:roobai/screens/mainscreen/homepage/home.dart';
 import 'package:roobai/screens/search/view/search_view.dart';
 import 'package:roobai/screens/setting/setting.dart';
 
-
-
-
 class Routes {
   final log = Logger();
 
   GoRouter router = GoRouter(
-    initialLocation: RouteName.mainScreen,
+    initialLocation: RouteName.splashScreen,
     routes: [
       GoRoute(
         name: RouteName.splashScreen,
@@ -28,14 +23,14 @@ class Routes {
           return SplashScreen();
         },
       ),
-       GoRoute(
+      GoRoute(
         name: RouteName.mainScreen,
         path: RouteName.mainScreen,
         builder: (BuildContext context, GoRouterState state) {
           return HomePage();
         },
       ),
-        GoRoute(
+      GoRoute(
         name: RouteName.joinUs,
         path: RouteName.joinUs,
         builder: (BuildContext context, GoRouterState state) {
@@ -49,29 +44,27 @@ class Routes {
           return Category();
         },
       ),
-         GoRoute(
+      GoRoute(
         name: RouteName.search,
         path: RouteName.search,
         builder: (BuildContext context, GoRouterState state) {
           return SearchView();
         },
       ),
-          GoRoute(
+      GoRoute(
         name: RouteName.dealfinder,
         path: RouteName.dealfinder,
         builder: (BuildContext context, GoRouterState state) {
           return Dealfinder();
         },
       ),
-       GoRoute(
+      GoRoute(
         name: RouteName.setting,
         path: RouteName.setting,
         builder: (BuildContext context, GoRouterState state) {
           return Setting();
         },
       ),
-    
-    
     ],
     redirect: (BuildContext context, GoRouterState state) {
       return null;
