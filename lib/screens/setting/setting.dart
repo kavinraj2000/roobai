@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_share/flutter_share.dart';
+// import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:roobai/core/theme/constants.dart';
 import 'package:roobai/screens/joinus/view/mobile/joinus_mobile_view.dart';
@@ -379,11 +379,11 @@ class _StateSetting extends State<Setting> with TickerProviderStateMixin {
 
     var shareLink = 'With Roobai application you can get best offers & deals from top online shopping sites. https://play.google.com/store/apps/details?id=com.roobai';
 
-    if (Platform.isAndroid) {
-      FlutterShare.share(title: 'Roobai App', linkUrl: shareLink.toString(), chooserTitle: "Roobai");
-    } else if (Platform.isIOS) {
-      FlutterShare.share(title: 'Roobai App', linkUrl: shareLink1.toString(), chooserTitle: "Roobai");
-    }
+    // if (Platform.isAndroid) {
+    //   FlutterShare.share(title: 'Roobai App', linkUrl: shareLink.toString(), chooserTitle: "Roobai");
+    // } else if (Platform.isIOS) {
+    //   FlutterShare.share(title: 'Roobai App', linkUrl: shareLink1.toString(), chooserTitle: "Roobai");
+    // }
   }
 
   void launchEmailSubmission() async {

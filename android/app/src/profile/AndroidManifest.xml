@@ -3,17 +3,5 @@
          the Flutter tool needs it to communicate with the running application
          to allow setting breakpoints, to provide hot reload, etc.
     -->
-    <activity
-    android:name=".MainActivity"
-    android:launchMode="singleTop"
-    android:theme="@style/LaunchTheme"
-    android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-    android:hardwareAccelerated="true"
-    android:windowSoftInputMode="adjustResize">
-    <meta-data
-        android:name="flutterEmbedding"
-        android:value="2" />
-</activity>
-
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

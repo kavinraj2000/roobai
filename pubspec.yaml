@@ -41,7 +41,7 @@ dependencies:
   pin_code_fields: ^8.0.1
   http: ^1.5.0
   firebase_messaging: ^16.0.0
-  flutter_local_notifications: ^19.4.0
+  # flutter_local_notifications: ^18.0.1
   flutter_secure_storage: ^9.2.4
   url_launcher: ^6.3.2
   flutter_email_sender: ^7.0.0
@@ -61,8 +61,8 @@ dependencies:
   upgrader: ^11.4.0
   dropdown_button2: ^2.3.9
   snippet_coder_utils: ^1.0.15
-  firebase_messaging_web: ^4.0.0
-  flutter_share: ^2.0.0
+  firebase_messaging_web: ^4.0.0 
+  # flutter_share: ^2.0.0
   bloc: ^9.0.0
   flutter_bloc: ^9.1.1
   responsive_framework: ^1.5.1
@@ -75,6 +75,7 @@ dependencies:
   flutter_svg: ^2.2.0
   simple_icons: ^14.6.1
   google_nav_bar: ^5.0.7
+  flutter_launcher_icons: ^0.14.4
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -126,3 +127,20 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/logo.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/icons/logo.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  # windows:
+  #   generate: true
+  #   image_path: "assets/icon/logo.png"
+  #   icon_size: 48 # min:48, max:256, default: 48
+  # macos:
+  #   generate: true
+  #   image_path: "assets/icon/logo.png
