@@ -6,6 +6,8 @@ import 'package:roobai/features/product/shared/widget/navbarwidget.dart';
 import 'package:roobai/features/product/shared/widget/searchbar.dart';
 import 'package:roobai/screens/mainscreen/products/product_grid.dart';
 
+import '../../../core/theme/constants.dart';
+
 
 
 class HomePage extends StatefulWidget {
@@ -75,7 +77,7 @@ class _HomePageState extends State<HomePage> {
       appBar: const Appbarwidget(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        backgroundColor: Colors.purple,
+        backgroundColor: primaryColor,
         elevation: 6,
         shape: const CircleBorder(),
         child: const Icon(Icons.shopping_cart_outlined, size: 30, color: Colors.white),

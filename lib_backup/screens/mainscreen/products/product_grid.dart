@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:roobai/core/theme/constants.dart';
 
 class ProductGrid extends StatelessWidget {
   const ProductGrid({super.key});
@@ -67,8 +68,9 @@ class ProductGrid extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   child: Text(
                     'Product Name',
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold,color: textColor),
                     overflow: TextOverflow.ellipsis,
+                    
                   ),
                 ),
 
@@ -78,7 +80,7 @@ class ProductGrid extends StatelessWidget {
                   child: Text(
                     '\$99.99',
                     style: TextStyle(
-                      color: Colors.green,
+                      color: textGreen,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -89,7 +91,7 @@ class ProductGrid extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                   child: Text(
                     'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                    style: TextStyle(fontSize: 12, color: Colors.black54),
+                    style: TextStyle(fontSize: 12, color: menuText),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -97,7 +99,6 @@ class ProductGrid extends StatelessWidget {
 
                 const Spacer(),
 
-                // Footer buttons
                 ClipPath(
                   clipper: WaveClipper(),
                   child: Container(
@@ -112,7 +113,7 @@ class ProductGrid extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           _iconButton(Icons.favorite_border, Colors.white),
                           _iconButton(Icons.shopping_bag, Colors.white),

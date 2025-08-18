@@ -23,38 +23,61 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     // Simulated data - replace with API call later
-    homeModel = HomeModel(
-      title: "Home",
-      type: "homepage",
-      data: [
-        Data(
-          bannerId: "1",
-          bannerName: "Summer Sale",
-          image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff",
-          category: "Laptops",
-          cat_slug: "laptops",
-          category_image: "https://cdn-icons-png.flaticon.com/512/201/201623.png",
-        ),
-        Data(
-          bannerId: "2",
-          bannerName: "Mobiles",
-          image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff",
-          category: "Mobiles",
-          cat_slug: "mobiles",
-          category_image: "https://cdn-icons-png.flaticon.com/512/597/597177.png",
-        ),
-        Data(
-          bannerId: "3",
-          bannerName: "Audio",
-          image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff",
-          category: "Audio",
-          cat_slug: "audio",
-          category_image: "https://cdn-icons-png.flaticon.com/512/727/727245.png",
-        ),
-      ],
-    );
-  }
-
+  homeModel = HomeModel(
+    title: "Home",
+    type: "homepage",
+    data: [
+      Data(
+        bannerId: "1",
+        bannerName: "Summer Sale",
+        image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff",
+        category: "Laptops",
+        cat_slug: "laptops",
+        category_image: "https://cdn-icons-png.flaticon.com/512/201/201623.png",
+      ),
+      Data(
+        bannerId: "2",
+        bannerName: "Mobiles",
+        image: "https://images.unsplash.com/photo-1580910051073-31c8f6f8f92f",
+        category: "Mobiles",
+        cat_slug: "mobiles",
+        category_image: "https://cdn-icons-png.flaticon.com/512/597/597177.png",
+      ),
+      Data(
+        bannerId: "3",
+        bannerName: "Audio",
+        image: "https://images.unsplash.com/photo-1594007654729-d52e9a810a46",
+        category: "Audio",
+        cat_slug: "audio",
+        category_image: "https://cdn-icons-png.flaticon.com/512/727/727245.png",
+      ),
+      Data(
+        bannerId: "4",
+        bannerName: "Watches",
+        image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30",
+        category: "Watches",
+        cat_slug: "watches",
+        category_image: "https://cdn-icons-png.flaticon.com/512/2917/2917999.png",
+      ),
+      Data(
+        bannerId: "5",
+        bannerName: "Cameras",
+        image: "https://images.unsplash.com/photo-1519183071298-a2962be90b8e",
+        category: "Cameras",
+        cat_slug: "cameras",
+        category_image: "https://cdn-icons-png.flaticon.com/512/2920/2920105.png",
+      ),
+      Data(
+        bannerId: "6",
+        bannerName: "Accessories",
+        image: "https://images.unsplash.com/photo-1600185365483-26c446fc9d49",
+        category: "Accessories",
+        cat_slug: "accessories",
+        category_image: "https://cdn-icons-png.flaticon.com/512/3184/3184760.png",
+      ),
+    ],
+  );
+}
   List<String> getBannerImages() {
     return homeModel?.data
             ?.where((item) => item.image != null)
