@@ -49,7 +49,6 @@ const productcmt = 'productcmt/';
 const postcmt = 'postcmt/';
 const banner = 'bannerlist/1/';
 
-// Form Error
 final RegExp emailValidatorRegExp = RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
 const String EmailNullError = "Please Enter your email";
 const String InvalidEmailError = "Please Enter Valid Email";

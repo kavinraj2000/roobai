@@ -10,10 +10,10 @@ class DealFinder extends StatefulWidget {
   const DealFinder({Key? key}) : super(key: key);
 
   @override
-  State<DealFinder> createState() => _DealFinderState();
+  State<DealFinder> createState() => _ProductState();
 }
 
-class _DealFinderState extends State<DealFinder> {
+class _ProductState extends State<DealFinder> {
   bool loading = true;
   bool hasError = false;
   DealModel? dealData;

@@ -19,7 +19,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        // color: Colors.white,
         borderRadius: BorderRadius.circular(_expanded ? 12 : 30),
         boxShadow: [
           BoxShadow(

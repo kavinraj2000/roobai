@@ -6,6 +6,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 // import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:roobai/core/theme/constants.dart';
+import 'package:roobai/features/product/shared/widget/appbarwidget.dart';
+import 'package:roobai/features/product/shared/widget/navbarwidget.dart';
 import 'package:roobai/screens/joinus/view/mobile/joinus_mobile_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -42,13 +44,15 @@ class _StateSetting extends State<Setting> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: Appbarwidget(),
+      bottomNavigationBar: BottomNavBarWidget(currentRoute: '/settings',),
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [primaryColor, primaryColor.withOpacity(0.8), Colors.grey.shade50],
-          ),
+          // gradient: LinearGradient(
+          //   begin: Alignment.topCenter,
+          //   end: Alignment.bottomCenter,
+          //   // colors: [primaryColor, primaryColor.withOpacity(0.8), Colors.grey.shade50],
+          // ),
         ),
         child: SafeArea(
           child: FadeTransition(

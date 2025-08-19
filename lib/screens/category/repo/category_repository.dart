@@ -9,7 +9,7 @@ class CategoryRepository {
   Future<List<CategoryModel>> getCategories() async {
     try {
       final response = await http.get(
-        Uri.parse(APIS.main_url),
+        Uri.parse(APIS.baseurl),
         headers: APIS.headers,
       );
 

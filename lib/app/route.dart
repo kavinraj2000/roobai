@@ -4,7 +4,7 @@ import 'package:logger/logger.dart';
 import 'package:roobai/app/route_names.dart';
 import 'package:roobai/features/product/shared/widget/splash_screen.dart';
 import 'package:roobai/screens/category/view/category.dart';
-import 'package:roobai/screens/deal_finder/dealfinder/view/delfinder.dart';
+import 'package:roobai/screens/mainscreen/product/view/products.dart';
 import 'package:roobai/screens/joinus/view/mobile/joinus_mobile_view.dart';
 import 'package:roobai/screens/mainscreen/homepage/home.dart';
 import 'package:roobai/screens/search/view/search_view.dart';
@@ -55,7 +55,7 @@ class Routes {
         name: RouteName.dealfinder,
         path: RouteName.dealfinder,
         builder: (BuildContext context, GoRouterState state) {
-          return Dealfinder();
+          return Productpage();
         },
       ),
       GoRoute(

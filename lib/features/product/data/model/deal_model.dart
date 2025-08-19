@@ -39,6 +39,12 @@ class DealModel {
     }
     return data;
   }
+  @override
+String toString() {
+  return 'DealModel(status: $status, title1: $title1, title2: $title2, '
+         'providers: $providers, dealCat: $dealCat)';
+}
+
 }
 
 class Providers {
@@ -70,6 +76,12 @@ class Providers {
     data['selected'] = this.selected;
     return data;
   }
+  @override
+String toString() {
+  return 'Providers(title: $title, image: $image, text: $text, type: $type, '
+         'gift: $gift, selected: $selected)';
+}
+
 }
 
 class DealCat {
@@ -92,4 +104,11 @@ class DealCat {
     data['categoryid'] = this.categoryid;
     return data;
   }
+
+@override
+String toString() {
+  return 'DealCat(category: $category, parentid: $parentid, categoryid: $categoryid)';
+}
+
+
 }

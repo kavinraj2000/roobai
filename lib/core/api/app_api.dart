@@ -1,5 +1,6 @@
 class APIS {
-  static var main_url = 'https://roobai.com/api/android/giveaway11/';
+  static var baseurl = 'https://roobai.com/api/android/giveaway11/';
+
 
   static var header = {
     "Content-Type": "application/json",
@@ -18,3 +19,5 @@ class APIS {
     "Token": "2304d5f65a9273202dce611154ba0c93",
   };
 }
+
+ 

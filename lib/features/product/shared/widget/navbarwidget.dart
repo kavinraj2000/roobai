@@ -19,55 +19,57 @@ class BottomNavBarWidget extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           child: GNav(
-            selectedIndex: selectedIndex,
-            onTabChange: (index) {
-              switch (index) {
-                case 0:
-                  context.goNamed(RouteName.mainScreen);
-                  break;
-                case 1:
-                  context.goNamed(RouteName.setting);
-                  break;
-                case 2:
-                  context.goNamed(RouteName.dealfinder);
-                  break;
-                case 3:
-                  context.goNamed(RouteName.category); 
-                  break;
-              }
-            },
-            rippleColor: Colors.white.withOpacity(0.2),
-            hoverColor: Colors.purpleAccent.withOpacity(0.1),
-            haptic: true,
-            tabBorderRadius: 20,
-            curve: Curves.easeOutBack,
-            duration: const Duration(milliseconds: 400),
-            gap: 8,
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-            tabBackgroundColor: Colors.purple.withOpacity(0.15),
-            color: Colors.grey[700],
-            activeColor: Colors.deepPurple.shade700,
-            iconSize: 24,
-            textStyle: const TextStyle(fontWeight: FontWeight.w600),
-            tabs: const [
-              GButton(
-                icon: Icons.home_rounded,
-                text: 'Home',
-              ),
-              GButton(
-                icon: Icons.account_circle_outlined,
-                text: 'Profile',
-              ),
-              GButton(
-                icon: Icons.favorite_outline,
-                text: 'Wishlist',
-              ),
-              GButton(
-                icon: Icons.menu_rounded,
-                text: 'Menu',
-              ),
-            ],
-          ),
+  selectedIndex: selectedIndex,
+  onTabChange: (index) {
+    switch (index) {
+      case 0:
+        context.goNamed(RouteName.mainScreen);
+        break;
+      case 1:
+        context.goNamed(RouteName.setting);
+        break;
+      case 2:
+        context.goNamed(RouteName.dealfinder);
+        break;
+        
+      case 3:
+        context.goNamed(RouteName.category); 
+        break;
+    }
+  },
+  rippleColor: Colors.transparent, // Optional: remove ripple
+  hoverColor: Colors.transparent,  // Optional: remove hover effect
+  haptic: true,
+  tabBorderRadius: 0, // Remove rounded corners
+  curve: Curves.easeOutBack,
+  duration: const Duration(milliseconds: 400),
+  gap: 8,
+  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+  tabBackgroundColor: Colors.transparent, // Remove background
+  color: Colors.grey[700],
+  activeColor: Colors.deepPurple.shade700,
+  iconSize: 24,
+  textStyle: const TextStyle(fontWeight: FontWeight.w600),
+  tabs: const [
+    GButton(
+      icon: Icons.home_rounded,
+      text: 'Home',
+    ),
+    GButton(
+      icon: Icons.account_circle_outlined,
+      text: 'Profile',
+    ),
+    GButton(
+      icon: Icons.local_offer_outlined,
+      text: 'Dealfinder',
+    ),
+    GButton(
+      icon: Icons.menu_rounded,
+      text: 'Menu',
+    ),
+  ],
+),
+
         ),
       ),
     );
