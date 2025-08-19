@@ -7,7 +7,8 @@ class DealApi {
   static const int defaultPageNumber = 1;
 
   /// Build a clean URL with no double slashes
-  static var dealurl = '${APIS.baseurl + base_api_url}/$just_in/$defaultPageNumber';
+  // static var dealurl = '${APIS.baseurl + base_api_url}/$just_in/$defaultPageNumber';
+  static var dealurl = 'https://roo.bi/api/flutter/v11.0/deal//1/1/';
 
   static final header = APIS.header;
   static final headers = APIS.headers;
