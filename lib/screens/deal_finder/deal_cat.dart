@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:roobai/core/theme/constants.dart';
-import 'package:roobai/features/product/data/model/deal_model.dart';
+import 'package:roobai/features/data/model/deal_model.dart';
 
 class DealCategory extends StatefulWidget {
   Providers provider = Providers();

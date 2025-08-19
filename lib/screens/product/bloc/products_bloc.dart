@@ -4,10 +4,10 @@ import 'package:logger/logger.dart';
 
 import 'package:roobai/features/product/data/model/deal_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:roobai/screens/mainscreen/product/model/products.dart';
+import 'package:roobai/screens/product/model/products.dart';
 import 'dart:convert';
 
-import 'package:roobai/screens/mainscreen/product/repo/products_repository.dart';
+import 'package:roobai/screens/product/repo/products_repository.dart';
 
 part 'products_event.dart';
 part 'products_state.dart';

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:roobai/screens/mainscreen/product/model/products.dart';
-import 'package:roobai/screens/mainscreen/product/view/widget/platform_utils.dart';
-import 'package:roobai/screens/mainscreen/product/view/widget/product_priceformattor.dart';
+import 'package:roobai/screens/product/model/products.dart';
+import 'package:roobai/screens/product/view/widget/platform_utils.dart';
+import 'package:roobai/screens/product/view/widget/product_priceformattor.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;

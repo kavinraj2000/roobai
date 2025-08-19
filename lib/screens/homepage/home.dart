@@ -4,8 +4,8 @@ import 'package:roobai/features/product/shared/widget/appbarwidget.dart';
 import 'package:roobai/features/product/shared/widget/carsoul_slider.dart';
 import 'package:roobai/features/product/shared/widget/navbarwidget.dart';
 import 'package:roobai/features/product/shared/widget/searchbar.dart';
-import 'package:roobai/screens/mainscreen/product/view/products.dart';
-import 'package:roobai/screens/mainscreen/product/view/products_view.dart';
+import 'package:roobai/screens/product/view/products.dart';
+import 'package:roobai/screens/product/view/products_view.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

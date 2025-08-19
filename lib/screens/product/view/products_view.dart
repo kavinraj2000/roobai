@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:roobai/screens/mainscreen/product/bloc/products_bloc.dart';
-import 'package:roobai/screens/mainscreen/product/view/widget/product_empty.dart';
-import 'package:roobai/screens/mainscreen/product/view/widget/product_error.dart';
-import 'package:roobai/screens/mainscreen/product/view/widget/product_grid.dart';
-import 'package:roobai/screens/mainscreen/product/view/widget/product_loading.dart';
+import 'package:roobai/screens/product/bloc/products_bloc.dart';
+import 'package:roobai/screens/product/view/widget/product_empty.dart';
+import 'package:roobai/screens/product/view/widget/product_error.dart';
+import 'package:roobai/screens/product/view/widget/product_grid.dart';
+import 'package:roobai/screens/product/view/widget/product_loading.dart';
 
 
 class DealFinderView extends StatelessWidget {
