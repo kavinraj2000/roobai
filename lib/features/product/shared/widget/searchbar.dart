@@ -1,51 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:roobai/app/route_names.dart';
+import 'package:roobai/core/theme/constants.dart';
 
-class SearchBarWidget extends StatefulWidget {
-  const SearchBarWidget({super.key});
+class SimpleSearchBar extends StatelessWidget {
+  final TextEditingController? controller;
+  final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onSubmitted;
+  final String hintText;
 
-  @override
-  State<SearchBarWidget> createState() => _SearchBarWidgetState();
-}
-
-class _SearchBarWidgetState extends State<SearchBarWidget> {
-  bool _expanded = false;
+  const SimpleSearchBar({
+    super.key,
+    this.controller,
+    this.onChanged,
+    this.onSubmitted,
+    this.hintText = "search ...",
+  });
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 300),
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        // color: Colors.white,
-        borderRadius: BorderRadius.circular(_expanded ? 12 : 30),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 6,
-            offset: Offset(0, 3),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(25),
       ),
-      child: Row(
-        children: [
-          Icon(Icons.search, color: Colors.grey[600]),
-          const SizedBox(width: 8),
-          Expanded(
-            child: TextField(
-              onTap: () {
-                setState(() => _expanded = true);
-                context.goNamed(RouteName.search);
-              },
-              decoration: InputDecoration(
-                hintText: 'Search for products',
-                border: InputBorder.none,
-              ),
-            ),
+      child: TextField(
+        controller: controller,
+        onChanged: onChanged,
+        onSubmitted: onSubmitted,
+        decoration: InputDecoration(
+          prefixIcon: Icon(Icons.search, color: Colors.blueGrey[300]),
+          hintText: hintText,
+          hintStyle: TextStyle(color: Colors.blueGrey[300]),
+          filled: true,                    
+          fillColor: white,               
+          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(0),
+            borderSide: BorderSide.none,
           ),
-        ],
+        ),
       ),
     );
   }

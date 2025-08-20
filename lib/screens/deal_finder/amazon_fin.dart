@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:roobai/core/api/app_api.dart';
 import 'package:roobai/core/theme/constants.dart';
-import 'package:roobai/features/product/data/model/deal_model.dart';
+import 'package:roobai/features/data/model/deal_model.dart';
 
 
 import 'deal_cat.dart';

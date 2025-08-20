@@ -3,10 +3,10 @@ import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
 import 'package:roobai/app/route_names.dart';
 import 'package:roobai/features/product/shared/widget/splash_screen.dart';
-import 'package:roobai/screens/category/view/category.dart';
+import 'package:roobai/screens/homepage/view/homepage_view.dart';
 import 'package:roobai/screens/product/view/products.dart';
 import 'package:roobai/screens/joinus/view/mobile/joinus_mobile_view.dart';
-import 'package:roobai/screens/homepage/home.dart';
+import 'package:roobai/screens/homepage/view/mobile/home.dart';
 import 'package:roobai/screens/search/view/search_view.dart';
 import 'package:roobai/screens/setting/setting.dart';
 
@@ -14,7 +14,7 @@ class Routes {
   final log = Logger();
 
   GoRouter router = GoRouter(
-    initialLocation: RouteName.splashScreen,
+    initialLocation: RouteName.mainScreen,
     routes: [
       GoRoute(
         name: RouteName.splashScreen,
@@ -27,7 +27,7 @@ class Routes {
         name: RouteName.mainScreen,
         path: RouteName.mainScreen,
         builder: (BuildContext context, GoRouterState state) {
-          return HomePage();
+          return Homepage();
         },
       ),
       GoRoute(
@@ -37,13 +37,13 @@ class Routes {
           return JoinUsScreen();
         },
       ),
-      GoRoute(
-        name: RouteName.category,
-        path: RouteName.category,
-        builder: (BuildContext context, GoRouterState state) {
-          return Category();
-        },
-      ),
+      // GoRoute(
+      //   name: RouteName.category,
+      //   path: RouteName.category,
+      //   builder: (BuildContext context, GoRouterState state) {
+      //     return Category();
+      //   },
+      // ),
       GoRoute(
         name: RouteName.search,
         path: RouteName.search,

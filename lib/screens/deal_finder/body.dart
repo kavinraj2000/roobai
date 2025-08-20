@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:roobai/core/api/app_api.dart';
 import 'package:roobai/core/theme/constants.dart';
-import 'package:roobai/features/product/data/model/deal_model.dart';
+import 'package:roobai/features/data/model/deal_model.dart';
 import 'amazon_fin.dart'; // Assume this page exists
 
 class DealFinder extends StatefulWidget {

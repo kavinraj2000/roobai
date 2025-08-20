@@ -13,7 +13,7 @@ class SearchScreen extends StatelessWidget {
     return BlocProvider(
       create: (_) => SearchBloc(),
       child: Scaffold(
-        appBar: const Appbarwidget(),
+        // appBar: const Appbarwidget(),
 
         floatingActionButton: FloatingActionButton(
           onPressed: () {},

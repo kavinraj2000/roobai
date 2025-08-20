@@ -8,13 +8,14 @@ class CarouselSliderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+
     return CarouselSlider(
       options: CarouselOptions(
-        height: 180,
+        height: 200, 
         autoPlay: true,
         enlargeCenterPage: true,
-        viewportFraction: 0.9,
-        aspectRatio: 16 / 9,
+        viewportFraction: 1.0,
         autoPlayCurve: Curves.fastOutSlowIn,
         enableInfiniteScroll: true,
         autoPlayAnimationDuration: const Duration(seconds: 1),
@@ -23,13 +24,10 @@ class CarouselSliderWidget extends StatelessWidget {
         return Builder(
           builder: (BuildContext context) {
             return Container(
-              margin: const EdgeInsets.symmetric(horizontal: 5),
+              width: screenWidth, 
+              margin: const EdgeInsets.symmetric(horizontal: 4),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
-                image: DecorationImage(
-                  image: NetworkImage(url),
-                  fit: BoxFit.cover,
-                ),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.2),
@@ -37,6 +35,25 @@ class CarouselSliderWidget extends StatelessWidget {
                     offset: const Offset(0, 4),
                   ),
                 ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Image.network(
+                  url,
+                  fit: BoxFit.cover, 
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      color: Colors.grey.shade300,
+                      child: const Icon(Icons.broken_image, size: 50, color: Colors.grey),
+                    );
+                  },
+                ),
               ),
             );
           },

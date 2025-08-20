@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:roobai/screens/product/model/products.dart';
 import 'package:roobai/screens/product/view/widget/product_card.dart';
 
-
 class DealFinderGrid extends StatelessWidget {
   final List<Product> products;
 
@@ -23,8 +22,9 @@ class DealFinderGrid extends StatelessWidget {
         ),
       ),
       child: CustomScrollView(
+        // Add this property to handle keyboard visibility
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         slivers: [
-          // Header Section
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -103,15 +103,13 @@ class DealFinderGrid extends StatelessWidget {
               delegate: SliverChildBuilderDelegate(
                 (context, index) => ProductCard(
                   product: products[index],
-                  index: index,
                 ),
                 childCount: products.length,
               ),
             ),
           ),
-          // Bottom Padding
           const SliverToBoxAdapter(
-            child: SizedBox(height: 20),
+            child: SizedBox(height: 40), // Increased from 20 to 40
           ),
         ],
       ),

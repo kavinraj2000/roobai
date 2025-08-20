@@ -7,7 +7,7 @@ import 'package:roobai/screens/joinus/bloc/joinus_bloc.dart';
 
 
 class JoinUsScreen extends StatelessWidget {
-  const JoinUsScreen({Key? key}) : super(key: key);
+  const JoinUsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

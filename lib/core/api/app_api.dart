@@ -1,11 +1,14 @@
+import 'package:logger/logger.dart';
+
 class APIS {
   static var baseurl = 'https://roobai.com/api/android/giveaway11/';
+  static var  base_api_url='';
 
   static var header = {
     "Content-Type": "application/json",
     "AppMode": "flutter",
     "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Credentials": true,
+    "Access-Control-Allow-Credentials": "true",
     "Access-Control-Allow-Headers":
         "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
@@ -17,4 +20,10 @@ class APIS {
     "AppMode": "android",
     "Token": "2304d5f65a9273202dce611154ba0c93",
   };
+
+  static void logConfig() {
+    Logger().d('baseurl:: $baseurl');
+    Logger().d('header:: $header');
+    Logger().d('headers:: $headers');
+  }
 }

@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
 
-import 'package:roobai/features/product/data/model/deal_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:roobai/screens/product/model/products.dart';
 import 'dart:convert';

@@ -28,6 +28,11 @@ class HomeModel {
     }
     return data;
   }
+
+  @override
+  String toString() {
+    return 'HomeModel(title: $title, cat_slug: $cat_slug, type: $type, data: $data)';
+  }
 }
 
 class Data {
@@ -168,5 +173,10 @@ class Data {
     data['store_name'] = storeName;
     data['img_url'] = img_url;
     return data;
+  }
+
+  @override
+  String toString() {
+    return 'Data(productName: $productName, storeName: $storeName, image: $image, price: $productOfferPrice)';
   }
 }

@@ -44,7 +44,7 @@ class _StateSetting extends State<Setting> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Appbarwidget(),
+      // appBar: Appbarwidget(),
       bottomNavigationBar: BottomNavBarWidget(currentRoute: '/settings',),
       body: Container(
         decoration: BoxDecoration(
