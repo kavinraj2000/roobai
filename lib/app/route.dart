@@ -3,10 +3,11 @@ import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
 import 'package:roobai/app/route_names.dart';
 import 'package:roobai/features/product/shared/widget/splash_screen.dart';
-import 'package:roobai/screens/homepage/view/homepage_view.dart';
+import 'package:roobai/screens/product/model/products.dart';
 import 'package:roobai/screens/product/view/products.dart';
 import 'package:roobai/screens/joinus/view/mobile/joinus_mobile_view.dart';
 import 'package:roobai/screens/homepage/view/mobile/home.dart';
+import 'package:roobai/screens/product_detail/view/mobile/product_detail_screen.dart';
 import 'package:roobai/screens/search/view/search_view.dart';
 import 'package:roobai/screens/setting/setting.dart';
 
@@ -52,10 +53,17 @@ class Routes {
         },
       ),
       GoRoute(
-        name: RouteName.dealfinder,
-        path: RouteName.dealfinder,
+        name: RouteName.product,
+        path: RouteName.product,
         builder: (BuildContext context, GoRouterState state) {
           return Productpage();
+        },
+      ),
+        GoRoute(
+        name: RouteName.productdetail,
+        path: RouteName.productdetail,
+        builder: (BuildContext context, GoRouterState state) {
+          return ProductDetailScreen( );
         },
       ),
       GoRoute(

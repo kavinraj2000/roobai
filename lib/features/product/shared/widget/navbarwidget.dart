@@ -40,7 +40,7 @@ class BottomNavBarWidget extends StatelessWidget {
                   context.goNamed(RouteName.setting);
                   break;
                 case 2:
-                  context.goNamed(RouteName.dealfinder);
+                  context.goNamed(RouteName.product);
                   break;
                 case 3:
                   context.goNamed(RouteName.category);
@@ -91,7 +91,7 @@ class BottomNavBarWidget extends StatelessWidget {
         return 0;
       case RouteName.setting:
         return 1;
-      case RouteName.dealfinder:
+      case RouteName.product:
         return 2;
       case RouteName.category:
         return 3;

@@ -25,6 +25,7 @@ class DealFinderView extends StatelessWidget {
     backgroundColor: white,
     body:  BlocBuilder<ProductBloc, ProductState>(
       builder: (context, state) {
+        Logger().d('state::product:url::${state.dealModel?.first.shareUrl}');
         switch (state.status) {
           case DealfinderStatus.loading:
             return const DealFinderLoading();
