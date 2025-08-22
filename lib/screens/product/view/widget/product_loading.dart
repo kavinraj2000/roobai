@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:roobai/features/product/shared/widget/loader.dart';
 
 class DealFinderLoading extends StatelessWidget {
   const DealFinderLoading({super.key});
@@ -17,10 +18,7 @@ class DealFinderLoading extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircularProgressIndicator(
-              strokeWidth: 3,
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.deepPurple),
-            ),
+            SizedBox(child: LoadingPage()),
             SizedBox(height: 16),
             Text(
               "Finding amazing deals...",

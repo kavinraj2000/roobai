@@ -91,9 +91,54 @@ class Product {
     };
   }
 
+  /// ✅ copyWith
+  Product copyWith({
+    String? pid,
+    String? productName,
+    String? productImage,
+    String? productSalePrice,
+    String? productOfferPrice,
+    String? productUrl,
+    String? coupon,
+    String? dealType,
+    String? stockStatus,
+    String? dateTime,
+    String? productShortUrl,
+    String? productPageUrl,
+    String? storeUrl,
+    String? storeImage,
+    String? storeName,
+    String? commentCount,
+    String? likeStatus,
+    String? shareUrl,
+    String? productDescription,
+  }) {
+    return Product(
+      pid: pid ?? this.pid,
+      productName: productName ?? this.productName,
+      productImage: productImage ?? this.productImage,
+      productSalePrice: productSalePrice ?? this.productSalePrice,
+      productOfferPrice: productOfferPrice ?? this.productOfferPrice,
+      productUrl: productUrl ?? this.productUrl,
+      coupon: coupon ?? this.coupon,
+      dealType: dealType ?? this.dealType,
+      stockStatus: stockStatus ?? this.stockStatus,
+      dateTime: dateTime ?? this.dateTime,
+      productShortUrl: productShortUrl ?? this.productShortUrl,
+      productPageUrl: productPageUrl ?? this.productPageUrl,
+      storeUrl: storeUrl ?? this.storeUrl,
+      storeImage: storeImage ?? this.storeImage,
+      storeName: storeName ?? this.storeName,
+      commentCount: commentCount ?? this.commentCount,
+      likeStatus: likeStatus ?? this.likeStatus,
+      shareUrl: shareUrl ?? this.shareUrl,
+      productDescription: productDescription ?? this.productDescription,
+    );
+  }
+
   /// ✅ Optional: Debug log
   @override
   String toString() {
-    return 'Product(pid: $pid, productName: $productName, productOfferPrice: $productOfferPrice)';
+    return 'Product(pid: $pid, productName: $productName, likeStatus: $likeStatus)';
   }
 }

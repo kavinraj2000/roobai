@@ -1,8 +1,8 @@
 import 'package:logger/logger.dart';
 
 class APIS {
-  static var baseurl = 'https://roobai.com/api/android/giveaway11/';
-  static var  base_api_url='';
+  static var mainurl = 'https://roobai.com/api/android/giveaway11/';
+  // static var  ='base_api_url';
 
   static var header = {
     "Content-Type": "application/json",
@@ -22,7 +22,7 @@ class APIS {
   };
 
   static void logConfig() {
-    Logger().d('baseurl:: $baseurl');
+    Logger().d('mainurl:: $mainurl');
     Logger().d('header:: $header');
     Logger().d('headers:: $headers');
   }

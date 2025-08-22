@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:roobai/core/theme/constants.dart';
 import 'package:roobai/features/product/shared/widget/appbarwidget.dart';
 import 'package:roobai/features/product/shared/widget/carsoul_slider.dart';
+import 'package:roobai/features/product/shared/widget/drawer.dart';
 import 'package:roobai/features/product/shared/widget/navbarwidget.dart';
 import 'package:roobai/features/product/shared/widget/searchbar.dart';
 import 'package:roobai/screens/homepage/view/mobile/card/platform_card.dart';
@@ -12,11 +13,28 @@ class Homepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+       drawer: CustomDrawer(
+        userName: 'Your Name',
+        userImageUrl: 'profile_image_url',
+        categories: [
+          DrawerCategory(title: 'Women', icon: Icons.woman),
+          DrawerCategory(title: 'Shoes', icon: Icons.shopping_bag),
+        ],
+        platforms: [
+          DrawerPlatform(
+            title: 'amazon',
+            backgroundColor: Color(0xFF232F3E),
+            textColor: Colors.white,
+            subtitle: '20%',
+          ),
+        ],
+      ),
       appBar: const CustomAppBar(title: "Home"),
-
-      // ✅ Removed `key: key` — not needed here
-      bottomNavigationBar: const BottomNavBarWidget(currentRoute: '/mainscreen'),
-      backgroundColor: const Color.fromARGB(255, 193, 229, 245),
+     
+      bottomNavigationBar: const BottomNavBarWidget(
+        currentRoute: '/mainscreen',
+      ),
+      backgroundColor: white,
 
       body: SafeArea(
         child: Padding(

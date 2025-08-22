@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:roobai/screens/homepage/view/mobile/home.dart';
 import 'package:roobai/screens/product/model/products.dart';
 import 'package:roobai/screens/product/view/widget/product_card.dart';
 
@@ -22,9 +23,9 @@ class DealFinderGrid extends StatelessWidget {
         ),
       ),
       child: CustomScrollView(
-        // Add this property to handle keyboard visibility
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         slivers: [
+          // Header section
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -70,7 +71,8 @@ class DealFinderGrid extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
                           color: Colors.deepPurple.shade100,
                           borderRadius: BorderRadius.circular(20),
@@ -90,28 +92,83 @@ class DealFinderGrid extends StatelessWidget {
               ),
             ),
           ),
-          // Products Grid
+
           SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 2), 
             sliver: SliverGrid(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 0.75,
+                crossAxisSpacing: 1, 
+                mainAxisSpacing: 1,  
+                childAspectRatio: 0.65,
               ),
               delegate: SliverChildBuilderDelegate(
-                (context, index) => ProductCard(
-                  product: products[index],
-                ),
+                (context, index) {
+                  final product = products[index];
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              Homepage(),
+                        ),
+                      );
+                    },
+                    child: Hero(
+                      tag: "product_${product.pid}", 
+                      child: ProductCard(product: product),
+                    ),
+                  );
+                },
                 childCount: products.length,
               ),
             ),
           ),
+
           const SliverToBoxAdapter(
-            child: SizedBox(height: 40), // Increased from 20 to 40
+            child: SizedBox(height: 40),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class ProductDetailScreen extends StatelessWidget {
+  final Product product;
+
+  const ProductDetailScreen({super.key, required this.product});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(product.productName!),
+        backgroundColor: Colors.deepPurple,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Hero(
+              tag: "product_${product.pid}",
+              child: ProductCard(product: product),
+            ),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                product.productDescription ?? "No description available",
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black87,
+                  height: 1.4,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -14,7 +14,7 @@ class Routes {
   final log = Logger();
 
   GoRouter router = GoRouter(
-    initialLocation: RouteName.mainScreen,
+    initialLocation: RouteName.splashScreen,
     routes: [
       GoRoute(
         name: RouteName.splashScreen,

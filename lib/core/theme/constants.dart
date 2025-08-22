@@ -39,7 +39,6 @@ const discount4 = Color(0xFF2874f0);
 
 const lay_bg = Color(0xFFEDF1F4);
 const gjsonDecodeAnimationDuration = Duration(milliseconds: 200);
-const BASE_API_URL='base_api_url';
 const just_in = '/deal//1/';
 const cat_list = '/salecategory/1/';
 const homepage = '/homepage/';

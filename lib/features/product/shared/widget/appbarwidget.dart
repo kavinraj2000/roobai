@@ -26,6 +26,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: Image.asset(
         'assets/icons/logo.png',
         fit: BoxFit.fitHeight,
+        
       ),
       title: title != null
           ? Text(
@@ -36,6 +37,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             )
           : null,
+           automaticallyImplyLeading: true,
       actions: [
         TextButton(
           onPressed: () {
@@ -62,12 +64,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               children: [
                 CircleAvatar(
                   radius: 14,
-                  backgroundImage: (profileImage != null &&
-                          profileImage!.isNotEmpty)
-                      ? NetworkImage(profileImage!)
-                      : const AssetImage("assets/icons/default_avatar.png")
-                          as ImageProvider,
-                  backgroundColor: Colors.grey[300],
+                //   backgroundImage: (profileImage != null &&
+                //           profileImage!.isNotEmpty)
+                //       ? NetworkImage(profileImage!)
+                //       : const AssetImage("")
+                //           as ImageProvider,
+                //   backgroundColor: Colors.grey[300],
+                // ),
                 ),
                 const SizedBox(width: 6),
                 Text(
