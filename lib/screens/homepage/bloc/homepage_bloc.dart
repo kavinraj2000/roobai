@@ -18,7 +18,7 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
     on<ProductSelectedEvent>(_onProductSelected);
   }
 
-  FutureOr<void> _onLoadHomepageData(
+  Future<void> _onLoadHomepageData(
       LoadHomepageDataEvent event, Emitter<HomepageState> emit) async {
     emit(state.copyWith(status: HomepageStatus.loading));
     

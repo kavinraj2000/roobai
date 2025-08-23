@@ -22,7 +22,8 @@ class ProductCard extends StatelessWidget {
 
     return InkWell(
       onTap: (){
-                context.goNamed(RouteName.productdetail);
+                context.goNamed(RouteName.productdetail,extra: product.toMap());
+                Logger().d('data passed ::${product.toMap()}');
 
       },
       child: Container(
@@ -142,7 +143,7 @@ class ProductCard extends StatelessWidget {
             children: [
               Flexible(
                 child: Text(
-                  "₹${PriceFormatter.formatPrice(product.productOfferPrice)}",
+                  "₹${product.productOfferPrice}",
                   style: const TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
@@ -154,7 +155,7 @@ class ProductCard extends StatelessWidget {
               if (salePrice > 0)
                 Flexible(
                   child: Text(
-                    "₹${PriceFormatter.formatPrice(product.productSalePrice)}",
+                    "₹${product.productSalePrice}",
                     style: TextStyle(
                       color: Colors.grey.shade500,
                       fontSize: 9,
