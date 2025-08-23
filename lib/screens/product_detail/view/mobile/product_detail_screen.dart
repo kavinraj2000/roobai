@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:roobai/app/route_names.dart';
+import 'package:roobai/features/product/shared/widget/appbarwidget.dart';
 import 'package:roobai/features/product/shared/widget/loader.dart';
 import 'package:roobai/screens/product_detail/bloc/product_detail_bloc.dart';
 import 'package:roobai/screens/product_detail/view/mobile/widget/Product_content.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -20,6 +24,7 @@ class ProductDetailScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.grey[50],
+      appBar: CustomAppBar(),
       body: BlocBuilder<ProductDetailBloc, ProductDetailState>(
         builder: (context, state) {
           if (state.status == ProductDetailStatus.loading) {
@@ -37,7 +42,7 @@ class ProductDetailScreen extends StatelessWidget {
                         GestureDetector(
                           onTap: () {
                             HapticFeedback.lightImpact();
-                            Navigator.of(context).pop();
+                           context.goNamed(RouteName.product);
                           },
                           child: Container(
                             padding: const EdgeInsets.all(8),
@@ -63,21 +68,71 @@ class ProductDetailScreen extends StatelessWidget {
                           ),
                         ),
                         const Spacer(),
-                        GestureDetector(
-                          onTap: () => HapticFeedback.lightImpact(),
-                          child: Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: const Icon(
-                              Icons.share_outlined,
-                              color: Colors.black,
-                              size: 20,
-                            ),
-                          ),
-                        ),
+
+
+// Inside your widget build method:
+
+GestureDetector(
+  onTap: () async {
+    final shareUrl = data['share_url'] ?? '';
+
+    if (shareUrl.isEmpty) {
+      // Handle empty URL case if needed
+      return;
+    }
+
+    // Show dialog with options to share or copy
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Share Product'),
+          content: Text('Would you like to share the product or copy the link?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // Copy to clipboard
+                Clipboard.setData(ClipboardData(text: shareUrl));
+                Navigator.of(context).pop();
+                
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Link copied to clipboard!')),
+                );
+              },
+              child: const Text('Copy Link'),
+            ),
+            TextButton(
+              onPressed: () {
+                Share.share(shareUrl);
+                Navigator.of(context).pop();
+              },
+              child: const Text('Share'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+          ],
+        );
+      },
+    );
+  },
+  child: Container(
+    padding: const EdgeInsets.all(8),
+    decoration: BoxDecoration(
+      color: Colors.white.withOpacity(0.2),
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: const Icon(
+      Icons.share_outlined,
+      color: Colors.black,
+      size: 20,
+    ),
+  ),
+),
+
                       ],
                     ),
                   ),
@@ -113,22 +168,6 @@ class ProductDetailScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(24),
                             child: Stack(
                               children: [
-                                Container(
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                  decoration: BoxDecoration(
-                                    // gradient: RadialGradient(
-                                    //   center: const Alignment(0.3, -0.5),
-                                    //   radius: 1.5,
-                                    //   // colors: [
-                                    //   //   const Color(0xFF3A3A3A).withOpacity(0.4),
-                                    //   //   const Color(0xFF1A1A1A).withOpacity(0.9),
-                                    //   // ],
-                                    // ),
-                                  ),
-                                ),
-
-                                //  Image
                                 Center(
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(24),
