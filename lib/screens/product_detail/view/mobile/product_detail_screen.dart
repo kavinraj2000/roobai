@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-// Dummy PriceFormatter since original is external
 class PriceFormatter {
   static String formatPrice(dynamic price) {
-    // Simple formatting for example
     if (price == null) return '0';
     return price.toString();
   }
@@ -34,7 +32,11 @@ class ProductDatetime extends StatelessWidget {
           const SizedBox(width: 6),
           Text(
             "${dateTime!.day}/${dateTime!.month}/${dateTime!.year} ${dateTime!.hour}:${dateTime!.minute.toString().padLeft(2, '0')}",
-            style: const TextStyle(color: Colors.deepPurple, fontSize: 14, fontWeight: FontWeight.w500),
+            style: const TextStyle(
+              color: Colors.deepPurple,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ],
       ),
@@ -53,7 +55,8 @@ class ProductDetailScreen extends StatelessWidget {
     final productOfferPrice = 89.99;
     final productSalePrice = 120.00;
     final storeName = "Fashion Store";
-    final productDescription = "These classic leather shoes are perfect for both formal and casual occasions. Made from high-quality leather, they offer comfort and durability with a timeless style.";
+    final productDescription =
+        "These classic leather shoes are perfect for both formal and casual occasions. Made from high-quality leather, they offer comfort and durability with a timeless style.";
     final dateTime = DateTime(2024, 8, 22, 15, 30);
     final rating = 4.7;
     final reviewsCount = 128;
@@ -62,11 +65,12 @@ class ProductDetailScreen extends StatelessWidget {
       "Comfortable Insole",
       "Durable Sole",
       "Water Resistant",
-      "Breathable Material"
+      "Breathable Material",
     ];
 
     final discount = productSalePrice > 0
-        ? ((productSalePrice - productOfferPrice) / productSalePrice * 100).round()
+        ? ((productSalePrice - productOfferPrice) / productSalePrice * 100)
+              .round()
         : 0;
 
     return Scaffold(
@@ -93,7 +97,10 @@ class ProductDetailScreen extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Icon(Icons.favorite_border, color: Colors.deepPurple),
+              child: const Icon(
+                Icons.favorite_border,
+                color: Colors.deepPurple,
+              ),
             ),
             onPressed: () {},
           ),
@@ -118,7 +125,7 @@ class ProductDetailScreen extends StatelessWidget {
                         color: Colors.deepPurple.withOpacity(0.2),
                         blurRadius: 20,
                         spreadRadius: 2,
-                      )
+                      ),
                     ],
                   ),
                   child: ClipRRect(
@@ -130,7 +137,11 @@ class ProductDetailScreen extends StatelessWidget {
                       productImage,
                       fit: BoxFit.cover,
                       errorBuilder: (_, __, ___) => const Center(
-                        child: Icon(Icons.image_not_supported, size: 50, color: Colors.grey),
+                        child: Icon(
+                          Icons.image_not_supported,
+                          size: 50,
+                          color: Colors.grey,
+                        ),
                       ),
                     ),
                   ),
@@ -139,7 +150,10 @@ class ProductDetailScreen extends StatelessWidget {
                   top: 20,
                   right: 20,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.deepPurple,
                       borderRadius: BorderRadius.circular(20),
@@ -177,14 +191,21 @@ class ProductDetailScreen extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.amber.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Row(
                           children: [
-                            const Icon(Icons.star, color: Colors.amber, size: 18),
+                            const Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                              size: 18,
+                            ),
                             const SizedBox(width: 4),
                             Text(
                               rating.toString(),
@@ -216,7 +237,11 @@ class ProductDetailScreen extends StatelessWidget {
                           color: Colors.orange.withOpacity(0.1),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(Icons.store, size: 18, color: Colors.orange),
+                        child: const Icon(
+                          Icons.store,
+                          size: 18,
+                          color: Colors.orange,
+                        ),
                       ),
                       const SizedBox(width: 8),
                       Text(
@@ -245,7 +270,7 @@ class ProductDetailScreen extends StatelessWidget {
                           color: Colors.grey.withOpacity(0.1),
                           blurRadius: 10,
                           spreadRadius: 2,
-                        )
+                        ),
                       ],
                     ),
                     child: Row(
@@ -350,7 +375,7 @@ class ProductDetailScreen extends StatelessWidget {
               color: Colors.grey.withOpacity(0.2),
               blurRadius: 10,
               spreadRadius: 2,
-            )
+            ),
           ],
         ),
         child: Row(
@@ -363,7 +388,10 @@ class ProductDetailScreen extends StatelessWidget {
                     backgroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
-                      side: const BorderSide(color: Colors.deepPurple, width: 1.5),
+                      side: const BorderSide(
+                        color: Colors.deepPurple,
+                        width: 1.5,
+                      ),
                     ),
                   ),
                   onPressed: () {},
