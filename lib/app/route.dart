@@ -8,6 +8,7 @@ import 'package:roobai/screens/product/view/products.dart';
 import 'package:roobai/screens/joinus/view/mobile/joinus_mobile_view.dart';
 import 'package:roobai/screens/homepage/view/mobile/home.dart';
 import 'package:roobai/screens/product_detail/view/mobile/product_detail_screen.dart';
+import 'package:roobai/screens/product_detail/view/productDetail.dart';
 import 'package:roobai/screens/search/view/search_view.dart';
 import 'package:roobai/screens/setting/setting.dart';
 
@@ -59,13 +60,16 @@ class Routes {
           return Productpage();
         },
       ),
-        GoRoute(
-        name: RouteName.productdetail,
-        path: RouteName.productdetail,
-        builder: (BuildContext context, GoRouterState state) {
-          return ProductDetailScreen( );
-        },
-      ),
+      GoRoute(
+  name: RouteName.productdetail,
+  path: RouteName.productdetail,
+  builder: (BuildContext context, GoRouterState state) {
+    final Map<String,dynamic> extraData = state.extra as Map<String,dynamic>;
+    Logger().d('route::productdetail::$extraData');
+    return ProductDeatil(initialvalue: extraData);
+  },
+),
+
       GoRoute(
         name: RouteName.setting,
         path: RouteName.setting,
