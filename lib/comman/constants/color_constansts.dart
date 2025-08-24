@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-/// Centralized color constants used across the app
 class ColorConstants {
   const ColorConstants();
   static const primaryColor = Color(0xFF5824c9);
