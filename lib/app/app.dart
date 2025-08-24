@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:roobai/app/route.dart';
-import 'package:roobai/core/theme/theme.dart';
-import 'package:roobai/features/auth/data/Database.dart';
+import 'package:roobai/comman/theme/theme.dart';
+import 'package:roobai/comman/repos/storage_repository.dart';
 
 class App extends StatelessWidget {
   const App({super.key});

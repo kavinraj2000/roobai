@@ -3,9 +3,12 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:roobai/core/api/app_api.dart';
-import 'package:roobai/core/theme/constants.dart';
-import 'package:roobai/features/data/model/deal_model.dart';
+import 'package:roobai/comman/constants/app_constansts.dart';
+import 'package:roobai/comman/constants/color_constansts.dart';
+import 'package:roobai/comman/constants/constansts.dart';
+import 'package:roobai/comman/repos/app_api_repository.dart';
+import 'package:roobai/comman/model/deal_model.dart';
+import 'package:roobai/comman/service/security_storage.dart';
 
 
 import 'deal_cat.dart';
@@ -107,7 +110,7 @@ class _amazon_finderState extends State<amazon_finder> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: primaryColor,
+          backgroundColor: ColorConstants.primaryColor,
           title: Text(
             "${widget.provider.title} Deal Finder",
             style: TextStyle(fontSize: 18),

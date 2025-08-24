@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:roobai/features/product/shared/widget/appbarwidget.dart';
-import 'package:roobai/features/product/shared/widget/navbarwidget.dart';
+import 'package:roobai/comman/widgets/appbarwidget.dart';
+import 'package:roobai/comman/widgets/navbarwidget.dart';
 import 'package:roobai/screens/search/bloc/search_bloc.dart';
 
 

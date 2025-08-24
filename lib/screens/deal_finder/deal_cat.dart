@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:roobai/core/theme/constants.dart';
-import 'package:roobai/features/data/model/deal_model.dart';
+import 'package:roobai/comman/constants/color_constansts.dart';
+import 'package:roobai/comman/model/deal_model.dart';
 
 class DealCategory extends StatefulWidget {
   Providers provider = Providers();
@@ -16,14 +16,14 @@ class _DealCategoryState extends State<DealCategory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: lay_bg,
+        backgroundColor:ColorConstants.layBg,
         appBar: AppBar(
         titleSpacing: 0,
         title: Text(' ${widget.provider.title!} Category List', style: TextStyle(color: Colors.white, fontSize: 18),),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () => Navigator.of(context).pop(),),
-          backgroundColor: primaryColor,),
+          backgroundColor:ColorConstants.primaryColor,),
     body: SafeArea(
       child: Container(
         width: MediaQuery.of(context).size.width,

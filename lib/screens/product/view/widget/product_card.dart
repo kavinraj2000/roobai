@@ -5,7 +5,6 @@ import 'package:logger/logger.dart';
 import 'package:roobai/app/route_names.dart';
 import 'package:roobai/screens/product/model/products.dart';
 import 'package:roobai/screens/product/view/widget/Product_datetime.dart';
-import 'package:roobai/screens/product/view/widget/product_priceformattor.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -14,17 +13,18 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final offerPrice = double.tryParse(product.productOfferPrice?.toString() ?? '0') ?? 0;
-    final salePrice = double.tryParse(product.productSalePrice?.toString() ?? '0') ?? 0;
+    final offerPrice =
+        double.tryParse(product.productOfferPrice?.toString() ?? '0') ?? 0;
+    final salePrice =
+        double.tryParse(product.productSalePrice?.toString() ?? '0') ?? 0;
     final discountPercentage = salePrice > 0
         ? ((salePrice - offerPrice) / salePrice * 100).round()
         : 0;
 
     return InkWell(
-      onTap: (){
-                context.goNamed(RouteName.productdetail,extra: product.toMap());
-                Logger().d('data passed ::${product.toMap()}');
-
+      onTap: () {
+        context.goNamed(RouteName.productdetail, extra: product.toMap());
+        Logger().d('data passed ::${product.toMap()}');
       },
       child: Container(
         clipBehavior: Clip.antiAlias,
@@ -32,7 +32,7 @@ class ProductCard extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: Colors.grey.shade200, width: 0.5),
-          boxShadow: [
+          boxShadow: [ 
             BoxShadow(
               color: Colors.black.withOpacity(0.04),
               blurRadius: 6,
@@ -71,7 +71,10 @@ class ProductCard extends StatelessWidget {
                 top: 0,
                 left: 0,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.green.shade600,
                     borderRadius: BorderRadius.circular(10),
@@ -182,9 +185,7 @@ class ProductCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: const BoxDecoration(
         color: Color.fromARGB(255, 245, 220, 2),
-        border: Border(
-          top: BorderSide(color: Colors.orange, width: 0.5),
-        ),
+        border: Border(top: BorderSide(color: Colors.orange, width: 0.5)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -227,7 +228,7 @@ class ProductCard extends StatelessWidget {
                 child: CircularProgressIndicator(
                   value: loadingProgress.expectedTotalBytes != null
                       ? loadingProgress.cumulativeBytesLoaded /
-                          loadingProgress.expectedTotalBytes!
+                            loadingProgress.expectedTotalBytes!
                       : null,
                   strokeWidth: 2,
                   color: Colors.blue.shade300,

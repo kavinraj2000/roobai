@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:roobai/features/product/shared/widget/loader.dart';
+import 'package:roobai/comman/widgets/loader.dart';
 
 class DealFinderLoading extends StatelessWidget {
   const DealFinderLoading({super.key});

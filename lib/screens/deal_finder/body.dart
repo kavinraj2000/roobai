@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:roobai/core/api/app_api.dart';
-import 'package:roobai/core/theme/constants.dart';
-import 'package:roobai/features/data/model/deal_model.dart';
+import 'package:roobai/comman/constants/color_constansts.dart';
+import 'package:roobai/comman/repos/app_api_repository.dart';
+import 'package:roobai/comman/model/deal_model.dart';
 import 'amazon_fin.dart'; // Assume this page exists
 
 class DealFinder extends StatefulWidget {
@@ -67,7 +67,7 @@ class _ProductState extends State<DealFinder> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Deal Finder"),
-        backgroundColor: primaryColor,
+        backgroundColor:ColorConstants.primaryColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),

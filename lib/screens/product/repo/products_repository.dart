@@ -2,14 +2,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
-import 'package:roobai/core/api/app_api.dart';
-import 'package:roobai/features/auth/data/Database.dart';
+import 'package:roobai/comman/repos/app_api_repository.dart';
+import 'package:roobai/comman/repos/storage_repository.dart';
 import 'package:roobai/screens/product/model/products.dart';
 
 class DealRepository {
   final Apidatabase api = Apidatabase();
   final log = Logger();
-  final Dio dio = Dio(); // ✅ Create Dio instance
+  final Dio dio = Dio();
 
   Future<List<Product>> getDealData() async {
     try {
@@ -32,7 +32,9 @@ class DealRepository {
 
         if (data is Map && data['data'] is List) {
           final List dataList = data['data'];
-          return dataList.map<Product>((json) => Product.fromMap(json)).toList();
+          return dataList
+              .map<Product>((json) => Product.fromMap(json))
+              .toList();
         }
 
         throw Exception("Unexpected response format: ${jsonEncode(data)}");

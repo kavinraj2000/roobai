@@ -2,62 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:roobai/comman/constants/color_constansts.dart';
+import 'package:roobai/comman/constants/constansts.dart';
 
 
-const primaryColor = Color(0xFF5824c9);
-const offerColor = Color(0xFF22ddb9);
-const textGreen = Color(0xFF33a072);
-const textGreenShade = Color(0xFFe0f8eb);
-const dayBack = Color(0xFFf1faff);
-const secondaryColor = Color(0xFF2CB7DE);
-const white = Color(0xFFFFFFFF);
-const black = Color(0xFF000000);
-const layBack = Color(0xFFF2F5FA);
-const textColor = Color(0xFF28306E);
-const textDarkColor = Color(0xFF151C4F);
-const textAsh = Color(0xFF919296);
-const cat_back = Color(0xFFCBCBCB);
-const listBorder = Color(0xFFE7EEF6);
-const menuText = Color(0xFFD8E5ED);
-const menuText1 = Color(0xFFa1a9b9);
-const strighthrough = Color(0xFF8b9ca7);
-const low = Color(0xFFff7f56);
-const clip_color = Color(0xFF798388);
-const what_color = Color(0xFF2cb641);
-const face_color = Color(0xFF4064ad);
-const tele_color = Color(0xFF027cb9);
-const twit_color = Color(0xFF1c9deb);
 
-const medium = Color(0xFFfe5621);
-const high = Color(0xFFee2b19);
-const flip = Color(0xFF2874f0);
 
-const discount1 = Color(0xFFffc000);
-const discount2 = Color(0xFFff7f56);
-const discount3 = Color(0xFFee2b19);
-const discount4 = Color(0xFF2874f0);
-
-const lay_bg = Color(0xFFEDF1F4);
-const gjsonDecodeAnimationDuration = Duration(milliseconds: 200);
-const just_in = '/deal//1/';
-const cat_list = '/salecategory/1/';
-const homepage = '/homepage/';
-const deal_finder = '/deal_finder/';
-const best = '/deal/2/';
-const allcmt = 'allcmt/';
-const productcmt = 'productcmt/';
-const postcmt = 'postcmt/';
-const banner = 'bannerlist/1/';
-
-final RegExp emailValidatorRegExp = RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-const String EmailNullError = "Please Enter your email";
-const String InvalidEmailError = "Please Enter Valid Email";
-const String PassNullError = "Please Enter your password";
-const String ShortPassError = "Password is too short";
-const String MatchPassError = "Passwords don't match";
-const String NamelNullError = "Please Enter your name";
-const String PhoneNumberNullError = "Please Enter your phone number";
-const String AddressNullError = "Please Enter your address";
 
 final otpInputDecoration = InputDecoration(
   contentPadding: EdgeInsets.symmetric(vertical: (15)),
@@ -69,7 +19,7 @@ final otpInputDecoration = InputDecoration(
 OutlineInputBorder outlineInputBorder() {
   return OutlineInputBorder(
     borderRadius: BorderRadius.circular((15)),
-    borderSide: const BorderSide(color: textColor),
+    borderSide: BorderSide(color:ColorConstants.textColor),
   );
 }
 

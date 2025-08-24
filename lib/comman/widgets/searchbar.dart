@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:roobai/core/theme/constants.dart';
+import 'package:roobai/comman/constants/color_constansts.dart';
 
 class SimpleSearchBar extends StatelessWidget {
   final TextEditingController? controller;
@@ -31,7 +31,7 @@ class SimpleSearchBar extends StatelessWidget {
           hintText: hintText,
           hintStyle: TextStyle(color: Colors.blueGrey[300]),
           filled: true,                    
-          fillColor: white,               
+          fillColor: ColorConstants.white,               
           contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(0),

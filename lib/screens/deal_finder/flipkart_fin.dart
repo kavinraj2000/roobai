@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:roobai/core/theme/constants.dart';
+import 'package:roobai/comman/constants/color_constansts.dart';
 
 class flipkart_finder extends StatefulWidget {
   @override
@@ -30,7 +30,7 @@ class _flipkart_finderState extends State<flipkart_finder> {
     return Scaffold(
         // backgroundColor: Color(0xFF2874f0),
         appBar: AppBar(
-          backgroundColor: primaryColor,
+          backgroundColor:ColorConstants.primaryColor,
           title: Text(
             "Flipkart Deal Finder",
             style: TextStyle(fontSize: 20),

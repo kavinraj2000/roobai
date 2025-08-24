@@ -1,35 +1,35 @@
 part of 'homepage_bloc.dart';
 
+// States
 enum HomepageStatus { initial, loading, loaded, error }
 
-class HomepageState {
+class HomepageState extends Equatable {
   final HomepageStatus status;
   final List<HomeModel>? homeModel;
+  final List<Data>? banners;
   final String? errorMessage;
-  final String? selectedCategory;
-  final String? selectedProduct;
 
   const HomepageState({
     this.status = HomepageStatus.initial,
     this.homeModel,
+    this.banners,
     this.errorMessage,
-    this.selectedCategory,
-    this.selectedProduct,
   });
 
   HomepageState copyWith({
     HomepageStatus? status,
     List<HomeModel>? homeModel,
+    List<Data>? banners,
     String? errorMessage,
-    String? selectedCategory,
-    String? selectedProduct,
   }) {
     return HomepageState(
       status: status ?? this.status,
       homeModel: homeModel ?? this.homeModel,
+      banners: banners ?? this.banners,
       errorMessage: errorMessage ?? this.errorMessage,
-      selectedCategory: selectedCategory ?? this.selectedCategory,
-      selectedProduct: selectedProduct ?? this.selectedProduct,
     );
   }
+
+  @override
+  List<Object?> get props => [status, homeModel, banners, errorMessage];
 }

@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 // import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
-import 'package:roobai/core/theme/constants.dart';
-import 'package:roobai/features/product/shared/widget/appbarwidget.dart';
-import 'package:roobai/features/product/shared/widget/navbarwidget.dart';
+import 'package:roobai/comman/constants/color_constansts.dart';
+import 'package:roobai/comman/widgets/appbarwidget.dart';
+import 'package:roobai/comman/widgets/navbarwidget.dart';
 import 'package:roobai/screens/joinus/view/mobile/joinus_mobile_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -114,7 +114,7 @@ class _StateSetting extends State<Setting> with TickerProviderStateMixin {
                         BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 15, offset: const Offset(0, 5)),
                       ],
                     ),
-                    child: Center(child: Icon(Icons.person, size: 35, color: primaryColor)),
+                    child: Center(child: Icon(Icons.person, size: 35, color:ColorConstants.primaryColor)),
                   ),
                 ),
                 const SizedBox(width: 20),
@@ -366,7 +366,7 @@ class _StateSetting extends State<Setting> with TickerProviderStateMixin {
                           width: 40,
                           height: 40,
                           decoration: BoxDecoration(
-                            gradient: LinearGradient(colors: [primaryColor, primaryColor.withOpacity(0.8)]),
+                            gradient: LinearGradient(colors: [ColorConstants.primaryColor,ColorConstants.primaryColor.withOpacity(0.8)]),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: const Icon(Icons.edit_rounded, color: Colors.white, size: 20),
@@ -454,7 +454,7 @@ class _StateSetting extends State<Setting> with TickerProviderStateMixin {
                               }
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: primaryColor,
+                              backgroundColor:ColorConstants.primaryColor,
                               foregroundColor: Colors.white,
                               padding: const EdgeInsets.symmetric(vertical: 16),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

@@ -1,38 +1,45 @@
-
-
-import 'dart:convert';
-
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
-import 'package:roobai/core/api/app_api.dart';
-import 'package:roobai/features/auth/data/Database.dart';
-import 'package:roobai/features/data/model/home_model.dart';
-import 'package:roobai/features/data/model/product_model.dart';
+import 'package:roobai/comman/repos/app_api_repository.dart';
+import 'package:roobai/comman/repos/storage_repository.dart';
+import 'package:roobai/comman/model/home_model.dart';
 
 class HomepageRepository {
-    final Apidatabase api = Apidatabase();
+  final Apidatabase api = Apidatabase();
+  final Dio _dio = Dio();
+  final log = Logger();
 
   Future<List<HomeModel>> getProducts() async {
-     final baseUrl = await api.getBaseUrl();
-      final url = "$baseUrl/homepage/"; 
     try {
-      // final baseUrl = 'https://roo.bi/api/flutter/v11.0/deal//1/1/';
+      final baseUrl = await api.getBaseUrl();
+      final url = "$baseUrl/homepage/";
 
-      final response = await http.get(
-        Uri.parse(url),
-        headers: APIS.headers,
+      final response = await _dio.get(
+        url,
+        options: Options(headers: APIS.headers),
       );
-      Logger().d('HomepageRepository::getProducts::response:::$response');
+
+      log.d("HomepageRepository::getProducts::statusCode::${response.statusCode}");
+      log.d("HomepageRepository::getProducts::data::${response.data}");
+
       if (response.statusCode == 200) {
-        final List responseJson = json.decode(response.body);
-        Logger().d('HgetProducts::response.body:${response.body}');
-        Logger().d('HgetProducts::responseJson::$responseJson');
-        return responseJson.map((json) => HomeModel.fromJson(json)).toList();
+        if (response.data is List) {
+          return (response.data as List)
+              .map((json) => HomeModel.fromJson(json as Map<String, dynamic>))
+              .toList();
+        } else if (response.data is Map && response.data["data"] is List) {
+          return (response.data["data"] as List)
+              .map((json) => HomeModel.fromJson(json as Map<String, dynamic>))
+              .toList();
+        } else {
+          throw Exception("Unexpected response format: ${response.data}");
+        }
       } else {
-        throw Exception('Failed to load products: ${response.statusCode}');
+        throw Exception("Failed to load products: ${response.statusCode}");
       }
     } catch (e) {
-      throw Exception('Error fetching products: $e');
+      log.e("HomepageRepository::getProducts::error::$e",);
+      throw Exception("Error fetching products: $e");
     }
   }
 }

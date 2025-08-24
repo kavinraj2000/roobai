@@ -2,7 +2,6 @@ import 'package:logger/logger.dart';
 
 class APIS {
   static var mainurl = 'https://roobai.com/api/android/giveaway11/';
-  // static var  ='base_api_url';
 
   static var header = {
     "Content-Type": "application/json",

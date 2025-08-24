@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:roobai/core/theme/constants.dart';
+import 'package:roobai/comman/constants/color_constansts.dart';
 
 class myntra_finder extends StatefulWidget {
   @override
@@ -26,7 +26,7 @@ class _myntra_finderState extends State<myntra_finder> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: primaryColor,
+          backgroundColor:ColorConstants.primaryColor,
           title: Text(
             "Myntra Deal Finder",
             style: TextStyle(fontSize: 20),

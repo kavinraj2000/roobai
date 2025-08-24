@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
-import 'package:roobai/core/api/app_api.dart';
-import 'package:roobai/features/data/model/base_model.dart';
+import 'package:roobai/comman/repos/app_api_repository.dart';
+import 'package:roobai/comman/model/base_model.dart';
 
 class Apidatabase {
   final _log = Logger();
@@ -42,7 +42,6 @@ class Apidatabase {
     try {
       final baseModel = await getPageData();
 
-      // ✅ Choose url based on platform
       return Platform.isAndroid
           ? baseModel.baseApiUrl ?? ''
           : baseModel.ios_base_api_url ?? '';

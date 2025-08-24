@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:roobai/app/route_names.dart';
-import 'package:roobai/core/theme/constants.dart';
+import 'package:roobai/comman/constants/color_constansts.dart';
 import 'package:roobai/screens/joinus/bloc/joinus_bloc.dart';
 
 
@@ -24,7 +24,7 @@ class JoinUsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: lay_bg,
+      backgroundColor: ColorConstants.layBg,
       appBar: AppBar(
         titleSpacing: 0,
         title: const Text(
@@ -35,7 +35,7 @@ class JoinUsView extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => context.goNamed(RouteName.mainScreen)
         ),
-        backgroundColor: primaryColor,
+        backgroundColor: ColorConstants.primaryColor,
       ),
       body: const SafeArea(
         child: JoinUsBody(),
@@ -77,7 +77,7 @@ class JoinUsBody extends StatelessWidget {
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
-                color: primaryColor,
+                color: ColorConstants.primaryColor,
               ),
             ),
             const SizedBox(height: 16),
@@ -159,20 +159,20 @@ class JoinUsBody extends StatelessWidget {
           width: size,
           color: platform.name == 'Twitter Page'
               ? Colors.transparent
-              : primaryColor.withOpacity(0.1),
+              : ColorConstants.primaryColor.withOpacity(0.1),
           padding: const EdgeInsets.all(6),
           child: Image.asset(
             platform.iconPath,
             fit: BoxFit.contain,
-            color: platform.name == 'Twitter Page' ? null : primaryColor,
+            color: platform.name == 'Twitter Page' ? null : ColorConstants.primaryColor,
           ),
         ),
       );
     } else {
       return CircleAvatar(
         radius: size / 2,
-        backgroundColor: primaryColor.withOpacity(0.1),
-        child: Icon(platform.iconData, color: primaryColor),
+        backgroundColor: ColorConstants.primaryColor.withOpacity(0.1),
+        child: Icon(platform.iconData, color: ColorConstants.primaryColor),
       );
     }
   }

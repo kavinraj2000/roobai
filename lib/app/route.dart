@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
 import 'package:roobai/app/route_names.dart';
-import 'package:roobai/features/product/shared/widget/splash_screen.dart';
+import 'package:roobai/comman/widgets/splash_screen.dart';
+import 'package:roobai/screens/homepage/view/homepage_view.dart';
 import 'package:roobai/screens/product/model/products.dart';
 import 'package:roobai/screens/product/view/products.dart';
 import 'package:roobai/screens/joinus/view/mobile/joinus_mobile_view.dart';
@@ -29,7 +30,7 @@ class Routes {
         name: RouteName.mainScreen,
         path: RouteName.mainScreen,
         builder: (BuildContext context, GoRouterState state) {
-          return Homepage();
+          return HomepageView();
         },
       ),
       GoRoute(
@@ -61,14 +62,15 @@ class Routes {
         },
       ),
       GoRoute(
-  name: RouteName.productdetail,
-  path: RouteName.productdetail,
-  builder: (BuildContext context, GoRouterState state) {
-    final Map<String,dynamic> extraData = state.extra as Map<String,dynamic>;
-    Logger().d('route::productdetail::$extraData');
-    return ProductDeatil(initialvalue: extraData);
-  },
-),
+        name: RouteName.productdetail,
+        path: RouteName.productdetail,
+        builder: (BuildContext context, GoRouterState state) {
+          final Map<String, dynamic> extraData =
+              state.extra as Map<String, dynamic>;
+          Logger().d('route::productdetail::$extraData');
+          return ProductDeatil(initialvalue: extraData);
+        },
+      ),
 
       GoRoute(
         name: RouteName.setting,

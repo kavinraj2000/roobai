@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:roobai/core/theme/constants.dart';
+import 'package:roobai/comman/constants/color_constansts.dart';
 
 
 ThemeData theme() {
@@ -44,7 +44,7 @@ ThemeData theme() {
 InputDecorationTheme inputDecorationTheme() {
   OutlineInputBorder outlineInputBorder = OutlineInputBorder(
     borderRadius: BorderRadius.circular(28),
-    borderSide: const BorderSide(color: textColor),
+    borderSide: const BorderSide(color: ColorConstants.textColor),
     gapPadding: 10,
   );
   return InputDecorationTheme(
@@ -61,8 +61,8 @@ InputDecorationTheme inputDecorationTheme() {
 
 TextTheme textTheme() {
   return TextTheme(
-    bodyLarge: TextStyle(color: textColor),
-    bodyMedium: TextStyle(color: textColor),
+    bodyLarge: TextStyle(color: ColorConstants.textColor),
+    bodyMedium: TextStyle(color: ColorConstants.textColor),
   );
 }
 

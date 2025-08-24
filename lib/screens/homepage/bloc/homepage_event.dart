@@ -1,19 +1,12 @@
 part of 'homepage_bloc.dart';
 
-abstract class HomepageEvent {}
+abstract class HomepageEvent extends Equatable {
+  const HomepageEvent();
 
-class LoadHomepageDataEvent extends HomepageEvent {}
-
-class RefreshHomepageDataEvent extends HomepageEvent {}
-
-class CategorySelectedEvent extends HomepageEvent {
-  final String categorySlug;
-  
-  CategorySelectedEvent(this.categorySlug);
+  @override
+  List<Object> get props => [];
 }
 
-class ProductSelectedEvent extends HomepageEvent {
-  final String productId;
-  
-  ProductSelectedEvent(this.productId);
-}
+class LoadHomepageData extends HomepageEvent {}
+
+class LoadBanners extends HomepageEvent {}
