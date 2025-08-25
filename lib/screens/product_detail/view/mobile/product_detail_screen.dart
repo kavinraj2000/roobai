@@ -88,7 +88,6 @@ class ProductDetailScreen extends StatelessWidget {
                                   actions: [
                                     TextButton(
                                       onPressed: () {
-                                        // Copy to clipboard
                                         Clipboard.setData(
                                           ClipboardData(text: shareUrl),
                                         );
@@ -142,7 +141,6 @@ class ProductDetailScreen extends StatelessWidget {
                   ),
                 ),
 
-                // Body Scrollable Content
                 Expanded(
                   child: SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),

@@ -14,7 +14,7 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
 
   HomepageBloc(this.homeRepository) : super(const HomepageState()) {
     on<LoadHomepageData>(_onLoadHomepageData);
-    // on<CategorySelectedEvent>(_onCategorySelected);
+    on<LoadCategories>(_onCategoryloaded);
     // on<ProductSelectedEvent>(_onProductSelected);
   }
 
@@ -31,10 +31,7 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
       );
       emit(state.copyWith(status: HomepageStatus.loaded, homeModel: products));
     } catch (e) {
-      log.e(
-        "HomepageBloc::_onLoadHomepageData::error$e",
-        
-      );
+      log.e("HomepageBloc::_onLoadHomepageData::error$e");
       emit(
         state.copyWith(
           status: HomepageStatus.error,
@@ -44,17 +41,28 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
     }
   }
 
-  // FutureOr<void> _onCategorySelected(
-  //   CategorySelectedEvent event,
-  //   Emitter<HomepageState> emit,
-  // ) {
-  //   emit(state.copyWith(selectedCategory: event.categorySlug));
-  // }
+  FutureOr<void> _onCategoryloaded(
+    LoadCategories event,
+    Emitter<HomepageState> emit,
+  ) {
+        emit(state.copyWith(status: HomepageStatus.loading));
 
+    try {
+      // Extract categories of type "banner" or as needed
+      final categories = event.homeModels
+          .where((hm) => hm.type == 'banner' || hm.cat_slug == 'just_in')
+          .expand((hm) => hm.data ?? [])
+          .toList();
+        emit(state.copyWith(status: HomepageStatus.loaded,banners: categories));
+    } catch (e) {
+        emit(state.copyWith(status: HomepageStatus.error,errorMessage: '$e'));
+    }
+  }
+}
   // FutureOr<void> _onProductSelected(
   //   ProductSelectedEvent event,
   //   Emitter<HomepageState> emit,
   // ) {
   //   emit(state.copyWith(selectedProduct: event.productId));
   // }
-}
+

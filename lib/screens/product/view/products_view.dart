@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
 import 'package:roobai/comman/constants/color_constansts.dart';
-import 'package:roobai/comman/repos/app_api_repository.dart';
 import 'package:roobai/comman/widgets/appbarwidget.dart';
 import 'package:roobai/comman/widgets/navbarwidget.dart';
 import 'package:roobai/screens/product/bloc/products_bloc.dart';
@@ -21,7 +19,7 @@ class DealFinderView extends StatelessWidget {
 
     return Scaffold(
     appBar: CustomAppBar(),
-    bottomNavigationBar: BottomNavBarWidget(currentRoute: 'product',), 
+    bottomNavigationBar: BottomNavBarWidget(selectedIndex:0, ),
     backgroundColor:ColorConstants.white,
     body:  BlocBuilder<ProductBloc, ProductState>(
       builder: (context, state) {

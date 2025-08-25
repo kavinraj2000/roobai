@@ -24,7 +24,7 @@ class SearchScreen extends StatelessWidget {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
-        bottomNavigationBar: const BottomNavBarWidget(currentRoute: '/search'),
+    bottomNavigationBar: BottomNavBarWidget(selectedIndex:0 ),
 
         body: Column(
           children: [

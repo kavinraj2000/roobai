@@ -10,3 +10,8 @@ abstract class HomepageEvent extends Equatable {
 class LoadHomepageData extends HomepageEvent {}
 
 class LoadBanners extends HomepageEvent {}
+
+class LoadCategories extends HomepageEvent {
+  final List<HomeModel> homeModels;
+  LoadCategories(this.homeModels);
+}

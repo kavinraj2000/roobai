@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
+import 'package:roobai/comman/constants/constansts.dart';
 import 'package:roobai/comman/repos/app_api_repository.dart';
 import 'package:roobai/comman/repos/storage_repository.dart';
 import 'package:roobai/comman/model/home_model.dart';
@@ -12,8 +13,8 @@ class HomepageRepository {
   Future<List<HomeModel>> getProducts() async {
     try {
       final baseUrl = await api.getBaseUrl();
-      final url = "$baseUrl/homepage/";
-
+      final url = "${baseUrl+Constansts.api.homepage}/";
+log.d('HomepageRepository:url:$url');
       final response = await _dio.get(
         url,
         options: Options(headers: APIS.headers),

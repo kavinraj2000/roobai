@@ -14,48 +14,47 @@ class ProductContentWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final log = Logger();
-    
+
     // Extract data safely with defaults
     final productName = data['product_name'] ?? 'Product Name';
     final salePrice = double.tryParse(data['product_sale_price']) ?? 0.0;
     final offerPrice = double.tryParse(data['product_offer_price']) ?? 0.0;
     final storeName = data['store_name'] ?? 'Store';
     final productDescription = data['product_description'];
-    final storeImage = data['store_image'] ;
-    final Producturl=data['product_url'];
-    final stockstatus=data['stock_status'];
-    final updateddate=data['date_time'];
-    final comment=data['comment_count'];
-    final like=data['like_status'];
-    final coupen=data['coupen'];
-    final roopaipageurl=data['share_url'];
-    final storeurl=data['store_url'];
+    final storeImage = data['store_image'];
+    final Producturl = data['product_url'];
+    final stockstatus = data['stock_status'];
+    final updateddate = data['date_time'];
+    final comment = data['comment_count'];
+    final like = data['like_status'];
+    final coupen = data['coupen'];
+    final roopaipageurl = data['share_url'];
+    final storeurl = data['store_url'];
     final savings = salePrice - offerPrice;
 
     if (data.containsKey('product_description')) {
-  String rawDescription = data['product_description'] ?? '';
+      String rawDescription = data['product_description'] ?? '';
 
-  String cleanedDescription = rawDescription
-      .replaceAll(RegExp(r'I/flutter \(\s*\d+\):\s*│\s*🐛\s*'), '')
-      .replaceAll('Product Description:', '')
-      .replaceAll('Disclaimer:', '')
-      .replaceAll('Note:', '')
-      .replaceAll('Disclosure:', '')
-      .replaceAll('🟡', '')
-      .replaceAll('│ 🐛', '')
-      .replaceAll('\n', ' ')
-      .replaceAll(RegExp(r'\s+'), ' ') // Collapse multiple spaces
-      .trim();
+      String cleanedDescription = rawDescription
+          .replaceAll(RegExp(r'I/flutter \(\s*\d+\):\s*│\s*🐛\s*'), '')
+          .replaceAll('Product Description:', '')
+          .replaceAll('Disclaimer:', '')
+          .replaceAll('Note:', '')
+          .replaceAll('Disclosure:', '')
+          .replaceAll('🟡', '')
+          .replaceAll('│ 🐛', '')
+          .replaceAll('\n', ' ')
+          .replaceAll(RegExp(r'\s+'), ' ') // Collapse multiple spaces
+          .trim();
 
-  // Set back cleaned version into data
-  data['product_description'] = cleanedDescription.isNotEmpty
-      ? cleanedDescription
-      : 'High-quality product with excellent features and performance.';
-}
-    
+      // Set back cleaned version into data
+      data['product_description'] = cleanedDescription.isNotEmpty
+          ? cleanedDescription
+          : 'High-quality product with excellent features and performance.';
+    }
+
     log.d('ProductContentWidget::data::::${data['product_description']}');
-  
-    
+
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -131,9 +130,7 @@ class ProductContentWidget extends StatelessWidget {
                   const Spacer(),
                   if (savings > 0)
                     Container(
-                      padding: const EdgeInsets.all(4
-                        
-                      ),
+                      padding: const EdgeInsets.all(4),
                       decoration: BoxDecoration(
                         color: Colors.orange.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
@@ -149,7 +146,7 @@ class ProductContentWidget extends StatelessWidget {
                     ),
                 ],
               ),
-            ),
+            ), 
           ),
 
           const SizedBox(height: 24),
@@ -169,61 +166,60 @@ class ProductContentWidget extends StatelessWidget {
 
           const SizedBox(height: 8),
 
-  Row(
-  children: [
-    // Like icon + count
-    Row(
-      children: [
-        Icon(
-          Icons.thumb_up_alt_outlined,  // Like icon
-          color: Colors.redAccent,
-          size: 20,
-        ),
-        const SizedBox(width: 4),
-        Text(
-          '${data['like_status']}',  // Use your like count variable here
-          style: TextStyle(
-            color: Colors.grey[600],
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
-    ),
+          Row(
+            children: [
+              // Like icon + count
+              Row(
+                children: [
+                  Icon(
+                    Icons.thumb_up_alt_outlined, // Like icon
+                    color: Colors.redAccent,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    '${data['like_status']}', // Use your like count variable here
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
 
-    const SizedBox(width: 16),
+              const SizedBox(width: 16),
 
-    // Comment icon + count
-    Row(
-      children: [
-        Icon(
-          Icons.comment_outlined,  // Comment icon
-          color: Colors.blueAccent,
-          size: 20,
-        ),
-        const SizedBox(width: 4),
-        Text(
-          '${data['comment_count']}',  // Use your like count variable here
-          style: TextStyle(
-            color: Colors.grey[600],
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
+              // Comment icon + count
+              Row(
+                children: [
+                  Icon(
+                    Icons.comment_outlined, // Comment icon
+                    color: Colors.blueAccent,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    '${data['comment_count']}', // Use your like count variable here
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    '${data['coupon']}', // Use your like count variable here
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-        ),
-           const SizedBox(width: 4),
-        Text(
-          '${data['coupon']}',  // Use your like count variable here
-          style: TextStyle(
-            color: Colors.grey[600],
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
-    ),
-  ],
-),
-
 
           const SizedBox(height: 20),
 
@@ -234,61 +230,66 @@ class ProductContentWidget extends StatelessWidget {
                   .replaceAll('Product Description:', '')
                   .replaceAll('🟡', '')
                   .trim();
-              
-              List<String> descriptionParts = productDescription.split(RegExp(r'Disclaimer:|Note:|Disclosure:'));
-              String mainDescription = descriptionParts.isNotEmpty 
-                  ? descriptionParts[0].trim() 
+
+              List<String> descriptionParts = productDescription.split(
+                RegExp(r'Disclaimer:|Note:|Disclosure:'),
+              );
+              String mainDescription = descriptionParts.isNotEmpty
+                  ? descriptionParts[0].trim()
                   : '';
-              
+
               if (mainDescription.isEmpty) {
-                mainDescription = 'High-quality product with excellent features and performance.';
+                mainDescription =
+                    'High-quality product with excellent features and performance.';
               }
-              
+
               String displayDescription = state.showFullDescription
                   ? mainDescription
-                  : (mainDescription.length > 100 
-                      ? '${mainDescription.substring(0, 100)}...' 
-                      : mainDescription);
-             return Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-    Text(
-      'Product Details',
-      style: GoogleFonts.poppins(  // 👈 title font
-        color: const Color(0xFF2D2D2D),
-        fontSize: 18,
-        fontWeight: FontWeight.w600,
-      ),
-    ),
-    const SizedBox(height: 12),
-    Text(
-      cleanDescription,
-      style: GoogleFonts.roboto(  // 👈 body font
-        color: const Color(0xFF555555),
-        fontSize: 15,
-        height: 1.6,
-        fontWeight: FontWeight.w400,
-      ),
-    ),
-    if (productDescription.length > 100) ...[
-      const SizedBox(height: 8),
-      GestureDetector(
-        onTap: () => context.read<ProductDetailBloc>().add(
-              ToggleDescriptionEvent(),
-            ),
-        child: Text(
-          state.showFullDescription ? 'Show less' : 'Read more',
-          style: GoogleFonts.poppins(  // 👈 link font
-            color: const Color(0xFF7B3F9E),
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-    ],
-  ],
-);
-
+                  : (mainDescription.length > 100
+                        ? '${mainDescription.substring(0, 100)}...'
+                        : mainDescription);
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Product Details',
+                    style: GoogleFonts.poppins(
+                      // 👈 title font
+                      color: const Color(0xFF2D2D2D),
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    cleanDescription,
+                    style: GoogleFonts.roboto(
+                      // 👈 body font
+                      color: const Color(0xFF555555),
+                      fontSize: 15,
+                      height: 1.6,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  if (productDescription.length > 100) ...[
+                    const SizedBox(height: 8),
+                    GestureDetector(
+                      onTap: () => context.read<ProductDetailBloc>().add(
+                        ToggleDescriptionEvent(),
+                      ),
+                      child: Text(
+                        state.showFullDescription ? 'Show less' : 'Read more',
+                        style: GoogleFonts.poppins(
+                          // 👈 link font
+                          color: const Color(0xFF7B3F9E),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              );
             },
           ),
 
@@ -326,7 +327,7 @@ class ProductContentWidget extends StatelessWidget {
                     ),
                   ),
                 if (storeImage.isNotEmpty) const SizedBox(width: 12),
-                
+
                 Expanded(
                   child: RichText(
                     text: TextSpan(
@@ -334,7 +335,7 @@ class ProductContentWidget extends StatelessWidget {
                         TextSpan(
                           text: '$storeName ',
                           style: TextStyle(
-                            color: storeName.toLowerCase() == 'amazon' 
+                            color: storeName.toLowerCase() == 'amazon'
                                 ? const Color(0xFFE53E3E)
                                 : const Color(0xFF7B3F9E),
                             fontSize: 16,
@@ -389,14 +390,12 @@ class ProductContentWidget extends StatelessWidget {
                   onPressed: state.status == ProductDetailStatus.loading
                       ? null
                       : () async {
-                        
                           HapticFeedback.mediumImpact();
-                          
-                         
-                        await launchUrl(
-  Uri.parse(Producturl),
-  mode: LaunchMode.inAppWebView,
-);
+
+                          await launchUrl(
+                            Uri.parse(Producturl),
+                            mode: LaunchMode.inAppWebView,
+                          );
                         },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.transparent,
@@ -414,7 +413,7 @@ class ProductContentWidget extends StatelessWidget {
                             strokeWidth: 2,
                           ),
                         )
-                      :  Row(
+                      : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
