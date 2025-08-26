@@ -13,14 +13,16 @@ class HomepageRepository {
   Future<List<HomeModel>> getProducts() async {
     try {
       final baseUrl = await api.getBaseUrl();
-      final url = "${baseUrl+Constansts.api.homepage}/";
-log.d('HomepageRepository:url:$url');
+      final url = "${baseUrl + Constansts.api.homepage}/";
+      log.d('HomepageRepository:url:$url');
       final response = await _dio.get(
         url,
         options: Options(headers: APIS.headers),
       );
 
-      log.d("HomepageRepository::getProducts::statusCode::${response.statusCode}");
+      log.d(
+        "HomepageRepository::getProducts::statusCode::${response.statusCode}",
+      );
       log.d("HomepageRepository::getProducts::data::${response.data}");
 
       if (response.statusCode == 200) {
@@ -39,7 +41,7 @@ log.d('HomepageRepository:url:$url');
         throw Exception("Failed to load products: ${response.statusCode}");
       }
     } catch (e) {
-      log.e("HomepageRepository::getProducts::error::$e",);
+      log.e("HomepageRepository::getProducts::error::$e");
       throw Exception("Error fetching products: $e");
     }
   }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class ProductDatetime extends StatelessWidget {
+class Datetimewidget extends StatelessWidget {
   final String? dateTime; // date string from API
 
-  const ProductDatetime({super.key, required this.dateTime});
+  const Datetimewidget({super.key, required this.dateTime});
 
   String _timeAgo(String dateString) {
     try {

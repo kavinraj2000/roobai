@@ -53,73 +53,99 @@ class ProductCard extends StatelessWidget {
       ),
     );
   }
+Widget _buildImageSection(int discountPercentage) {
+  return AspectRatio(
+    aspectRatio: 1.1,
+    child: Container(
+      padding: const EdgeInsets.all(6),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+      ),
+      child: Stack(
+        children: [
+          Center(child: _buildProductImage()),
 
-  Widget _buildImageSection(int discountPercentage) {
-    return AspectRatio(
-      aspectRatio: 1.1, // Makes the image section more square
-      child: Container(
-        padding: const EdgeInsets.all(6),
-        decoration: BoxDecoration(
-          color: Colors.grey.shade50,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-        ),
-        child: Stack(
-          children: [
-            Center(child: _buildProductImage()),
-            if (discountPercentage > 0)
-              Positioned(
-                top: 0,
-                left: 0,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.green.shade600,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    "$discountPercentage% OFF",
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 9,
-                    ),
-                  ),
-                ),
-              ),
+          // Discount Badge
+          if (discountPercentage > 0)
             Positioned(
               top: 0,
-              right: 0,
-              child: GestureDetector(
-                onTap: () => Logger().d('onpressed ::like button'),
-                child: Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
+              left: 0,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: Colors.green.shade600,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  "$discountPercentage% OFF",
+                  style: const TextStyle(
                     color: Colors.white,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 3,
-                        offset: const Offset(0, 1),
-                      ),
-                    ],
-                  ),
-                  child: Icon(
-                    Icons.favorite_border,
-                    color: Colors.red.shade400,
-                    size: 14,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 9,
                   ),
                 ),
               ),
             ),
-          ],
-        ),
+
+          // Favorite Button
+          Positioned(
+            top: 0,
+            right: 0,
+            child: GestureDetector(
+              onTap: () => Logger().d('onpressed ::like button'),
+              child: Container(
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 3,
+                      offset: const Offset(0, 1),
+                    ),
+                  ],
+                ),
+                child: Icon(
+                  Icons.favorite_border,
+                  color: Colors.red.shade400,
+                  size: 14,
+                ),
+              ),
+            ),
+          ),
+
+          // ✅ GOAT Badge (only if discount ≥ 80%)
+          if (discountPercentage >= 80)
+            Positioned(
+              bottom: 0,
+              left: 0,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                decoration: BoxDecoration(
+                  color: Colors.deepPurple,
+                  borderRadius: const BorderRadius.only(
+                    topRight: Radius.circular(8),
+                  ),
+                ),
+                child: const Text(
+                  'GOAT',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 10,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
+
 
   Widget _buildContentSection(double offerPrice, double salePrice) {
     return Padding(
@@ -172,7 +198,7 @@ class ProductCard extends StatelessWidget {
           ),
           if (product.dateTime != null) ...[
             const SizedBox(height: 4),
-            ProductDatetime(dateTime: product.dateTime),
+            Datetimewidget(dateTime: product.dateTime),
           ],
         ],
       ),

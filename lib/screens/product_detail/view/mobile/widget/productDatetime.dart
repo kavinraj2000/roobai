@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class ProductDatetime extends StatelessWidget {
+class Datetime extends StatelessWidget {
   final DateTime? dateTime;
 
-  const ProductDatetime({super.key, this.dateTime});
+  const Datetime({super.key, this.dateTime});
 
   @override
   Widget build(BuildContext context) {

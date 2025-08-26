@@ -19,7 +19,7 @@ class DealFinderView extends StatelessWidget {
 
     return Scaffold(
     appBar: CustomAppBar(),
-    bottomNavigationBar: BottomNavBarWidget(selectedIndex:0, ),
+    bottomNavigationBar: BottomNavBarWidget(selectedIndex:2, ),
     backgroundColor:ColorConstants.white,
     body:  BlocBuilder<ProductBloc, ProductState>(
       builder: (context, state) {

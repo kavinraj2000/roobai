@@ -8,6 +8,7 @@ import 'package:roobai/comman/widgets/loader.dart';
 import 'package:roobai/screens/product_detail/bloc/product_detail_bloc.dart';
 import 'package:roobai/screens/product_detail/view/mobile/widget/Product_content.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -25,6 +26,72 @@ class ProductDetailScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: CustomAppBar(),
+
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+          child: BlocBuilder<ProductDetailBloc, ProductDetailState>(
+            builder: (context, state) {
+              final productUrl = data['product_url'] ?? '';
+              final storeName = data['store_name'] ?? 'Buy Now';
+
+              return SizedBox(
+                height: 56,
+                child: ElevatedButton(
+                  onPressed: state.status == ProductDetailStatus.loading
+                      ? null
+                      : () async {
+                          HapticFeedback.mediumImpact();
+
+                          await launchUrl(
+                            Uri.parse(productUrl),
+                            mode: LaunchMode.inAppWebView,
+                          );
+                        },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    shadowColor: Colors.transparent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                  child: state.status == ProductDetailStatus.loading
+                      ? const SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.shopping_cart_outlined,
+                              color: Colors.white,
+                              size: 24,
+                            ),
+                            SizedBox(width: 12),
+                            Text(
+                              '$storeName',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          ],
+                        ),
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+
+      // ✅ Main product detail content
       body: BlocBuilder<ProductDetailBloc, ProductDetailState>(
         builder: (context, state) {
           if (state.status == ProductDetailStatus.loading) {
@@ -69,22 +136,19 @@ class ProductDetailScreen extends StatelessWidget {
                         ),
                         const Spacer(),
 
+                        // ✅ Share icon
                         GestureDetector(
                           onTap: () async {
                             final shareUrl = data['share_url'] ?? '';
 
-                            if (shareUrl.isEmpty) {
-                              return;
-                            }
+                            if (shareUrl.isEmpty) return;
 
                             showDialog(
                               context: context,
                               builder: (context) {
                                 return AlertDialog(
                                   title: const Text('Share Product'),
-                                  content: Text(
-                                    'Would you like to share the product or copy the link?',
-                                  ),
+                                  content: const Text('Would you like to share the product or copy the link?'),
                                   actions: [
                                     TextButton(
                                       onPressed: () {
@@ -92,15 +156,8 @@ class ProductDetailScreen extends StatelessWidget {
                                           ClipboardData(text: shareUrl),
                                         );
                                         Navigator.of(context).pop();
-
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                              'Link copied to clipboard!',
-                                            ),
-                                          ),
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          const SnackBar(content: Text('Link copied to clipboard!')),
                                         );
                                       },
                                       child: const Text('Copy Link'),
@@ -113,9 +170,7 @@ class ProductDetailScreen extends StatelessWidget {
                                       child: const Text('Share'),
                                     ),
                                     TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
+                                      onPressed: () => Navigator.of(context).pop(),
                                       child: const Text('Cancel'),
                                     ),
                                   ],
@@ -141,6 +196,7 @@ class ProductDetailScreen extends StatelessWidget {
                   ),
                 ),
 
+                // ✅ Product image and discount badge
                 Expanded(
                   child: SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
@@ -171,87 +227,60 @@ class ProductDetailScreen extends StatelessWidget {
                             child: Stack(
                               children: [
                                 Center(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(24),
-                                    child: Image.network(
-                                      data['product_image'],
-                                      fit: BoxFit.cover,
-                                      width: double.infinity,
-                                      height: double.infinity,
-                                      errorBuilder:
-                                          (context, error, stackTrace) {
-                                            return const Center(
-                                              child: Icon(
-                                                Icons.broken_image,
-                                                size: 50,
-                                                color: Colors.white,
-                                              ),
-                                            );
-                                          },
-                                      loadingBuilder:
-                                          (context, child, loadingProgress) {
-                                            if (loadingProgress == null)
-                                              return child;
-                                            return const Center(
-                                              child:
-                                                  CircularProgressIndicator(),
-                                            );
-                                          },
-                                    ),
+                                  child: Image.network(
+                                    data['product_image'],
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return const Center(
+                                        child: Icon(Icons.broken_image, size: 50, color: Colors.white),
+                                      );
+                                    },
+                                    loadingBuilder: (context, child, loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return const Center(child: CircularProgressIndicator());
+                                    },
                                   ),
                                 ),
 
-                                // Favorite Icon
+                                // Favorite button (optional)
                                 Positioned(
                                   top: 20,
                                   right: 20,
-                                  child:
-                                      BlocBuilder<
-                                        ProductDetailBloc,
-                                        ProductDetailState
-                                      >(
-                                        builder: (context, state) {
-                                          return GestureDetector(
-                                            onTap: () {
-                                              // HapticFeedback.lightImpact();
-                                              // context.read<ProductDetailBloc>().add(ToggleFavoriteEvent());
-                                            },
-                                            child: Container(
-                                              width: 50,
-                                              height: 50,
-                                              decoration: BoxDecoration(
-                                                color: state.isFavorite
-                                                    ? Colors.red.withOpacity(
-                                                        0.9,
-                                                      )
-                                                    : Colors.black.withOpacity(
-                                                        0.3,
-                                                      ),
-                                                borderRadius:
-                                                    BorderRadius.circular(25),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: state.isFavorite
-                                                        ? Colors.red
-                                                              .withOpacity(0.4)
-                                                        : Colors.black
-                                                              .withOpacity(0.2),
-                                                    offset: const Offset(0, 4),
-                                                    blurRadius: 8,
-                                                  ),
-                                                ],
-                                              ),
-                                              child: Icon(
-                                                state.isFavorite
-                                                    ? Icons.favorite
-                                                    : Icons.favorite_border,
-                                                color: Colors.white,
-                                                size: 26,
-                                              ),
-                                            ),
-                                          );
+                                  child: BlocBuilder<ProductDetailBloc, ProductDetailState>(
+                                    builder: (context, state) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          // Implement favorite toggle if needed
                                         },
-                                      ),
+                                        child: Container(
+                                          width: 50,
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                            color: state.isFavorite
+                                                ? Colors.red.withOpacity(0.9)
+                                                : Colors.black.withOpacity(0.3),
+                                            borderRadius: BorderRadius.circular(25),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: state.isFavorite
+                                                    ? Colors.red.withOpacity(0.4)
+                                                    : Colors.black.withOpacity(0.2),
+                                                offset: const Offset(0, 4),
+                                                blurRadius: 8,
+                                              ),
+                                            ],
+                                          ),
+                                          child: Icon(
+                                            state.isFavorite ? Icons.favorite : Icons.favorite_border,
+                                            color: Colors.white,
+                                            size: 26,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 ),
 
                                 // Discount Badge

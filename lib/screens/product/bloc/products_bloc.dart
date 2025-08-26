@@ -10,7 +10,7 @@ part 'products_state.dart';
 
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
   final DealRepository repo;
-  
+
   ProductBloc(this.repo) : super(ProductState.initial()) {
     on<FetchDealFinderData>(_onFetchDealFinderData);
     on<Addlikestatusevent>(_onLikeStatusChange);
@@ -24,28 +24,31 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       emit(state.copyWith(status: DealfinderStatus.loading));
 
       Logger().d('ProductBloc::_onFetchDealFinderData::${event.runtimeType}');
-      
+
       final List<Product> data = await repo.getDealData();
-      
+
       Logger().d('_onFetchDealFinderData::data count::$data');
-      
-      emit(state.copyWith(
-        status: DealfinderStatus.loaded, 
-        dealModel: data,
-        message: null, 
-      ));
-      
+
+      emit(
+        state.copyWith(
+          status: DealfinderStatus.loaded,
+          dealModel: data,
+          message: null,
+        ),
+      );
     } catch (e, stackTrace) {
       Logger().e(
         'ProductBloc::_onFetchDealFinderData::error::$e',
         stackTrace: stackTrace,
       );
-      
-      emit(state.copyWith(
-        status: DealfinderStatus.failure,
-        message: 'Failed to load products. Please try again.',
-        dealModel: [], 
-      ));
+
+      emit(
+        state.copyWith(
+          status: DealfinderStatus.failure,
+          message: 'Failed to load products. Please try again.',
+          dealModel: [],
+        ),
+      );
     }
   }
 
@@ -54,7 +57,6 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     Emitter<ProductState> emit,
   ) async {
     try {
-      // Check if we have products loaded
       if (state.dealModel == null || state.dealModel!.isEmpty) {
         Logger().w('ProductBloc::_onLikeStatusChange::No products loaded');
         return;
@@ -80,10 +82,12 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       currentProducts[productIndex] = updatedProduct;
 
       // Emit optimistic update
-      emit(state.copyWith(
-        status: DealfinderStatus.loaded,
-        dealModel: currentProducts,
-      ));
+      emit(
+        state.copyWith(
+          status: DealfinderStatus.loaded,
+          dealModel: currentProducts,
+        ),
+      );
 
       Logger().d(
         'ProductBloc::_onLikeStatusChange::Updated product ${updatedProduct.pid} '
@@ -115,7 +119,6 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         ));
       }
       */
-
     } catch (e, stackTrace) {
       Logger().e(
         'ProductBloc::_onLikeStatusChange::Unexpected error::$e',
@@ -123,10 +126,12 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       );
 
       // On unexpected error, try to revert to original state
-      emit(state.copyWith(
-        status: DealfinderStatus.failure,
-        message: 'Error updating favorite status',
-      ));
+      emit(
+        state.copyWith(
+          status: DealfinderStatus.failure,
+          message: 'Error updating favorite status',
+        ),
+      );
     }
   }
 
@@ -140,4 +145,3 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     add(Addlikestatusevent(product));
   }
 }
-

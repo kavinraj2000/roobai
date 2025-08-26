@@ -4,47 +4,44 @@ enum HomepageStatus { initial, loading, loaded, error }
 
 class HomepageState extends Equatable {
   final HomepageStatus status;
-  final List<HomeModel>? homeModel;
-  final List<HomeModel>? repo;
-  final List<dynamic>? banners;
-  final String? errorMessage;
+  final List<HomeModel> homeModel;
+  final List<dynamic> banners;
+  final List<dynamic> categories;
+  final List<dynamic> justin;
+  final List<dynamic> livenow;
+  final String errorMessage;
 
   const HomepageState({
     this.status = HomepageStatus.initial,
-    this.homeModel,
-    this.repo,
-    this.banners,
-    this.errorMessage,
+    this.homeModel = const [],
+    this.banners = const [],
+    this.livenow=const[],
+    this.justin = const [],
+    this.categories = const [],
+    this.errorMessage = '',
   });
 
-  /// Factory for initial/default state
-  factory HomepageState.initial() {
-    return const HomepageState(
-      status: HomepageStatus.initial,
-      homeModel: [],
-      repo: [],
-      banners: [],
-      errorMessage: '',
-    );
-  }
-
-  /// Copy method to update specific fields immutably
   HomepageState copyWith({
     HomepageStatus? status,
     List<HomeModel>? homeModel,
-    List<HomeModel>? repo,
+    List<dynamic>? livenow,
     List<dynamic>? banners,
+    List<dynamic>? justin,
+    List<dynamic>? categories,
     String? errorMessage,
   }) {
     return HomepageState(
       status: status ?? this.status,
       homeModel: homeModel ?? this.homeModel,
-      repo: repo ?? this.repo,
+      livenow: livenow ?? this.livenow,
       banners: banners ?? this.banners,
+      justin: justin ?? this.justin,
+      categories: categories ?? this.categories,
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }
 
   @override
-  List<Object?> get props => [status, homeModel, repo, banners, errorMessage];
+  List<Object?> get props =>
+      [status, homeModel, banners, categories,justin, errorMessage,livenow];
 }

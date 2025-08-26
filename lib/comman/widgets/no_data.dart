@@ -9,7 +9,7 @@ class NoDataWidget extends StatelessWidget {
   const NoDataWidget({
     super.key,
     this.message = 'No data available',
-    this.lottieAssetPath = 'assets/animation/404 error page with cat.json', // your default Lottie asset
+    this.lottieAssetPath = 'assets/animation/404 error page with cat.json',
     this.height = 250,
   });
 

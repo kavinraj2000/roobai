@@ -12,7 +12,7 @@ class HomepageView extends StatelessWidget {
     return BlocProvider<HomepageBloc>(
       create: (context) =>
           HomepageBloc(HomepageRepository())..add(LoadHomepageData()),
-      child: const Homepage(), 
+      child: const HomeView(), 
     );
   }
 }

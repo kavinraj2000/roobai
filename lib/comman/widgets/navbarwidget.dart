@@ -30,48 +30,48 @@ class BottomNavBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16), 
-      child: Material(
-        color: Colors.deepPurpleAccent,
-        borderRadius: BorderRadius.circular(20),
-        elevation: 6,
-        child: BottomNavigationBar(
-          currentIndex: selectedIndex,
-          onTap: (index) => _onTabTapped(context, index),
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.transparent, // ✅ transparent background
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.white60,
-          selectedLabelStyle: const TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 13,
-          ),
-          unselectedLabelStyle: const TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: 12,
-          ),
-          elevation: 0, // ✅ remove elevation so no shadow from bar itself
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(LucideIcons.house),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(LucideIcons.user),
-              label: 'Profile',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(LucideIcons.tag),
-              label: 'Deals',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(LucideIcons.menu),
-              label: 'Menu',
-            ),
-          ],
-        ),
+    return BottomNavigationBar(
+      currentIndex: selectedIndex,
+      onTap: (index) => _onTabTapped(context, index),
+      type: BottomNavigationBarType.fixed,
+      backgroundColor: Colors.deepPurpleAccent, 
+      selectedItemColor: Colors.white,
+      unselectedItemColor: Colors.white60,
+      selectedLabelStyle: const TextStyle(
+        fontWeight: FontWeight.w600,
+        fontSize: 13,
       ),
+      unselectedLabelStyle: const TextStyle(
+        fontWeight: FontWeight.w500,
+        fontSize: 12,
+      ),
+      elevation: 0, 
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(LucideIcons.house),
+          label: 'Home',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(LucideIcons.user),
+          label: 'Profile',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(LucideIcons.tag),
+          label: 'Justin',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(LucideIcons.partyPopper),
+          label: 'Best',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(LucideIcons.menu),
+          label: 'Menu',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(LucideIcons.heartHandshake),
+          label: 'Dealfinder',
+        ),
+      ],
     );
   }
 }
