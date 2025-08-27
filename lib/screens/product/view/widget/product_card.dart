@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
-import 'package:roobai/app/route_names.dart';
 import 'package:roobai/screens/product/model/products.dart';
 import 'package:roobai/screens/product/view/widget/Product_datetime.dart';
 
@@ -23,8 +21,8 @@ class ProductCard extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        context.goNamed(RouteName.productdetail, extra: product.toMap());
-        Logger().d('data passed ::${product.toMap()}');
+        Logger().d('BottomSheet opened with product ::${product.toMap()}');
+        _showProductBottomSheet(context, product);
       },
       child: Container(
         clipBehavior: Clip.antiAlias,
@@ -32,7 +30,7 @@ class ProductCard extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: Colors.grey.shade200, width: 0.5),
-          boxShadow: [ 
+          boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.04),
               blurRadius: 6,
@@ -53,99 +51,120 @@ class ProductCard extends StatelessWidget {
       ),
     );
   }
-Widget _buildImageSection(int discountPercentage) {
-  return AspectRatio(
-    aspectRatio: 1.1,
-    child: Container(
-      padding: const EdgeInsets.all(6),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade50,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-      ),
-      child: Stack(
-        children: [
-          Center(child: _buildProductImage()),
 
-          // Discount Badge
-          if (discountPercentage > 0)
+  /// ✅ Function to show BottomSheet
+  void _showProductBottomSheet(BuildContext context, Product product) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) {
+        return ProductDetailSheet(product: product);
+      },
+    );
+  }
+
+  Widget _buildImageSection(int discountPercentage) {
+    return AspectRatio(
+      aspectRatio: 1.1,
+      child: Container(
+        padding: const EdgeInsets.all(6),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade50,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+        ),
+        child: Stack(
+          children: [
+            Center(child: _buildProductImage()),
+
+            // Discount Badge
+            if (discountPercentage > 0)
+              Positioned(
+                top: 0,
+                left: 0,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.green.shade600,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    "$discountPercentage% OFF",
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 9,
+                    ),
+                  ),
+                ),
+              ),
+
+            // Favorite Button
             Positioned(
               top: 0,
-              left: 0,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(
-                  color: Colors.green.shade600,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Text(
-                  "$discountPercentage% OFF",
-                  style: const TextStyle(
+              right: 0,
+              child: GestureDetector(
+                onTap: () => Logger().d('onpressed ::like button'),
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
                     color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 9,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 3,
+                        offset: const Offset(0, 1),
+                      ),
+                    ],
+                  ),
+                  child: Icon(
+                    Icons.favorite_border,
+                    color: Colors.red.shade400,
+                    size: 14,
                   ),
                 ),
               ),
             ),
 
-          // Favorite Button
-          Positioned(
-            top: 0,
-            right: 0,
-            child: GestureDetector(
-              onTap: () => Logger().d('onpressed ::like button'),
-              child: Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 3,
-                      offset: const Offset(0, 1),
+            // ✅ GOAT Badge (only if discount ≥ 80%)
+            if (discountPercentage >= 80)
+              Positioned(
+                bottom: 0,
+                left: 0,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 3,
+                  ),
+                  decoration: const BoxDecoration(
+                    color: Colors.deepPurple,
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(8),
                     ),
-                  ],
-                ),
-                child: Icon(
-                  Icons.favorite_border,
-                  color: Colors.red.shade400,
-                  size: 14,
-                ),
-              ),
-            ),
-          ),
-
-          // ✅ GOAT Badge (only if discount ≥ 80%)
-          if (discountPercentage >= 80)
-            Positioned(
-              bottom: 0,
-              left: 0,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                decoration: BoxDecoration(
-                  color: Colors.deepPurple,
-                  borderRadius: const BorderRadius.only(
-                    topRight: Radius.circular(8),
                   ),
-                ),
-                child: const Text(
-                  'GOAT',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 10,
-                    letterSpacing: 0.5,
+                  child: const Text(
+                    'GOAT',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 10,
+                      letterSpacing: 0.5,
+                    ),
                   ),
                 ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 
   Widget _buildContentSection(double offerPrice, double salePrice) {
     return Padding(
@@ -288,6 +307,111 @@ Widget _buildImageSection(int discountPercentage) {
                 fontSize: 9,
                 color: Colors.grey.shade500,
                 fontWeight: FontWeight.w400,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// ✅ Bottom Sheet Widget
+class ProductDetailSheet extends StatelessWidget {
+  final Product product;
+  const ProductDetailSheet({super.key, required this.product});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        left: 16,
+        right: 16,
+        top: 16,
+        bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+      ),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Drag handle
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 12),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade400,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+
+            // Product Image
+            if (product.productImage != null)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(
+                  product.productImage!,
+                  height: 200,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+              ),
+
+            const SizedBox(height: 12),
+
+            // Product Name
+            Text(
+              product.productName ?? "Unnamed Product",
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+            ),
+
+            const SizedBox(height: 6),
+
+            // Price
+            Text(
+              "₹${product.productOfferPrice}",
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.green,
+              ),
+            ),
+
+            if (product.productSalePrice != null)
+              Text(
+                "₹${product.productSalePrice}",
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey,
+                  decoration: TextDecoration.lineThrough,
+                ),
+              ),
+
+            const SizedBox(height: 12),
+
+            // Store
+            if (product.storeName != null)
+              Row(
+                children: [
+                  const Icon(Icons.store, size: 16),
+                  const SizedBox(width: 6),
+                  Text(product.storeName!),
+                ],
+              ),
+
+            const SizedBox(height: 16),
+
+            // Close button
+            Align(
+              alignment: Alignment.centerRight,
+              child: ElevatedButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text("Close"),
               ),
             ),
           ],

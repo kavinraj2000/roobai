@@ -9,12 +9,12 @@ import 'package:roobai/screens/product/model/products.dart';
 class DealRepository {
   final Apidatabase api = Apidatabase();
   final log = Logger();
-  final Dio dio = Dio();
+  final Dio dio = Dio(); 
 
   Future<List<Product>> getDealData() async {
     try {
       final baseUrl = await api.getBaseUrl();
-final url = "$baseUrl/deal/1/1000/"; // Instead of /1/1/
+      final url = "$baseUrl/deal/1/1000/"; // Instead of /1/1/
       final response = await dio.get(
         url,
         options: Options(headers: APIS.headers),

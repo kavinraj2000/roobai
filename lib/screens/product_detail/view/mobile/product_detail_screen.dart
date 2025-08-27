@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:roobai/app/route_names.dart';
-import 'package:roobai/comman/widgets/appbarwidget.dart';
 import 'package:roobai/comman/widgets/loader.dart';
 import 'package:roobai/screens/product_detail/bloc/product_detail_bloc.dart';
 import 'package:roobai/screens/product_detail/view/mobile/widget/Product_content.dart';
@@ -25,8 +24,8 @@ class ProductDetailScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.grey[50],
-      appBar: CustomAppBar(),
 
+      /// ✅ Removed `CustomAppBar()`, since you already built a custom header
       bottomNavigationBar: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
@@ -49,8 +48,8 @@ class ProductDetailScreen extends StatelessWidget {
                           );
                         },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    shadowColor: Colors.transparent,
+                    backgroundColor: Colors.green,
+                    shadowColor: Colors.greenAccent,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
@@ -67,15 +66,15 @@ class ProductDetailScreen extends StatelessWidget {
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.shopping_cart_outlined,
                               color: Colors.white,
                               size: 24,
                             ),
-                            SizedBox(width: 12),
+                            const SizedBox(width: 12),
                             Text(
-                              '$storeName',
-                              style: TextStyle(
+                              storeName,
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
@@ -101,6 +100,7 @@ class ProductDetailScreen extends StatelessWidget {
           if (state.status == ProductDetailStatus.loaded) {
             return Column(
               children: [
+                /// ✅ Custom Header
                 SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.all(16),
@@ -114,7 +114,7 @@ class ProductDetailScreen extends StatelessWidget {
                           child: Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.2),
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: const Icon(
@@ -148,7 +148,9 @@ class ProductDetailScreen extends StatelessWidget {
                               builder: (context) {
                                 return AlertDialog(
                                   title: const Text('Share Product'),
-                                  content: const Text('Would you like to share the product or copy the link?'),
+                                  content: const Text(
+                                    'Would you like to share the product or copy the link?',
+                                  ),
                                   actions: [
                                     TextButton(
                                       onPressed: () {
@@ -156,8 +158,14 @@ class ProductDetailScreen extends StatelessWidget {
                                           ClipboardData(text: shareUrl),
                                         );
                                         Navigator.of(context).pop();
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          const SnackBar(content: Text('Link copied to clipboard!')),
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                              'Link copied to clipboard!',
+                                            ),
+                                          ),
                                         );
                                       },
                                       child: const Text('Copy Link'),
@@ -170,7 +178,8 @@ class ProductDetailScreen extends StatelessWidget {
                                       child: const Text('Share'),
                                     ),
                                     TextButton(
-                                      onPressed: () => Navigator.of(context).pop(),
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(),
                                       child: const Text('Cancel'),
                                     ),
                                   ],
@@ -181,7 +190,7 @@ class ProductDetailScreen extends StatelessWidget {
                           child: Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.2),
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: const Icon(
@@ -229,97 +238,121 @@ class ProductDetailScreen extends StatelessWidget {
                                 Center(
                                   child: Image.network(
                                     data['product_image'],
-                                    fit: BoxFit.cover,
+                                    fit: BoxFit.contain, // ✅ better fit
                                     width: double.infinity,
                                     height: double.infinity,
                                     errorBuilder: (context, error, stackTrace) {
                                       return const Center(
-                                        child: Icon(Icons.broken_image, size: 50, color: Colors.white),
+                                        child: Icon(
+                                          Icons.broken_image,
+                                          size: 50,
+                                          color: Colors.white,
+                                        ),
                                       );
                                     },
-                                    loadingBuilder: (context, child, loadingProgress) {
-                                      if (loadingProgress == null) return child;
-                                      return const Center(child: CircularProgressIndicator());
-                                    },
+                                    loadingBuilder:
+                                        (context, child, loadingProgress) {
+                                          if (loadingProgress == null)
+                                            return child;
+                                          return const Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        },
                                   ),
                                 ),
 
-                                // Favorite button (optional)
+                                // Favorite button
                                 Positioned(
                                   top: 20,
                                   right: 20,
-                                  child: BlocBuilder<ProductDetailBloc, ProductDetailState>(
-                                    builder: (context, state) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          // Implement favorite toggle if needed
-                                        },
-                                        child: Container(
-                                          width: 50,
-                                          height: 50,
-                                          decoration: BoxDecoration(
-                                            color: state.isFavorite
-                                                ? Colors.red.withOpacity(0.9)
-                                                : Colors.black.withOpacity(0.3),
-                                            borderRadius: BorderRadius.circular(25),
-                                            boxShadow: [
-                                              BoxShadow(
+                                  child:
+                                      BlocBuilder<
+                                        ProductDetailBloc,
+                                        ProductDetailState
+                                      >(
+                                        builder: (context, state) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              context
+                                                  .read<ProductDetailBloc>()
+                                                  .add(ToggleFavoriteEvent());
+                                            },
+                                            child: Container(
+                                              width: 50,
+                                              height: 50,
+                                              decoration: BoxDecoration(
                                                 color: state.isFavorite
-                                                    ? Colors.red.withOpacity(0.4)
-                                                    : Colors.black.withOpacity(0.2),
-                                                offset: const Offset(0, 4),
-                                                blurRadius: 8,
+                                                    ? Colors.red.withOpacity(
+                                                        0.9,
+                                                      )
+                                                    : Colors.black.withOpacity(
+                                                        0.3,
+                                                      ),
+                                                borderRadius:
+                                                    BorderRadius.circular(25),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: state.isFavorite
+                                                        ? Colors.red
+                                                              .withOpacity(0.4)
+                                                        : Colors.black
+                                                              .withOpacity(0.2),
+                                                    offset: const Offset(0, 4),
+                                                    blurRadius: 8,
+                                                  ),
+                                                ],
                                               ),
-                                            ],
-                                          ),
-                                          child: Icon(
-                                            state.isFavorite ? Icons.favorite : Icons.favorite_border,
-                                            color: Colors.white,
-                                            size: 26,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
+                                              child: Icon(
+                                                state.isFavorite
+                                                    ? Icons.favorite
+                                                    : Icons.favorite_border,
+                                                color: Colors.white,
+                                                size: 26,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
                                 ),
 
                                 // Discount Badge
-                                Positioned(
-                                  top: 20,
-                                  left: 20,
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 12,
-                                      vertical: 6,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      gradient: const LinearGradient(
-                                        colors: [
-                                          Color(0xFF4CAF50),
-                                          Color(0xFF45A049),
+                                if (discountPercentage > 0)
+                                  Positioned(
+                                    top: 20,
+                                    left: 20,
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical: 6,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        gradient: const LinearGradient(
+                                          colors: [
+                                            Color(0xFF4CAF50),
+                                            Color(0xFF45A049),
+                                          ],
+                                        ),
+                                        borderRadius: BorderRadius.circular(20),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: const Color(
+                                              0xFF4CAF50,
+                                            ).withOpacity(0.4),
+                                            offset: const Offset(0, 4),
+                                            blurRadius: 8,
+                                          ),
                                         ],
                                       ),
-                                      borderRadius: BorderRadius.circular(20),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: const Color(
-                                            0xFF4CAF50,
-                                          ).withOpacity(0.4),
-                                          offset: const Offset(0, 4),
-                                          blurRadius: 8,
+                                      child: Text(
+                                        ' $discountPercentage% off',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600,
                                         ),
-                                      ],
-                                    ),
-                                    child: Text(
-                                      ' $discountPercentage% off',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                   ),
-                                ),
                               ],
                             ),
                           ),
