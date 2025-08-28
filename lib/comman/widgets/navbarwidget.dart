@@ -63,14 +63,14 @@ class BottomNavBarWidget extends StatelessWidget {
           icon: Icon(LucideIcons.partyPopper),
           label: 'Best',
         ),
-        BottomNavigationBarItem(
-          icon: Icon(LucideIcons.menu),
-          label: 'Menu',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(LucideIcons.heartHandshake),
-          label: 'Dealfinder',
-        ),
+        // BottomNavigationBarItem(
+        //   icon: Icon(LucideIcons.menu),
+        //   label: 'Menu',
+        // ),
+        // BottomNavigationBarItem(
+        //   icon: Icon(LucideIcons.heartHandshake),
+        //   label: 'Dealfinder',
+        // ),
       ],
     );
   }

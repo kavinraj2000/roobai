@@ -90,7 +90,6 @@ class ProductDetailScreen extends StatelessWidget {
         ),
       ),
 
-      // ✅ Main product detail content
       body: BlocBuilder<ProductDetailBloc, ProductDetailState>(
         builder: (context, state) {
           if (state.status == ProductDetailStatus.loading) {
@@ -100,7 +99,6 @@ class ProductDetailScreen extends StatelessWidget {
           if (state.status == ProductDetailStatus.loaded) {
             return Column(
               children: [
-                /// ✅ Custom Header
                 SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.all(16),

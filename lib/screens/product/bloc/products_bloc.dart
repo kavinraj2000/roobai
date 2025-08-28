@@ -13,7 +13,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
   ProductBloc(this.repo) : super(ProductState.initial()) {
     on<FetchDealFinderData>(_onFetchDealFinderData);
-    on<Addlikestatusevent>(_onLikeStatusChange);
+    // on<Addlikestatusevent>(_onLikeStatusChange);
   }
 
   Future<void> _onFetchDealFinderData(
@@ -25,9 +25,11 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
       Logger().d('ProductBloc::_onFetchDealFinderData::${event.runtimeType}');
 
-      final List<Product> data = await repo.getDealData();
+      final List<Product> data = await repo.getDealData( );
 
       Logger().d('_onFetchDealFinderData::data count::$data');
+
+
 
       emit(
         state.copyWith(
@@ -52,47 +54,66 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     }
   }
 
-  Future<void> _onLikeStatusChange(
-    Addlikestatusevent event,
-    Emitter<ProductState> emit,
-  ) async {
-    try {
-      if (state.dealModel == null || state.dealModel!.isEmpty) {
-        Logger().w('ProductBloc::_onLikeStatusChange::No products loaded');
-        return;
-      }
+// Future<void> _onLikeStatusChange(
+//   Addlikestatusevent event,
+//   Emitter<ProductState> emit,
+// ) async {
+//   try {
+//     if (state.dealModel == null || state.dealModel!.isEmpty) {
+//       Logger().w('ProductBloc::_onLikeStatusChange::No products loaded');
+//       return;
+//     }
 
-      // Optimistic update - update UI immediately
-      final currentProducts = List<Product>.from(state.dealModel!);
-      final productIndex = currentProducts.indexWhere(
-        (p) => p.pid == event.product.pid,
-      );
+//     final currentProducts = List<Product>.from(state.dealModel!);
+//     final productIndex = currentProducts.indexWhere(
+//       (p) => p.pid == event.product.pid,
+//     );
 
-      if (productIndex == -1) {
-        Logger().w('ProductBloc::_onLikeStatusChange::Product not found');
-        return;
-      }
+//     if (productIndex == -1) {
+//       Logger().w('ProductBloc::_onLikeStatusChange::Product not found');
+//       return;
+//     }
 
-      // Toggle like status
-      final updatedProduct = event.product.copyWith(
-        likeStatus: event.product.likeStatus == "1" ? "0" : "1",
-      );
+//     // Toggle like status
+//     final updatedProduct = event.product.copyWith(
+//       likeStatus: event.product.likeStatus == "1" ? "0" : "1",
+//     );
 
-      // Update the product in the list
-      currentProducts[productIndex] = updatedProduct;
+//     // Optimistic update
+//     currentProducts[productIndex] = updatedProduct;
 
-      // Emit optimistic update
-      emit(
-        state.copyWith(
-          status: DealfinderStatus.loaded,
-          dealModel: currentProducts,
-        ),
-      );
+//     emit(
+//       state.copyWith(
+//         status: DealfinderStatus.loaded,
+//         dealModel: currentProducts,
+//       ),
+//     );
 
-      Logger().d(
-        'ProductBloc::_onLikeStatusChange::Updated product ${updatedProduct.pid} '
-        'like status to ${updatedProduct.likeStatus}',
-      );
+//     Logger().d(
+//       'ProductBloc::_onLikeStatusChange::Updated product ${updatedProduct.pid} '
+//       'like status to ${updatedProduct.likeStatus}',
+//     );
+
+//     await repo.addlikestatus(
+//       productId: updatedProduct.pid!,
+//       likeStatus: updatedProduct.likeStatus!,
+//     );
+
+//   } catch (e, stackTrace) {
+//     Logger().e(
+//       'ProductBloc::_onLikeStatusChange::Unexpected error::$e',
+//       stackTrace: stackTrace,
+//     );
+
+//     emit(
+//       state.copyWith(
+//         status: DealfinderStatus.failure,
+//         message: 'Error updating favorite status',
+//       ),
+//     );
+//   }
+
+
 
       // Uncomment when backend API is ready
       /*
@@ -119,29 +140,30 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         ));
       }
       */
-    } catch (e, stackTrace) {
-      Logger().e(
-        'ProductBloc::_onLikeStatusChange::Unexpected error::$e',
-        stackTrace: stackTrace,
-      );
+  //   } catch (e, stackTrace) {
+  //     Logger().e(
+  //       'ProductBloc::_onLikeStatusChange::Unexpected error::$e',
+  //       stackTrace: stackTrace,
+  //     );
 
-      // On unexpected error, try to revert to original state
-      emit(
-        state.copyWith(
-          status: DealfinderStatus.failure,
-          message: 'Error updating favorite status',
-        ),
-      );
-    }
-  }
+  //     // On unexpected error, try to revert to original state
+  //     emit(
+  //       state.copyWith(
+  //         status: DealfinderStatus.failure,
+  //         message: 'Error updating favorite status',
+  //       ),
+  //     );
+  //   }
+  // }
 
-  // Helper method to refresh data
-  void refreshData() {
-    add(FetchDealFinderData());
-  }
+  // // Helper method to refresh data
+  // void refreshData() {
+  //   add(FetchDealFinderData());
+  // }
 
-  // Helper method to toggle like status
-  void toggleLikeStatus(Product product) {
-    add(Addlikestatusevent(product));
-  }
+  // // Helper method to toggle like status
+  // void toggleLikeStatus(Product product) {
+  //   add(Addlikestatusevent(product));
+  // }
+
 }

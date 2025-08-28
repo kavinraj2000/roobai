@@ -264,7 +264,6 @@ class ProductContentWidget extends StatelessWidget {
                   Text(
                     cleanDescription,
                     style: GoogleFonts.roboto(
-                      // 👈 body font
                       color: const Color(0xFF555555),
                       fontSize: 15,
                       height: 1.6,
@@ -280,7 +279,6 @@ class ProductContentWidget extends StatelessWidget {
                       child: Text(
                         state.showFullDescription ? 'Show less' : 'Read more',
                         style: GoogleFonts.poppins(
-                          // 👈 link font
                           color: const Color(0xFF7B3F9E),
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
@@ -295,7 +293,6 @@ class ProductContentWidget extends StatelessWidget {
 
           const SizedBox(height: 24),
 
-          // Store section - Using dynamic store data
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(

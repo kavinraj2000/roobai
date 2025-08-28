@@ -20,9 +20,5 @@ class APIS {
     "Token": "2304d5f65a9273202dce611154ba0c93",
   };
 
-  static void logConfig() {
-    Logger().d('mainurl:: $mainurl');
-    Logger().d('header:: $header');
-    Logger().d('headers:: $headers');
-  }
+ 
 }

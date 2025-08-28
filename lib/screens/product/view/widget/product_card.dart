@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
 import 'package:roobai/screens/product/model/products.dart';
 import 'package:roobai/screens/product/view/widget/Product_datetime.dart';
+import 'package:roobai/screens/product/view/widget/product_detail_popup.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -11,17 +12,20 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final log = Logger();
+
     final offerPrice =
         double.tryParse(product.productOfferPrice?.toString() ?? '0') ?? 0;
     final salePrice =
         double.tryParse(product.productSalePrice?.toString() ?? '0') ?? 0;
+
     final discountPercentage = salePrice > 0
         ? ((salePrice - offerPrice) / salePrice * 100).round()
         : 0;
 
     return InkWell(
       onTap: () {
-        Logger().d('BottomSheet opened with product ::${product.toMap()}');
+        log.d('BottomSheet opened with product ::${product.toMap()}');
         _showProductBottomSheet(context, product);
       },
       child: Container(
@@ -43,16 +47,15 @@ class ProductCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildImageSection(discountPercentage),
-            _buildContentSection(offerPrice, salePrice),
-            if (product.storeName != null && product.storeName!.isNotEmpty)
-              _buildStoreNameSection(product.storeName!),
+            _buildContentSection(offerPrice, salePrice, discountPercentage),
+            // if (product.storeName != null && product.storeName!.isNotEmpty)
+            // _buildStoreNameSection(product.storeName!),
           ],
         ),
       ),
     );
   }
 
-  /// ✅ Function to show BottomSheet
   void _showProductBottomSheet(BuildContext context, Product product) {
     showModalBottomSheet(
       context: context,
@@ -62,7 +65,7 @@ class ProductCard extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (_) {
-        return ProductDetailSheet(product: product);
+        return SmallProductPopup(product: product, );
       },
     );
   }
@@ -80,82 +83,41 @@ class ProductCard extends StatelessWidget {
           children: [
             Center(child: _buildProductImage()),
 
-            // Discount Badge
-            if (discountPercentage > 0)
+            if (discountPercentage >= 80)
               Positioned(
                 top: 0,
                 left: 0,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.green.shade600,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    "$discountPercentage% OFF",
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 9,
+                right: 0,
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
                     ),
-                  ),
-                ),
-              ),
-
-            // Favorite Button
-            Positioned(
-              top: 0,
-              right: 0,
-              child: GestureDetector(
-                onTap: () => Logger().d('onpressed ::like button'),
-                child: Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 3,
-                        offset: const Offset(0, 1),
+                    decoration: BoxDecoration(
+                      color: Colors.deepPurple,
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(6),
+                        bottomRight: Radius.circular(6),
                       ),
-                    ],
-                  ),
-                  child: Icon(
-                    Icons.favorite_border,
-                    color: Colors.red.shade400,
-                    size: 14,
-                  ),
-                ),
-              ),
-            ),
-
-            // ✅ GOAT Badge (only if discount ≥ 80%)
-            if (discountPercentage >= 80)
-              Positioned(
-                bottom: 0,
-                left: 0,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 3,
-                  ),
-                  decoration: const BoxDecoration(
-                    color: Colors.deepPurple,
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.25),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
                     ),
-                  ),
-                  child: const Text(
-                    'GOAT',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 10,
-                      letterSpacing: 0.5,
+                    child: const Text(
+                      'G.O.A.T',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 10,
+                        letterSpacing: 0.5,
+                      ),
                     ),
                   ),
                 ),
@@ -166,12 +128,15 @@ class ProductCard extends StatelessWidget {
     );
   }
 
-  Widget _buildContentSection(double offerPrice, double salePrice) {
+  Widget _buildContentSection(
+    double offerPrice,
+    double salePrice,
+    int discountPercentage,
+  ) {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
         children: [
           if (product.productName != null && product.productName!.isNotEmpty)
             Text(
@@ -186,73 +151,105 @@ class ProductCard extends StatelessWidget {
               ),
             ),
           const SizedBox(height: 4),
+
+          // Price row
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Flexible(
-                child: Text(
-                  "₹${product.productOfferPrice}",
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                  overflow: TextOverflow.ellipsis,
+              Text(
+                "₹${offerPrice.toStringAsFixed(0)}",
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
                 ),
               ),
+              const SizedBox(width: 10),
               if (salePrice > 0)
-                Flexible(
+                Text(
+                  "₹${salePrice.toStringAsFixed(0)}",
+                  style: TextStyle(
+                    fontSize: 9,
+                    color: Colors.grey.shade500,
+                    decoration: TextDecoration.lineThrough,
+                  ),
+                ),
+              if (discountPercentage > 0)
+                Container(
+                  margin: const EdgeInsets.only(left: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.green.shade600,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   child: Text(
-                    "₹${product.productSalePrice}",
-                    style: TextStyle(
-                      color: Colors.grey.shade500,
+                    "$discountPercentage% OFF",
+                    style: const TextStyle(
+                      color: Colors.white,
                       fontSize: 9,
-                      decoration: TextDecoration.lineThrough,
-                      decorationColor: Colors.grey.shade500,
+                      fontWeight: FontWeight.bold,
                     ),
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
             ],
           ),
+
           if (product.dateTime != null) ...[
-            const SizedBox(height: 4),
-            Datetimewidget(dateTime: product.dateTime),
+            const SizedBox(height: 6),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Datetimewidget(dateTime: product.dateTime),
+                Flexible(
+                  child: Text(
+                    product.storeName!,
+                    style: GoogleFonts.sora(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w600,
+                      color: const Color.fromARGB(255, 146, 146, 146),
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
           ],
         ],
       ),
     );
   }
 
-  Widget _buildStoreNameSection(String storeName) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: const BoxDecoration(
-        color: Color.fromARGB(255, 245, 220, 2),
-        border: Border(top: BorderSide(color: Colors.orange, width: 0.5)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.store_outlined, size: 12, color: Colors.black),
-          const SizedBox(width: 3),
-          Flexible(
-            child: Text(
-              storeName,
-              style: GoogleFonts.sora(
-                fontSize: 10,
-                fontWeight: FontWeight.w600,
-                color: Colors.black,
-              ),
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _buildStoreNameSection(String storeName) {
+  //   return Container(
+  //     padding: const EdgeInsets.all(4),
+  //     decoration: const BoxDecoration(
+  //       color: Color.fromARGB(255, 245, 220, 2),
+  //       border: Border(top: BorderSide(color: Colors.orange, width: 0.5)),
+  //     ),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       children: [
+  //         const Icon(Icons.store_outlined, size: 12, color: Colors.black),
+  //         const SizedBox(width: 4),
+  //         Flexible(
+  //           child: Text(
+  //             storeName,
+  //             style: GoogleFonts.sora(
+  //               fontSize: 10,
+  //               fontWeight: FontWeight.w600,
+  //               color: Colors.black,
+  //             ),
+  //             overflow: TextOverflow.ellipsis,
+  //             textAlign: TextAlign.center,
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _buildProductImage() {
     if (product.productImage != null) {
@@ -307,111 +304,6 @@ class ProductCard extends StatelessWidget {
                 fontSize: 9,
                 color: Colors.grey.shade500,
                 fontWeight: FontWeight.w400,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// ✅ Bottom Sheet Widget
-class ProductDetailSheet extends StatelessWidget {
-  final Product product;
-  const ProductDetailSheet({super.key, required this.product});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-        left: 16,
-        right: 16,
-        top: 16,
-        bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Drag handle
-            Center(
-              child: Container(
-                width: 40,
-                height: 4,
-                margin: const EdgeInsets.only(bottom: 12),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade400,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-            ),
-
-            // Product Image
-            if (product.productImage != null)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.network(
-                  product.productImage!,
-                  height: 200,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
-
-            const SizedBox(height: 12),
-
-            // Product Name
-            Text(
-              product.productName ?? "Unnamed Product",
-              style: Theme.of(
-                context,
-              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-            ),
-
-            const SizedBox(height: 6),
-
-            // Price
-            Text(
-              "₹${product.productOfferPrice}",
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Colors.green,
-              ),
-            ),
-
-            if (product.productSalePrice != null)
-              Text(
-                "₹${product.productSalePrice}",
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey,
-                  decoration: TextDecoration.lineThrough,
-                ),
-              ),
-
-            const SizedBox(height: 12),
-
-            // Store
-            if (product.storeName != null)
-              Row(
-                children: [
-                  const Icon(Icons.store, size: 16),
-                  const SizedBox(width: 6),
-                  Text(product.storeName!),
-                ],
-              ),
-
-            const SizedBox(height: 16),
-
-            // Close button
-            Align(
-              alignment: Alignment.centerRight,
-              child: ElevatedButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text("Close"),
               ),
             ),
           ],

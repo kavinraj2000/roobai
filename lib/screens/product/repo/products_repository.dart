@@ -9,12 +9,12 @@ import 'package:roobai/screens/product/model/products.dart';
 class DealRepository {
   final Apidatabase api = Apidatabase();
   final log = Logger();
-  final Dio dio = Dio(); 
+  final Dio dio = Dio();
 
   Future<List<Product>> getDealData() async {
     try {
       final baseUrl = await api.getBaseUrl();
-      final url = "$baseUrl/deal/1/1000/"; // Instead of /1/1/
+      final url = "$baseUrl/deal/1/1/";
       final response = await dio.get(
         url,
         options: Options(headers: APIS.headers),
@@ -47,4 +47,43 @@ class DealRepository {
       rethrow;
     }
   }
+
+//   Future<void> addlikestatus({
+//   required String productId,
+//   required String likeStatus,
+// }) async {
+//   try {
+//     final baseUrl = await api.getBaseUrl();
+//     final url = "$baseUrl/deal/1/1/"; 
+//     final headers = APIS.headers;
+
+//     final data = {
+//       'pid': productId,
+//       'likeStatus': likeStatus,
+//     };
+
+//     Logger().d('POST $url');
+//     Logger().d('Headers: $headers');
+//     Logger().d('Data: $data');
+
+//     final response = await dio.post(
+//       url,
+//       data: jsonEncode(data),
+//       options: Options(headers: headers),
+//     );
+
+//     if (response.statusCode == 200 || response.statusCode == 201) {
+//       Logger().i('Like status updated successfully');
+//     } else {
+//       Logger().e(
+//           'Failed with status code: ${response.statusCode}, body: ${response.data}');
+//       throw Exception('Failed to update like status');
+//     }
+//   } on DioException catch (e, stackTrace) {
+//     Logger().e('DealRepository:addlikestatus::Error::$e',
+//         stackTrace: stackTrace);
+//     rethrow;
+//   }
+// }
+
 }

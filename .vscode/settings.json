@@ -1,3 +1,8 @@
 {
-    "java.jdt.ls.androidSupport.enabled": "on"
+    "java.jdt.ls.androidSupport.enabled": "on",
+    "cSpell.words": [
+        "onpresesed",
+        "productdetail",
+        "Searchrepository"
+    ]
 }

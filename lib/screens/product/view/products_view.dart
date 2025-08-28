@@ -37,7 +37,7 @@ class DealFinderView extends StatelessWidget {
             return DealFinderError(
               message: state.message ?? "Unknown error occurred",
               onRetry: () {
-                context.read<ProductBloc>().add(FetchDealFinderData());
+                context.read<ProductBloc>().add(FetchDealFinderData(0));
               },
             );
           default:

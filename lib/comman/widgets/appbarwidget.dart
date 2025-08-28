@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:roobai/app/route_names.dart';
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String? title;
   final String? profileImage;
   final String? userName;
   final VoidCallback? onNotificationPressed;
   final VoidCallback? onProfilePressed;
+  final Function(String)? onSearch;
 
   const CustomAppBar({
     super.key,
@@ -16,75 +17,99 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.userName,
     this.onNotificationPressed,
     this.onProfilePressed,
+    this.onSearch,
   });
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+
+  @override
+  State<CustomAppBar> createState() => _CustomAppBarState();
+}
+
+class _CustomAppBarState extends State<CustomAppBar> {
+  bool isSearching = false;
+  final TextEditingController _searchController = TextEditingController();
+
+  void _toggleSearch() {
+    setState(() {
+      isSearching = !isSearching;
+      if (!isSearching) _searchController.clear();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: const Color(0xFF5E17EB),
       elevation: 0,
-      leading: Image.asset(
-        'assets/icons/logo.png',
-        fit: BoxFit.fitHeight,
-        
-      ),
-      title: title != null
-          ? Text(
-              title!,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-              ),
+      leading: isSearching
+          ? IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: _toggleSearch,
             )
-          : null,
-           automaticallyImplyLeading: true,
-      actions: [
-        TextButton(
-          onPressed: () {
-            context.goNamed(RouteName.joinUs);
-          },
-          child: const Text(
-            'Join us',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
+          : Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Image.asset('assets/icons/logo.png', fit: BoxFit.contain),
             ),
-          ),
-        ),
-        const SizedBox(width: 10),
-        IconButton(
-          icon: const Icon(Icons.notifications, color: Colors.white),
-          onPressed: onNotificationPressed,
-        ),
-        GestureDetector(
-          onTap: onProfilePressed,
-          child: Padding(
-            padding: const EdgeInsets.only(right: 12),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  radius: 14,
-                //   backgroundImage: (profileImage != null &&
-                //           profileImage!.isNotEmpty)
-                //       ? NetworkImage(profileImage!)
-                //       : const AssetImage("")
-                //           as ImageProvider,
-                //   backgroundColor: Colors.grey[300],
-                // ),
+      // title: isSearching
+      //     ? TextField(
+      //         controller: _searchController,
+      //         autofocus: true,
+      //         style: const TextStyle(color: Colors.white),
+      //         cursorColor: Colors.white,
+      //         decoration: const InputDecoration(
+      //           hintText: 'Search...',
+      //           hintStyle: TextStyle(color: Colors.white70),
+      //           border: InputBorder.none,
+      //         ),
+      //         onChanged: widget.onSearch,
+      //       )
+      //     : Text(
+      //         widget.title ?? '',
+      //         style: const TextStyle(
+      //           color: Colors.white,
+      //           fontWeight: FontWeight.w600,
+      //         ),
+      //       ),
+      // actions: isSearching
+      //     ? [
+      //         IconButton(
+      //           icon: const Icon(Icons.close, color: Colors.white),
+      //           onPressed: _toggleSearch,
+      //         ),
+      //       ]
+          actions:  [
+              IconButton(
+                icon: const Icon(Icons.search, color: Colors.white),
+                onPressed: (){
+                  context.goNamed(RouteName.search);
+                },
+              ),
+              TextButton(
+                onPressed: () {
+                  context.goNamed(RouteName.joinUs);
+                },
+                child: const Text(
+                  'Join us',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-                const SizedBox(width: 6),
-                Text(
-                  userName ?? "Guest",
-                  style: const TextStyle(color: Colors.white),
+              ),
+              IconButton(
+                icon: const Icon(Icons.notifications, color: Colors.white),
+                onPressed: widget.onNotificationPressed,
+              ),
+              GestureDetector(
+                onTap: widget.onProfilePressed,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: const Icon(Icons.person, color: Colors.white),
                 ),
-              ],
-            ),
-          ),
-        ),
-      ],
+              ),
+          ]      
     );
   }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
