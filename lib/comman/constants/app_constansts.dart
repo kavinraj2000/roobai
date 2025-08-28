@@ -1,5 +1,8 @@
+import 'package:flutter/material.dart';
+
 class AppConstants {
   const AppConstants();
+
   static final RegExp emailValidatorRegExp = RegExp(
     r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
   );
@@ -12,4 +15,38 @@ class AppConstants {
   final String nameNullError = "Please enter your name";
   final String phoneNumberNullError = "Please enter your phone number";
   final String addressNullError = "Please enter your address";
+
+  static const TextStyle headerblack = TextStyle(
+    fontFamily: 'Figtree',
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    color: Colors.black87,
+  );
+  static const TextStyle headerwhite = TextStyle(
+    fontFamily: 'Figtree',
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    color: Colors.white,
+  );
+  static const TextStyle textblack = TextStyle(
+    fontFamily: 'Figtree',
+    fontSize: 10,
+    fontWeight: FontWeight.w400,
+    color: Colors.black87,
+  );
+  static const TextStyle textwhite = TextStyle(
+    fontFamily: 'Figtree',
+    fontSize: 10,
+    fontWeight: FontWeight.w400,
+    color: Colors.white,
+  );
+  static final TextStyle offer = TextStyle(
+    fontFamily: 'Figtree',
+    fontSize: 10,
+    fontWeight: FontWeight.w400,
+    color: const Color.fromARGB(255, 146, 145, 145),
+    decoration: TextDecoration.lineThrough,
+    decorationThickness: 2,
+    decorationColor: Colors.white,
+  );
 }

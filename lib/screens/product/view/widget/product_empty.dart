@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:roobai/comman/constants/app_constansts.dart';
 
 class DealFinderEmpty extends StatelessWidget {
   const DealFinderEmpty({super.key});
@@ -17,27 +18,13 @@ class DealFinderEmpty extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.search_off,
-              size: 80,
-              color: Colors.grey,
-            ),
+            Icon(Icons.search_off, size: 80, color: Colors.grey),
             SizedBox(height: 16),
-            Text(
-              "No deals found",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey,
-              ),
-            ),
+            Text("No deals found", style: AppConstants.headerblack),
             SizedBox(height: 8),
             Text(
               "Check back later for new deals!",
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
-              ),
+              style: AppConstants.headerblack,
             ),
           ],
         ),

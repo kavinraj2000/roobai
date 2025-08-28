@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
-import 'package:roobai/comman/repos/app_api_repository.dart';
+import 'package:roobai/comman/repo/app_api_repository.dart';
 import 'package:roobai/comman/model/base_model.dart';
 
 class Apidatabase {

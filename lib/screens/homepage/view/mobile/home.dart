@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:roobai/comman/constants/app_constansts.dart';
 import 'package:roobai/comman/constants/color_constansts.dart';
 import 'package:roobai/comman/constants/constansts.dart';
 import 'package:roobai/comman/model/home_model.dart';
@@ -178,11 +180,7 @@ class HomeView extends StatelessWidget {
                             ),
                             child: Text(
                               data.category ?? '',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: AppConstants.headerblack,
                             ),
                           ),
                         ),
@@ -324,10 +322,7 @@ class HomeView extends StatelessWidget {
                       textAlign: TextAlign.center,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.lato(
-                        color: const Color.fromARGB(255, 0, 0, 0),
-                        fontSize: 10,
-                      ),
+                      style: AppConstants.textblack,
                     ),
                   ),
                 ],
@@ -420,60 +415,60 @@ class HomeView extends StatelessWidget {
 
                         // GOAT Badge
                         if (discount >= 80)
-                        // GOAT badge + Image section
-Column(
-  children: [
-    if (discount >= 80)
-      Container(
-        margin: const EdgeInsets.only(bottom: 4), // spacing below badge
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        decoration: BoxDecoration(
-          color: Colors.deepPurple,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: const Text(
-          'G.O.A.T',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 10,
-          ),
-        ),
-      ),
-    Container(
-      height: 100,
-      width: double.infinity,
-      padding: const EdgeInsets.all(6),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(6),
-        child: CachedNetworkImage(
-          imageUrl: data.productImage ?? '',
-          fit: BoxFit.cover,
-          placeholder: (_, __) => Container(
-            color: Colors.grey.shade100,
-            child: const Center(
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: Colors.grey,
-              ),
-            ),
-          ),
-          errorWidget: (_, __, ___) => Container(
-            color: Colors.grey.shade100,
-            child: const Center(
-              child: Icon(
-                Icons.broken_image,
-                color: Colors.grey,
-                size: 32,
-              ),
-            ),
-          ),
-        ),
-      ),
-    ),
-  ],
-),
-
+                          // GOAT badge + Image section
+                          Column(
+                            children: [
+                              if (discount >= 80)
+                                Container(
+                                  margin: const EdgeInsets.only(
+                                    bottom: 4,
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.deepPurple,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Text(
+                                    'G.O.A.T',
+                                    style: AppConstants.headerwhite,
+                                  ),
+                                ),
+                              Container(
+                                height: 100,
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(6),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(6),
+                                  child: CachedNetworkImage(
+                                    imageUrl: data.productImage ?? '',
+                                    fit: BoxFit.cover,
+                                    placeholder: (_, __) => Container(
+                                      color: Colors.grey.shade100,
+                                      child: const Center(
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ),
+                                    errorWidget: (_, __, ___) => Container(
+                                      color: Colors.grey.shade100,
+                                      child: const Center(
+                                        child: Icon(
+                                          Icons.broken_image,
+                                          color: Colors.grey,
+                                          size: 32,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                       ],
                     ),
 
@@ -496,11 +491,7 @@ Column(
                           ),
                           child: Text(
                             data.storeName!,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 8,
-                              color: Colors.black,
-                            ),
+                            style: AppConstants.headerblack,
                           ),
                         ),
                       ),
@@ -516,12 +507,7 @@ Column(
                               data.productName ?? 'Product',
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14,
-                                color: Colors.black87,
-                                height: 1.2,
-                              ),
+                              style: AppConstants.headerblack,
                             ),
 
                             const SizedBox(height: 8),
@@ -531,21 +517,13 @@ Column(
                               children: [
                                 Text(
                                   '₹${data.productOfferPrice ?? ''}',
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
+                                  style: AppConstants.headerblack,
                                 ),
                                 const SizedBox(width: 6),
                                 if (data.productSalePrice != null)
                                   Text(
                                     '₹${data.productSalePrice}',
-                                    style: TextStyle(
-                                      color: Colors.grey.shade500,
-                                      fontSize: 12,
-                                      decoration: TextDecoration.lineThrough,
-                                    ),
+                                    style: AppConstants.offer,
                                   ),
 
                                 if (discount > 0) ...[
@@ -560,13 +538,14 @@ Column(
                                       color: Colors.green.shade600,
                                       borderRadius: BorderRadius.circular(10),
                                     ),
-                                    child: Text(
-                                      "$discount% OFF",
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 9,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "$discount",
+                                          style: AppConstants.textwhite,
+                                        ),
+                                        Icon(LucideIcons.trendingDown)
+                                      ],
                                     ),
                                   ),
                                 ],
@@ -617,15 +596,8 @@ Column(
                                                           child: Text(
                                                             data.productName ??
                                                                 "Product Details",
-                                                            style:
-                                                                const TextStyle(
-                                                                  fontSize: 18,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  color: Colors
-                                                                      .black87,
-                                                                ),
+                                                            style: AppConstants
+                                                                .headerblack,
                                                           ),
                                                         ),
                                                       ],
@@ -640,13 +612,8 @@ Column(
                                                         child: Text(
                                                           data.itext ??
                                                               "No description available.",
-                                                          style:
-                                                              const TextStyle(
-                                                                fontSize: 14,
-                                                                color: Colors
-                                                                    .black87,
-                                                                height: 1.4,
-                                                              ),
+                                                          style: AppConstants
+                                                              .headerblack,
                                                         ),
                                                       ),
                                                     ),
@@ -731,16 +698,7 @@ Column(
       padding: const EdgeInsets.all(8),
       child: Row(
         children: [
-          Expanded(
-            child: Text(
-              title,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
-            ),
-          ),
+          Expanded(child: Text(title, style: AppConstants.headerblack)),
           // TextButton(
           //   onPressed: () {
           //   },

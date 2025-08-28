@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:roobai/comman/constants/app_constansts.dart';
 import 'package:roobai/screens/product/model/products.dart';
 import 'package:roobai/screens/product/view/widget/Product_datetime.dart';
 import 'package:roobai/screens/product/view/widget/product_detail_popup.dart';
@@ -65,7 +67,7 @@ class ProductCard extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (_) {
-        return SmallProductPopup(product: product, );
+        return SmallProductPopup(product: product);
       },
     );
   }
@@ -112,12 +114,7 @@ class ProductCard extends StatelessWidget {
                     ),
                     child: const Text(
                       'G.O.A.T',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 10,
-                        letterSpacing: 0.5,
-                      ),
+                      style: AppConstants.headerwhite,
                     ),
                   ),
                 ),
@@ -143,12 +140,7 @@ class ProductCard extends StatelessWidget {
               product.productName!,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.sora(
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-                color: Colors.black87,
-                height: 1.2,
-              ),
+              style: AppConstants.headerblack,
             ),
           const SizedBox(height: 4),
 
@@ -157,21 +149,13 @@ class ProductCard extends StatelessWidget {
             children: [
               Text(
                 "₹${offerPrice.toStringAsFixed(0)}",
-                style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
+                style: AppConstants.headerblack,
               ),
               const SizedBox(width: 10),
               if (salePrice > 0)
                 Text(
                   "₹${salePrice.toStringAsFixed(0)}",
-                  style: TextStyle(
-                    fontSize: 9,
-                    color: Colors.grey.shade500,
-                    decoration: TextDecoration.lineThrough,
-                  ),
+                  style: AppConstants.offer,
                 ),
               if (discountPercentage > 0)
                 Container(
@@ -184,13 +168,15 @@ class ProductCard extends StatelessWidget {
                     color: Colors.green.shade600,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Text(
-                    "$discountPercentage% OFF",
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 9,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  child: Row(
+                    children: [
+                      Text(
+                        "$discountPercentage",
+                        style: AppConstants.textwhite,
+                      ),
+                 
+                  Icon(LucideIcons.trendingDown),
+                     ],
                   ),
                 ),
             ],
@@ -205,11 +191,7 @@ class ProductCard extends StatelessWidget {
                 Flexible(
                   child: Text(
                     product.storeName!,
-                    style: GoogleFonts.sora(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w600,
-                      color: const Color.fromARGB(255, 146, 146, 146),
-                    ),
+                    style: AppConstants.headerblack,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                   ),
@@ -298,14 +280,7 @@ class ProductCard extends StatelessWidget {
           children: [
             Icon(Icons.image_outlined, size: 28, color: Colors.grey.shade400),
             const SizedBox(height: 2),
-            Text(
-              "No Image",
-              style: TextStyle(
-                fontSize: 9,
-                color: Colors.grey.shade500,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
+            Text("No Image", style: AppConstants.headerblack),
           ],
         ),
       ),

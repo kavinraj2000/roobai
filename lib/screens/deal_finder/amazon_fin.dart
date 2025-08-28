@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:roobai/comman/constants/app_constansts.dart';
 import 'package:roobai/comman/constants/color_constansts.dart';
 import 'package:roobai/comman/constants/constansts.dart';
-import 'package:roobai/comman/repos/app_api_repository.dart';
+import 'package:roobai/comman/repo/app_api_repository.dart';
 import 'package:roobai/comman/model/deal_model.dart';
 import 'package:roobai/comman/service/security_storage.dart';
 

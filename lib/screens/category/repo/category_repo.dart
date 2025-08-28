@@ -12,7 +12,7 @@ class CategoryRepository {
 
   Future<List<CategoryModel>> getCategoryData() async {
     try {
-      final baseUrl = await api.getBaseUrl(); // ✅ Await the future
+      final baseUrl = await api.getBaseUrl(); 
       final url = '$baseUrl/${Constansts.api.categoryList}';
 
       log.d('CategoryRepository:getCategoryData::Requesting URL: $url');

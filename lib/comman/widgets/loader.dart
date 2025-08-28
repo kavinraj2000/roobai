@@ -7,21 +7,19 @@ class LoadingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Lottie.asset(
-              'assets/animation/loading.json',
-              width: 100,
-              height: 100,
-              fit: BoxFit.contain,
-            ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Lottie.asset(
+            'assets/animation/loading.json',
+            width: 100,
+            height: 100,
+            fit: BoxFit.cover,
+          ),
 
-            const SizedBox(height: 20),
-
-          ],
-        ),
-      );
-    
+          const SizedBox(height: 20),
+        ],
+      ),
+    );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:roobai/comman/constants/app_constansts.dart';
 import 'package:roobai/screens/product/model/products.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
@@ -143,11 +144,7 @@ class _SmallProductPopupState extends State<SmallProductPopup> {
                     ),
                     child: const Text(
                       'G.O.A.T',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 10,
-                      ),
+                      style: AppConstants.headerwhite
                     ),
                   ),
 
@@ -183,10 +180,7 @@ class _SmallProductPopupState extends State<SmallProductPopup> {
             if (widget.product.productName != null)
               Text(
                 widget.product.productName!,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+                style:AppConstants.headerblack,
                 textAlign: TextAlign.center,
               ),
 
@@ -198,7 +192,7 @@ class _SmallProductPopupState extends State<SmallProductPopup> {
               child: SingleChildScrollView(
                 child: Text(
                   description,
-                  style: const TextStyle(fontSize: 14, color: Colors.black87),
+                  style: AppConstants.headerblack,
                 ),
               ),
             ),
@@ -237,12 +231,7 @@ class _SmallProductPopupState extends State<SmallProductPopup> {
                           const SizedBox(width: 12),
                           Text(
                             widget.product.storeName!,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 0.5,
-                            ),
+                            style: AppConstants.textblack
                           ),
                         ],
                       ),

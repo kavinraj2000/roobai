@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:roobai/comman/constants/app_constansts.dart';
 import 'package:roobai/comman/constants/color_constansts.dart';
 
 class SimpleSearchBar extends StatelessWidget {
@@ -29,7 +30,7 @@ class SimpleSearchBar extends StatelessWidget {
         decoration: InputDecoration(
           prefixIcon: Icon(Icons.search, color: Colors.blueGrey[300]),
           hintText: hintText,
-          hintStyle: TextStyle(color: Colors.blueGrey[300]),
+          hintStyle: AppConstants.headerblack,
           filled: true,                    
           fillColor: ColorConstants.white,               
           contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),

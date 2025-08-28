@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
-import 'package:roobai/comman/repos/app_api_repository.dart';
-import 'package:roobai/comman/repos/storage_repository.dart';
+import 'package:roobai/comman/repo/app_api_repository.dart';
+import 'package:roobai/comman/repo/storage_repository.dart';
 import 'package:roobai/screens/product/model/products.dart';
 
 class DealRepository {

@@ -6,8 +6,8 @@ import 'package:logger/web.dart';
 import 'package:roobai/comman/constants/api_contstansts.dart';
 import 'package:roobai/comman/constants/constansts.dart';
 import 'package:roobai/comman/model/home_model.dart';
-import 'package:roobai/comman/repos/app_api_repository.dart';
-import 'package:roobai/comman/repos/storage_repository.dart';
+import 'package:roobai/comman/repo/app_api_repository.dart';
+import 'package:roobai/comman/repo/storage_repository.dart';
 import 'package:roobai/screens/product/model/products.dart';
 
 class Searchrepository {

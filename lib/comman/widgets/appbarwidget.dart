@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:roobai/app/route_names.dart';
+import 'package:roobai/comman/constants/app_constansts.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String? title;
@@ -92,10 +93,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 },
                 child: const Text(
                   'Join us',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: AppConstants.headerwhite
                 ),
               ),
               IconButton(

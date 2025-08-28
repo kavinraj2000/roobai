@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:roobai/comman/constants/color_constansts.dart';
-import 'package:roobai/comman/repos/app_api_repository.dart';
+import 'package:roobai/comman/repo/app_api_repository.dart';
 import 'package:roobai/comman/model/deal_model.dart';
 import 'amazon_fin.dart'; // Assume this page exists
 
