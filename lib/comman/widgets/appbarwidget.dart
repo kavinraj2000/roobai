@@ -43,7 +43,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: const Color(0xFF5E17EB),
-      elevation: 0,
+      elevation: 1,
       leading: isSearching
           ? IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.white),

@@ -18,7 +18,7 @@ class BottomNavBarWidget extends StatelessWidget {
         context.goNamed(RouteName.mainScreen);
         break;
       case 1:
-        context.goNamed(RouteName.setting);
+        context.goNamed(RouteName.best);
         break;
       case 2:
         context.goNamed(RouteName.product);

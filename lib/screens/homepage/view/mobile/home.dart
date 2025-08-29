@@ -43,35 +43,12 @@ class HomeView extends StatelessWidget {
                     color: Colors.red.shade300,
                   ),
                   const SizedBox(height: 24),
-                  Padding(padding: EdgeInsets.all(16), child: NoDataWidget()),
+                  const Padding(
+                    padding: EdgeInsets.all(16),
+                    child: NoDataWidget(),
+                  ),
                   const SizedBox(height: 8),
-                  // Text(
-                  //   state.errorMessage ?? 'Please try again',
-                  //   style: TextStyle(
-                  //     fontSize: 14,
-                  //     color: Colors.grey.shade600,
-                  //   ),
-                  //   textAlign: TextAlign.center,
-                  // ),
                   const SizedBox(height: 24),
-                  // ElevatedButton.icon(
-                  //   onPressed: () {
-                  //     context.read<HomepageBloc>().add(LoadHomepageData());
-                  //   },
-                  //   icon: const Icon(Icons.refresh),
-                  //   label: const Text('Retry'),
-                  //   style: ElevatedButton.styleFrom(
-                  //     backgroundColor: Colors.blue,
-                  //     foregroundColor: Colors.white,
-                  //     padding: const EdgeInsets.symmetric(
-                  //       horizontal: 24,
-                  //       vertical: 12,
-                  //     ),
-                  //     shape: RoundedRectangleBorder(
-                  //       borderRadius: BorderRadius.circular(8),
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
             );
@@ -148,12 +125,8 @@ class HomeView extends StatelessWidget {
                           width: double.infinity,
                           height: double.infinity,
                           fit: BoxFit.contain,
-                          placeholder: (context, url) => Container(
-                            // color: Colors.grey.shade200,
-                            child: const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          ),
+                          placeholder: (context, url) =>
+                              const Center(child: CircularProgressIndicator()),
                           errorWidget: (context, url, error) => Container(
                             color: Colors.grey.shade300,
                             child: const Center(
@@ -283,8 +256,6 @@ class HomeView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // _buildSectionHeader(homeModel.title ?? ''),
-        // const SizedBox(height: 12),
         SizedBox(
           height: 100,
           child: ListView.separated(
@@ -330,22 +301,27 @@ class HomeView extends StatelessWidget {
             },
           ),
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 15),
       ],
     );
   }
 
   Widget _buildDefaultSection(HomeModel homeModel) {
+    final showDateTimeSections = ['just in'];
+    final type = homeModel.type?.toLowerCase();
+    final title = homeModel.title?.toLowerCase();
+    final shouldShowDateTime =
+        showDateTimeSections.contains(type) ||
+        showDateTimeSections.contains(title);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (homeModel.title != null && homeModel.title!.isNotEmpty)
           _buildSectionHeader(homeModel.title!),
-
         const SizedBox(height: 8),
-
         SizedBox(
-          height: 271,
+          height: shouldShowDateTime ? 271 : 250,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -360,13 +336,14 @@ class HomeView extends StatelessWidget {
               final discount = (mrp > 0)
                   ? (((mrp - offerPrice) / mrp) * 100).round()
                   : 0;
+              final bool isExpired = data.flag?.toString() == '1';
 
               return Container(
                 width: 180,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey.shade200, width: 1),
+                  border: Border.all(color: Colors.grey.shade200),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.04),
@@ -378,7 +355,6 @@ class HomeView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Image Section
                     Stack(
                       children: [
                         Container(
@@ -389,7 +365,7 @@ class HomeView extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                             child: CachedNetworkImage(
                               imageUrl: data.productImage ?? '',
-                              fit: BoxFit.cover,
+                              fit: BoxFit.contain,
                               placeholder: (_, __) => Container(
                                 color: Colors.grey.shade100,
                                 child: const Center(
@@ -413,86 +389,110 @@ class HomeView extends StatelessWidget {
                           ),
                         ),
 
-                        // GOAT Badge
-                        if (discount >= 80)
-                          // GOAT badge + Image section
-                          Column(
-                            children: [
-                              if (discount >= 80)
-                                Container(
-                                  margin: const EdgeInsets.only(
-                                    bottom: 4,
-                                  ),
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                    vertical: 4,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.deepPurple,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Text(
-                                    'G.O.A.T',
-                                    style: AppConstants.headerwhite,
-                                  ),
+                        if (isExpired)
+                          Center(
+                            child: Opacity(
+                              opacity: 0.5,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 6,
                                 ),
-                              Container(
-                                height: 100,
-                                width: double.infinity,
-                                padding: const EdgeInsets.all(6),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(6),
-                                  child: CachedNetworkImage(
-                                    imageUrl: data.productImage ?? '',
-                                    fit: BoxFit.cover,
-                                    placeholder: (_, __) => Container(
-                                      color: Colors.grey.shade100,
-                                      child: const Center(
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                    ),
-                                    errorWidget: (_, __, ___) => Container(
-                                      color: Colors.grey.shade100,
-                                      child: const Center(
-                                        child: Icon(
-                                          Icons.broken_image,
-                                          color: Colors.grey,
-                                          size: 32,
-                                        ),
-                                      ),
-                                    ),
+                                decoration: BoxDecoration(
+                                  color: Colors.redAccent.withOpacity(0.8),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: const Text(
+                                  'EXPIRED',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12,
+                                    letterSpacing: 1.5,
                                   ),
                                 ),
                               ),
-                            ],
+                            ),
+                          ),
+
+                        if (!isExpired && discount >= 80)
+                          Positioned(
+                            top: -2,
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            child: Align(
+                              alignment: Alignment.topCenter,
+                              child: Container(
+                                margin: const EdgeInsets.only(top: 6),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.deepPurple,
+                                  borderRadius: const BorderRadius.only(
+                                    bottomLeft: Radius.circular(6),
+                                    bottomRight: Radius.circular(6),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.25),
+                                      blurRadius: 4,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ],
+                                ),
+                                child: const Text(
+                                  'G.O.A.T',
+                                  style: AppConstants.headerwhite,
+                                ),
+                              ),
+                            ),
                           ),
                       ],
                     ),
 
                     if (data.storeName != null)
-                      Positioned(
-                        top: 6,
-                        left: 6,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 6,
-                            vertical: 2,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.amber.shade400,
-                            borderRadius: BorderRadius.circular(4),
-                            border: Border.all(
-                              color: Colors.amber.shade700,
-                              width: 0.5,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFF5DC02),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text(
+                                  data.storeName!,
+                                  style: GoogleFonts.sora(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
                             ),
-                          ),
-                          child: Text(
-                            data.storeName!,
-                            style: AppConstants.headerblack,
-                          ),
+                            GestureDetector(
+                              onTap: () =>
+                                  _showProductInfoDialog(context, data.itext),
+                              child: const Padding(
+                                padding: EdgeInsets.all(6),
+                                child: Icon(
+                                  Icons.info,
+                                  size: 16,
+                                  color: Color.fromARGB(255, 207, 206, 206),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
 
@@ -502,17 +502,13 @@ class HomeView extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Product Name
                             Text(
                               data.productName ?? 'Product',
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: AppConstants.headerblack,
                             ),
-
-                            const SizedBox(height: 8),
-
-                            // Price Section
+                            const SizedBox(height: 10),
                             Row(
                               children: [
                                 Text(
@@ -520,163 +516,41 @@ class HomeView extends StatelessWidget {
                                   style: AppConstants.headerblack,
                                 ),
                                 const SizedBox(width: 6),
-                                if (data.productSalePrice != null)
+                                if (mrp > 0)
                                   Text(
                                     '₹${data.productSalePrice}',
                                     style: AppConstants.offer,
                                   ),
-
                                 if (discount > 0) ...[
-                                  const SizedBox(width: 4),
-                                  Container(
-                                    margin: const EdgeInsets.only(left: 8),
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 6,
-                                      vertical: 2,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Colors.green.shade600,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          "$discount",
-                                          style: AppConstants.textwhite,
-                                        ),
-                                        Icon(LucideIcons.trendingDown)
-                                      ],
-                                    ),
+                                  const SizedBox(width: 40),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "$discount%",
+                                        style: AppConstants.textblack,
+                                      ),
+                                      const SizedBox(width: 2),
+                                       Image.asset('assets/icons/thunder.png',width: 12,height: 12,color: _getDiscountBadgeColor(discount),),
+                                        // size: 12,
+                                        // color: Colors.white,
+                                      
+                                    ],
                                   ),
                                 ],
                               ],
                             ),
 
-                            if (data.dateTime != null) ...[
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Datetimewidget(
-                                      dateTime: data.dateTime,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  GestureDetector(
-                                    onTap: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return Dialog(
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(16),
-                                            ),
-                                            elevation: 16,
-                                            backgroundColor: Colors.white,
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(20),
-                                              child: IntrinsicHeight(
-                                                child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Row(
-                                                      children: [
-                                                        const Icon(
-                                                          Icons.info,
-                                                          color: Colors.blue,
-                                                          size: 24,
-                                                        ),
-                                                        const SizedBox(
-                                                          width: 10,
-                                                        ),
-                                                        Expanded(
-                                                          child: Text(
-                                                            data.productName ??
-                                                                "Product Details",
-                                                            style: AppConstants
-                                                                .headerblack,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    const Divider(
-                                                      height: 1,
-                                                      color: Colors.grey,
-                                                    ),
-                                                    const SizedBox(height: 16),
-                                                    Flexible(
-                                                      child: SingleChildScrollView(
-                                                        child: Text(
-                                                          data.itext ??
-                                                              "No description available.",
-                                                          style: AppConstants
-                                                              .headerblack,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(height: 20),
-                                                    Align(
-                                                      alignment:
-                                                          Alignment.centerRight,
-                                                      child: ElevatedButton.icon(
-                                                        onPressed: () =>
-                                                            Navigator.of(
-                                                              context,
-                                                            ).pop(),
-                                                        icon: const Icon(
-                                                          Icons.close,
-                                                          size: 18,
-                                                        ),
-                                                        label: const Text(
-                                                          "Close",
-                                                        ),
-                                                        style: ElevatedButton.styleFrom(
-                                                          padding:
-                                                              const EdgeInsets.symmetric(
-                                                                horizontal: 16,
-                                                                vertical: 10,
-                                                              ),
-                                                          backgroundColor:
-                                                              Colors.blue,
-                                                          foregroundColor:
-                                                              Colors.white,
-                                                          shape: RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius.circular(
-                                                                  8,
-                                                                ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      );
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.all(6),
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey.shade100,
-                                        borderRadius: BorderRadius.circular(6),
-                                      ),
-                                      child: const Icon(
-                                        Icons.info,
-                                        size: 16,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                            if (shouldShowDateTime && data.dateTime != null)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 6),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Datetimewidget(dateTime: data.dateTime),
+                                  ],
+                                ),
                               ),
-                              const SizedBox(height: 8),
-                            ],
                           ],
                         ),
                       ),
@@ -687,8 +561,7 @@ class HomeView extends StatelessWidget {
             },
           ),
         ),
-
-        const SizedBox(height: 10),
+        const SizedBox(height: 15),
       ],
     );
   }
@@ -699,19 +572,88 @@ class HomeView extends StatelessWidget {
       child: Row(
         children: [
           Expanded(child: Text(title, style: AppConstants.headerblack)),
-          // TextButton(
-          //   onPressed: () {
-          //   },
-          //   child: Text(
-          //     'View All',
-          //     style: TextStyle(
-          //       color: Colors.blue.shade600,
-          //       fontWeight: FontWeight.w600,
-          //     ),
-          //   ),
-          // ),
         ],
       ),
+    );
+  }
+
+  Color _getDiscountBadgeColor(int discount) {
+    if (discount < 25) {
+      return Colors.red;
+    } else if (discount >= 50 && discount <= 80) {
+      return Colors.blue;
+    } else if (discount >= 50 && discount <= 24) {
+      return Colors.orange;
+    } else {
+      return Colors.green.shade600;
+    }
+  }
+
+  void _showProductInfoDialog(BuildContext context, String? description) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          elevation: 16,
+          backgroundColor: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: IntrinsicHeight(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.info, color: Colors.blue, size: 24),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          "Product Information",
+                          style: AppConstants.headerblack,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Divider(height: 1, color: Colors.grey),
+                  const SizedBox(height: 16),
+                  Flexible(
+                    child: SingleChildScrollView(
+                      child: Text(
+                        description ?? "No description available.",
+                        style: AppConstants.headerblack,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: ElevatedButton.icon(
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: const Icon(Icons.close, size: 18),
+                      label: const Text("Close"),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 10,
+                        ),
+                        backgroundColor: Colors.blue,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

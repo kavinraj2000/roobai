@@ -18,20 +18,21 @@ class AppConstants {
 
   static const TextStyle headerblack = TextStyle(
     fontFamily: 'Figtree',
-    fontSize: 16,
-    fontWeight: FontWeight.w400,
+    fontSize: 12,
+
+    fontWeight: FontWeight.bold,
     color: Colors.black87,
   );
   static const TextStyle headerwhite = TextStyle(
     fontFamily: 'Figtree',
-    fontSize: 16,
-    fontWeight: FontWeight.w400,
+    fontSize: 12,
+    fontWeight: FontWeight.bold,
     color: Colors.white,
   );
   static const TextStyle textblack = TextStyle(
     fontFamily: 'Figtree',
-    fontSize: 10,
-    fontWeight: FontWeight.w400,
+    fontSize: 11,
+    fontWeight: FontWeight.bold,
     color: Colors.black87,
   );
   static const TextStyle textwhite = TextStyle(
@@ -40,13 +41,13 @@ class AppConstants {
     fontWeight: FontWeight.w400,
     color: Colors.white,
   );
-  static final TextStyle offer = TextStyle(
+  static const TextStyle offer = TextStyle(
     fontFamily: 'Figtree',
     fontSize: 10,
     fontWeight: FontWeight.w400,
-    color: const Color.fromARGB(255, 146, 145, 145),
+    color: Color.fromARGB(255, 96, 94, 94),
     decoration: TextDecoration.lineThrough,
     decorationThickness: 2,
-    decorationColor: Colors.white,
+    decorationColor: Color(0xFF000000),
   );
 }

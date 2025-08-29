@@ -7,7 +7,7 @@ import 'package:roobai/screens/product/model/products.dart';
 import 'package:roobai/screens/product/view/widget/Product_datetime.dart';
 import 'package:roobai/screens/product/view/widget/product_detail_popup.dart';
 
-class ProductCard extends StatefulWidget {
+class BestProductCard extends StatefulWidget {
   final Product product;
   final VoidCallback? onTap;
   final bool showStoreName;
@@ -15,7 +15,7 @@ class ProductCard extends StatefulWidget {
   final bool showDateTime;
   final bool enableBottomSheet;
 
-  const ProductCard({
+  const BestProductCard({
     super.key,
     required this.product,
     this.onTap,
@@ -26,10 +26,10 @@ class ProductCard extends StatefulWidget {
   });
 
   @override
-  State<ProductCard> createState() => _ProductCardState();
+  State<BestProductCard> createState() => _BestProductCardState();
 }
 
-class _ProductCardState extends State<ProductCard> {
+class _BestProductCardState extends State<BestProductCard> {
   @override
   Widget build(BuildContext context) {
     final log = Logger();
@@ -111,7 +111,7 @@ class _ProductCardState extends State<ProductCard> {
             Center(child: _buildProductImage()),
 
             if (isExpired)
-                 Center(
+                   Center(
                             child: Opacity(
                               opacity: 0.5,
                               child: Container(
@@ -378,9 +378,9 @@ class _ProductCardState extends State<ProductCard> {
         borderRadius: BorderRadius.circular(6),
         child: Image.network(
           widget.product.productImage!,
-          fit: BoxFit.cover,
-          width: double.infinity,
-          height: double.infinity,
+          fit: BoxFit.contain,
+          // width: double.infinity,
+          // height: double.infinity,
           errorBuilder: (_, __, ___) => _buildImagePlaceholder(),
           loadingBuilder: (context, child, loadingProgress) {
             if (loadingProgress == null) return child;
