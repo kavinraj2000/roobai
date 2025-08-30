@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:roobai/app/route.dart';
+import 'package:roobai/comman/constants/color_constansts.dart';
 import 'package:roobai/comman/theme/theme.dart';
 import 'package:roobai/comman/repo/storage_repository.dart';
 
@@ -11,7 +12,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider(
-      create: (_) => Apidatabase(), 
+      create: (_) => Apidatabase(),
       child: MaterialApp.router(
         builder: (context, child) => ResponsiveBreakpoints.builder(
           child: child!,
@@ -24,7 +25,9 @@ class App extends StatelessWidget {
         ),
         debugShowCheckedModeBanner: false,
         routerConfig: Routes().router,
-        theme: theme(),
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+        ).copyWith(scaffoldBackgroundColor: ColorConstants.white),
       ),
     );
   }

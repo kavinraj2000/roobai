@@ -1,7 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
+import 'package:roobai/comman/model/home_model.dart';
 import 'package:roobai/screens/best/repo/best_products_repository.dart';
+import 'package:roobai/screens/homepage/repo/homepage_repo.dart';
 
 import 'package:roobai/screens/product/model/products.dart';
 import 'package:roobai/screens/product/repo/products_repository.dart';
@@ -11,8 +13,10 @@ part 'best_products_state.dart';
 
 class BestProductBloc extends Bloc<BestProductEvent, BestProductState> {
   final BestproductRepository repo;
+  final HomepageRepository? homerepo;
 
-  BestProductBloc(this.repo) : super(BestProductState.initial()) {
+  BestProductBloc(this.repo, this.homerepo)
+    : super(BestProductState.initial()) {
     on<FetchproductrData>(_onFetchproductrData);
     // on<Addlikestatusevent>(_onLikeStatusChange);
   }
@@ -26,20 +30,39 @@ class BestProductBloc extends Bloc<BestProductEvent, BestProductState> {
 
       Logger().d('BestProductBloc::_onFetchproductrData::${event.runtimeType}');
 
-      final List<Product> data = await repo.getDealData( );
+      final List<Product> products = await repo.getDealData();
+      final List<HomeModel> homeModels = await homerepo!.getProducts();
 
-      Logger().d('_onFetchproductrData::data count::$data');
+      Logger().d('_onFetchproductrData::data count::$products ');
+      Logger().d('_onFetchproductrData::homemodel::$homeModels ');
+
+  final List<Product> filteredProducts = products.where((product) {
+  return homeModels.any((homeModel) {
+    return homeModel.data?.any((homeItem) {
+      final itext = homeItem.itext ?? '';
+      return product.productName != null && itext.contains(product.productName!);
+    }) ?? false;
+  });
+}).toList();
+
+Logger().d('Filtered Products: $filteredProducts');
 
 
+        Logger().d(
+          '_onFetchproductrData::filteredProducts::$filteredProducts ',
+        );
 
-      emit(
-        state.copyWith(
-          status: BestProductStatus.loaded,
-          dealModel: data,
-          message: null,
-        ),
-      );
-    } catch (e, stackTrace) {
+        emit(
+          state.copyWith(
+            status: BestProductStatus.loaded,
+            dealModel: products,
+            homemodel: homeModels,
+            message: null,
+          ),
+        );
+      }
+    
+     catch (e, stackTrace) {
       Logger().e(
         'BestProductBloc::_onFetchproductrData::error::$e',
         stackTrace: stackTrace,
@@ -52,72 +75,70 @@ class BestProductBloc extends Bloc<BestProductEvent, BestProductState> {
           dealModel: [],
         ),
       );
-    }
-  }
+    }}
+  
 
-// Future<void> _onLikeStatusChange(
-//   Addlikestatusevent event,
-//   Emitter<BestProductState> emit,
-// ) async {
-//   try {
-//     if (state.dealModel == null || state.dealModel!.isEmpty) {
-//       Logger().w('BestProductBloc::_onLikeStatusChange::No products loaded');
-//       return;
-//     }
+  // Future<void> _onLikeStatusChange(
+  //   Addlikestatusevent event,
+  //   Emitter<BestProductState> emit,
+  // ) async {
+  //   try {
+  //     if (state.dealModel == null || state.dealModel!.isEmpty) {
+  //       Logger().w('BestProductBloc::_onLikeStatusChange::No products loaded');
+  //       return;
+  //     }
 
-//     final currentProducts = List<Product>.from(state.dealModel!);
-//     final productIndex = currentProducts.indexWhere(
-//       (p) => p.pid == event.product.pid,
-//     );
+  //     final currentProducts = List<Product>.from(state.dealModel!);
+  //     final productIndex = currentProducts.indexWhere(
+  //       (p) => p.pid == event.product.pid,
+  //     );
 
-//     if (productIndex == -1) {
-//       Logger().w('BestProductBloc::_onLikeStatusChange::Product not found');
-//       return;
-//     }
+  //     if (productIndex == -1) {
+  //       Logger().w('BestProductBloc::_onLikeStatusChange::Product not found');
+  //       return;
+  //     }
 
-//     // Toggle like status
-//     final updatedProduct = event.product.copyWith(
-//       likeStatus: event.product.likeStatus == "1" ? "0" : "1",
-//     );
+  //     // Toggle like status
+  //     final updatedProduct = event.product.copyWith(
+  //       likeStatus: event.product.likeStatus == "1" ? "0" : "1",
+  //     );
 
-//     // Optimistic update
-//     currentProducts[productIndex] = updatedProduct;
+  //     // Optimistic update
+  //     currentProducts[productIndex] = updatedProduct;
 
-//     emit(
-//       state.copyWith(
-//         status: BestProductStatus.loaded,
-//         dealModel: currentProducts,
-//       ),
-//     );
+  //     emit(
+  //       state.copyWith(
+  //         status: BestProductStatus.loaded,
+  //         dealModel: currentProducts,
+  //       ),
+  //     );
 
-//     Logger().d(
-//       'BestProductBloc::_onLikeStatusChange::Updated product ${updatedProduct.pid} '
-//       'like status to ${updatedProduct.likeStatus}',
-//     );
+  //     Logger().d(
+  //       'BestProductBloc::_onLikeStatusChange::Updated product ${updatedProduct.pid} '
+  //       'like status to ${updatedProduct.likeStatus}',
+  //     );
 
-//     await repo.addlikestatus(
-//       productId: updatedProduct.pid!,
-//       likeStatus: updatedProduct.likeStatus!,
-//     );
+  //     await repo.addlikestatus(
+  //       productId: updatedProduct.pid!,
+  //       likeStatus: updatedProduct.likeStatus!,
+  //     );
 
-//   } catch (e, stackTrace) {
-//     Logger().e(
-//       'BestProductBloc::_onLikeStatusChange::Unexpected error::$e',
-//       stackTrace: stackTrace,
-//     );
+  //   } catch (e, stackTrace) {
+  //     Logger().e(
+  //       'BestProductBloc::_onLikeStatusChange::Unexpected error::$e',
+  //       stackTrace: stackTrace,
+  //     );
 
-//     emit(
-//       state.copyWith(
-//         status: BestProductStatus.failure,
-//         message: 'Error updating favorite status',
-//       ),
-//     );
-//   }
+  //     emit(
+  //       state.copyWith(
+  //         status: BestProductStatus.failure,
+  //         message: 'Error updating favorite status',
+  //       ),
+  //     );
+  //   }
 
-
-
-      // Uncomment when backend API is ready
-      /*
+  // Uncomment when backend API is ready
+  /*
       try {
         // Call API to persist the like status
         await repo.updateLikeStatus(
@@ -167,4 +188,4 @@ class BestProductBloc extends Bloc<BestProductEvent, BestProductState> {
   //   add(Addlikestatusevent(product));
   // }
 
-}
+  }

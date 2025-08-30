@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:roobai/comman/widgets/navbarwidget.dart';
 
 class Category {
   final String cid;
@@ -118,6 +119,7 @@ class _CategoryPageState extends State<CategoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[50],
+      bottomNavigationBar: BottomNavBarWidget(selectedIndex: 3,),
       appBar: AppBar(
         title: const Text(
           'Categories',

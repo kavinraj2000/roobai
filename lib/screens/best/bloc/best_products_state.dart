@@ -6,7 +6,7 @@ class BestProductState extends Equatable {
   final BestProductStatus status;
   final String message;
   final List<Product>? dealModel;
-  final List<Product>? likeStatus;
+  final List<HomeModel>? homemodel;
   final int? page;
   final bool hasMore;
 
@@ -14,7 +14,7 @@ class BestProductState extends Equatable {
     required this.status,
     required this.dealModel,
     required this.message,
-    this.likeStatus,
+    this.homemodel,
     required this.page,
     required this.hasMore,
     
@@ -25,7 +25,7 @@ class BestProductState extends Equatable {
       status: BestProductStatus.initial,
       dealModel: null,
       message: '',
-      likeStatus: null,
+      homemodel: null,
       page: 0,
       hasMore: false
     );
@@ -35,7 +35,7 @@ class BestProductState extends Equatable {
     BestProductStatus? status,
     String? message,
     List<Product>? dealModel,
-    List<Product>? likeStatus,
+    List<HomeModel>? homemodel,
     int? page,
     bool? hasMore,
   }) {
@@ -43,12 +43,12 @@ class BestProductState extends Equatable {
       dealModel: dealModel ?? this.dealModel,
       message: message ?? this.message,
       status: status ?? this.status,
-      likeStatus: likeStatus ?? this.likeStatus,
+      homemodel: homemodel ?? this.homemodel,
       page: page ??this.page,
       hasMore: hasMore ?? this.hasMore,
     );
   }
 
   @override
-  List<Object?> get props => [status, message, dealModel, likeStatus,page,hasMore];
+  List<Object?> get props => [status, message, dealModel, homemodel,page,hasMore];
 }

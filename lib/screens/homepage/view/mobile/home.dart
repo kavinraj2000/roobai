@@ -10,6 +10,7 @@ import 'package:roobai/comman/constants/color_constansts.dart';
 import 'package:roobai/comman/constants/constansts.dart';
 import 'package:roobai/comman/model/home_model.dart';
 import 'package:roobai/comman/widgets/appbarwidget.dart';
+import 'package:roobai/comman/widgets/itext.dart';
 import 'package:roobai/comman/widgets/navbarwidget.dart';
 import 'package:roobai/comman/widgets/no_data.dart';
 import 'package:roobai/screens/homepage/bloc/homepage_bloc.dart';
@@ -301,7 +302,66 @@ class HomeView extends StatelessWidget {
             },
           ),
         ),
-        const SizedBox(height: 15),
+        // const SizedBox(height: 15),
+      ],
+    );
+  }
+
+  Widget _buildbuttonslide(BuildContext context,HomeModel homeModel){
+    return 
+    Row(
+      children: [
+       Container(
+  padding: const EdgeInsets.all(16),
+  decoration: BoxDecoration(
+    color: Colors.white,
+    boxShadow: [
+      BoxShadow(
+        blurRadius: 20,
+        color: Colors.black26,
+        offset: Offset(0, 4),
+      ),
+    ],
+    borderRadius: BorderRadius.circular(12),
+  ),
+  child: Row(
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly, // space between buttons
+    children: [
+      Expanded(
+        child: ElevatedButton(
+          onPressed: () {
+            // Action for button 1
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.blue, // button color
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          child: const Text("Button 1"),
+        ),
+      ),
+      const SizedBox(width: 16), // space between buttons
+      Expanded(
+        child: ElevatedButton(
+          onPressed: () {
+            // Action for button 2
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green, // button color
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          child: const Text("Button 2"),
+        ),
+      ),
+    ],
+  ),
+)
+
       ],
     );
   }
@@ -390,26 +450,35 @@ class HomeView extends StatelessWidget {
                         ),
 
                         if (isExpired)
-                          Center(
-                            child: Opacity(
-                              opacity: 0.5,
+                          Positioned(
+                            top: 0,
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            child: Align(
+                              alignment: Alignment.topCenter,
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 6,
+                                  horizontal: 8,
+                                  vertical: 1,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Colors.redAccent.withOpacity(0.8),
-                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.red,
+                                  borderRadius: const BorderRadius.only(
+                                    bottomLeft: Radius.circular(6),
+                                    bottomRight: Radius.circular(6),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.25),
+                                      blurRadius: 4,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ],
                                 ),
                                 child: const Text(
-                                  'EXPIRED',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12,
-                                    letterSpacing: 1.5,
-                                  ),
+                                  'Expired',
+                                  style: AppConstants.headerwhite,
                                 ),
                               ),
                             ),
@@ -417,17 +486,16 @@ class HomeView extends StatelessWidget {
 
                         if (!isExpired && discount >= 80)
                           Positioned(
-                            top: -2,
+                            top: 0,
                             bottom: 0,
                             left: 0,
                             right: 0,
                             child: Align(
                               alignment: Alignment.topCenter,
                               child: Container(
-                                margin: const EdgeInsets.only(top: 6),
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 8,
-                                  vertical: 4,
+                                  vertical: 1,
                                 ),
                                 decoration: BoxDecoration(
                                   color: Colors.deepPurple,
@@ -482,7 +550,7 @@ class HomeView extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () =>
-                                  _showProductInfoDialog(context, data.itext),
+                                  _showSmartProductDialog(context, data.itext!),
                               child: const Padding(
                                 padding: EdgeInsets.all(6),
                                 child: Icon(
@@ -530,10 +598,15 @@ class HomeView extends StatelessWidget {
                                         style: AppConstants.textblack,
                                       ),
                                       const SizedBox(width: 2),
-                                       Image.asset('assets/icons/thunder.png',width: 12,height: 12,color: _getDiscountBadgeColor(discount),),
-                                        // size: 12,
-                                        // color: Colors.white,
-                                      
+                                      Image.asset(
+                                        'assets/icons/thunder.png',
+                                        width: 12,
+                                        height: 12,
+                                        color: _getDiscountBadgeColor(discount),
+                                      ),
+
+                                      // size: 12,
+                                      // color: Colors.white,
                                     ],
                                   ),
                                 ],
@@ -589,71 +662,16 @@ class HomeView extends StatelessWidget {
     }
   }
 
-  void _showProductInfoDialog(BuildContext context, String? description) {
+  void _showSmartProductDialog(BuildContext context, String apiText) {
     showDialog(
       context: context,
       builder: (context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          elevation: 16,
-          backgroundColor: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: IntrinsicHeight(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      const Icon(Icons.info, color: Colors.blue, size: 24),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Text(
-                          "Product Information",
-                          style: AppConstants.headerblack,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Divider(height: 1, color: Colors.grey),
-                  const SizedBox(height: 16),
-                  Flexible(
-                    child: SingleChildScrollView(
-                      child: Text(
-                        description ?? "No description available.",
-                        style: AppConstants.headerblack,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: ElevatedButton.icon(
-                      onPressed: () => Navigator.of(context).pop(),
-                      icon: const Icon(Icons.close, size: 18),
-                      label: const Text("Close"),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 10,
-                        ),
-                        backgroundColor: Colors.blue,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+        return SmartProductInfoDialog(
+          title: "disclaimer",
+          description: apiText,
         );
       },
     );
   }
+
 }

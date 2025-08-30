@@ -32,6 +32,7 @@ class Routes {
         path: RouteName.mainScreen,
         builder: (BuildContext context, GoRouterState state) {
           return HomepageView();
+          // return HomepageView();
         },
       ),
       GoRoute(
@@ -88,8 +89,11 @@ class Routes {
         },
       ),
     ],
+
+    
     redirect: (BuildContext context, GoRouterState state) {
       return null;
+      
 
       //   final log = Logger();
       //   final bool signedIn = context.read<LoginBloc>().state.status == LoginStatus.loggedIn;

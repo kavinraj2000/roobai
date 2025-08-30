@@ -11,10 +11,10 @@ class DealRepository {
   final log = Logger();
   final Dio dio = Dio();
 
-  Future<List<Product>> getDealData() async {
+  Future<List<Product>> getDealData({required int page}) async {
     try {
       final baseUrl = await api.getBaseUrl();
-      final url = "$baseUrl/deal/1/1/";
+      final url = "$baseUrl/deal/1/1/$page";
       final response = await dio.get(
         url,
         options: Options(headers: APIS.headers),

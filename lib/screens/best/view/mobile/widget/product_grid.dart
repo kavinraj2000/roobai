@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logger/logger.dart';
 import 'package:roobai/app/route_names.dart';
+import 'package:roobai/comman/model/home_model.dart';
 import 'package:roobai/screens/product/model/products.dart';
-import 'package:roobai/screens/product/view/widget/product_card.dart';
+import 'package:roobai/comman/widgets/product_card.dart';
 
 class BestProductGrid extends StatelessWidget {
   final List<Product> products;
+  final List<HomeModel>? homemodel;
 
-  const BestProductGrid({super.key, required this.products});
+  const BestProductGrid({super.key, required this.products,this.homemodel});
 
   @override
   Widget build(BuildContext context) {
+    Logger().d('data::homemodel::${homemodel!.first.data!.first.itext}');
     final ScrollController scroll=ScrollController();
     return Container(
       decoration: BoxDecoration(
@@ -41,6 +45,7 @@ class BestProductGrid extends StatelessWidget {
                           child: _buildProductCard(
                             context,
                             products[leftIndex],
+                            
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -68,7 +73,7 @@ class BestProductGrid extends StatelessWidget {
     );
   }
 
-  Widget _buildProductCard(BuildContext context, Product product) {
+  Widget _buildProductCard(BuildContext context, Product product,) {
     return GestureDetector(
       onTap: () {
         // Navigator.push(
@@ -81,7 +86,7 @@ class BestProductGrid extends StatelessWidget {
       },
       child: Hero(
         tag: "product_${product.pid}",
-        child: ProductCard(product: product),
+        child: ProductCard(product: product,homemodel: homemodel,),
       ),
     );
   }

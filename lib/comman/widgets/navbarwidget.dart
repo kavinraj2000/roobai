@@ -1,3 +1,4 @@
+// 
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:go_router/go_router.dart';
@@ -35,40 +36,35 @@ class BottomNavBarWidget extends StatelessWidget {
       currentIndex: selectedIndex,
       onTap: (index) => _onTabTapped(context, index),
       type: BottomNavigationBarType.fixed,
-      backgroundColor: Colors.deepPurpleAccent, 
-      selectedItemColor: Colors.white,
-      unselectedItemColor: Colors.white60,
-      selectedLabelStyle:  AppConstants.headerblack,
+      backgroundColor: Colors.white,
+      selectedItemColor: Colors.deepPurple,
+      unselectedItemColor: Colors.deepPurple.shade200,
+      selectedLabelStyle: AppConstants.headerblack.copyWith(
+        fontWeight: FontWeight.bold,
+        fontSize: 13,
+      ),
       unselectedLabelStyle: const TextStyle(
         fontWeight: FontWeight.w500,
         fontSize: 12,
       ),
-      elevation: 0, 
+      elevation: 4,
       items: const [
         BottomNavigationBarItem(
-          icon: Icon(LucideIcons.house),
-          label: 'Home ',
+          icon: Icon(LucideIcons.house100),
+          label: 'Home',
         ),
         BottomNavigationBarItem(
-          icon: Icon(LucideIcons.user),
-          label: 'Profile',
+          icon: Icon(LucideIcons.partyPopper100),
+          label: 'Best',
         ),
         BottomNavigationBarItem(
-          icon: Icon(LucideIcons.tag),
+          icon: Icon(LucideIcons.tag100),
           label: 'Justin',
         ),
         BottomNavigationBarItem(
-          icon: Icon(LucideIcons.partyPopper),
-          label: 'Best',
+          icon: Icon(LucideIcons.menu100),
+          label: 'Category',
         ),
-        // BottomNavigationBarItem(
-        //   icon: Icon(LucideIcons.menu),
-        //   label: 'Menu',
-        // ),
-        // BottomNavigationBarItem(
-        //   icon: Icon(LucideIcons.heartHandshake),
-        //   label: 'Dealfinder',
-        // ),
       ],
     );
   }

@@ -20,3 +20,7 @@ class LoadCategories extends HomepageEvent {
   final List<HomeModel> homeModels;
   LoadCategories(this.homeModels);
 }
+class NavigateToProductEvent extends HomepageEvent {
+  final String? productUrl;
+  NavigateToProductEvent(this.productUrl);
+}

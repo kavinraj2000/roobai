@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
+import 'package:roobai/comman/model/home_model.dart';
+import 'package:roobai/screens/homepage/repo/homepage_repo.dart';
 
 import 'package:roobai/screens/product/model/products.dart';
 import 'package:roobai/screens/product/repo/products_repository.dart';
@@ -10,9 +12,11 @@ part 'products_state.dart';
 
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
   final DealRepository repo;
+  final HomepageRepository? homerepo;
 
-  ProductBloc(this.repo) : super(ProductState.initial()) {
+  ProductBloc(this.repo, this.homerepo) : super(ProductState.initial()) {
     on<FetchDealFinderData>(_onFetchDealFinderData);
+    on<RefreshProducts>(_onRefershproductevent);
     // on<Addlikestatusevent>(_onLikeStatusChange);
   }
 
@@ -25,16 +29,16 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
       Logger().d('ProductBloc::_onFetchDealFinderData::${event.runtimeType}');
 
-      final List<Product> data = await repo.getDealData( );
+      final List<Product> data = await repo.getDealData(page: state.page!+1);
+      final List<HomeModel> homeModels = await homerepo!.getProducts();
 
       Logger().d('_onFetchDealFinderData::data count::$data');
-
-
 
       emit(
         state.copyWith(
           status: DealfinderStatus.loaded,
           dealModel: data,
+          homemodel: homeModels,
           message: null,
         ),
       );
@@ -54,69 +58,75 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     }
   }
 
-// Future<void> _onLikeStatusChange(
-//   Addlikestatusevent event,
-//   Emitter<ProductState> emit,
-// ) async {
-//   try {
-//     if (state.dealModel == null || state.dealModel!.isEmpty) {
-//       Logger().w('ProductBloc::_onLikeStatusChange::No products loaded');
-//       return;
-//     }
+  Future<void> _onRefershproductevent(
+    RefreshProducts event,
+    Emitter<ProductState> emit,
+  ) async {
+    emit(state.copyWith(status:DealfinderStatus.loading ));
+    add( FetchDealFinderData());
+  }
+}
+  // Future<void> _onLikeStatusChange(
+  //   Addlikestatusevent event,
+  //   Emitter<ProductState> emit,
+  // ) async {
+  //   try {
+  //     if (state.dealModel == null || state.dealModel!.isEmpty) {
+  //       Logger().w('ProductBloc::_onLikeStatusChange::No products loaded');
+  //       return;
+  //     }
 
-//     final currentProducts = List<Product>.from(state.dealModel!);
-//     final productIndex = currentProducts.indexWhere(
-//       (p) => p.pid == event.product.pid,
-//     );
+  //     final currentProducts = List<Product>.from(state.dealModel!);
+  //     final productIndex = currentProducts.indexWhere(
+  //       (p) => p.pid == event.product.pid,
+  //     );
 
-//     if (productIndex == -1) {
-//       Logger().w('ProductBloc::_onLikeStatusChange::Product not found');
-//       return;
-//     }
+  //     if (productIndex == -1) {
+  //       Logger().w('ProductBloc::_onLikeStatusChange::Product not found');
+  //       return;
+  //     }
 
-//     // Toggle like status
-//     final updatedProduct = event.product.copyWith(
-//       likeStatus: event.product.likeStatus == "1" ? "0" : "1",
-//     );
+  //     // Toggle like status
+  //     final updatedProduct = event.product.copyWith(
+  //       likeStatus: event.product.likeStatus == "1" ? "0" : "1",
+  //     );
 
-//     // Optimistic update
-//     currentProducts[productIndex] = updatedProduct;
+  //     // Optimistic update
+  //     currentProducts[productIndex] = updatedProduct;
 
-//     emit(
-//       state.copyWith(
-//         status: DealfinderStatus.loaded,
-//         dealModel: currentProducts,
-//       ),
-//     );
+  //     emit(
+  //       state.copyWith(
+  //         status: DealfinderStatus.loaded,
+  //         dealModel: currentProducts,
+  //       ),
+  //     );
 
-//     Logger().d(
-//       'ProductBloc::_onLikeStatusChange::Updated product ${updatedProduct.pid} '
-//       'like status to ${updatedProduct.likeStatus}',
-//     );
+  //     Logger().d(
+  //       'ProductBloc::_onLikeStatusChange::Updated product ${updatedProduct.pid} '
+  //       'like status to ${updatedProduct.likeStatus}',
+  //     );
 
-//     await repo.addlikestatus(
-//       productId: updatedProduct.pid!,
-//       likeStatus: updatedProduct.likeStatus!,
-//     );
+  //     await repo.addlikestatus(
+  //       productId: updatedProduct.pid!,
+  //       likeStatus: updatedProduct.likeStatus!,
+  //     );
 
-//   } catch (e, stackTrace) {
-//     Logger().e(
-//       'ProductBloc::_onLikeStatusChange::Unexpected error::$e',
-//       stackTrace: stackTrace,
-//     );
+  //   } catch (e, stackTrace) {
+  //     Logger().e(
+  //       'ProductBloc::_onLikeStatusChange::Unexpected error::$e',
+  //       stackTrace: stackTrace,
+  //     );
 
-//     emit(
-//       state.copyWith(
-//         status: DealfinderStatus.failure,
-//         message: 'Error updating favorite status',
-//       ),
-//     );
-//   }
+  //     emit(
+  //       state.copyWith(
+  //         status: DealfinderStatus.failure,
+  //         message: 'Error updating favorite status',
+  //       ),
+  //     );
+  //   }
 
-
-
-      // Uncomment when backend API is ready
-      /*
+  // Uncomment when backend API is ready
+  /*
       try {
         // Call API to persist the like status
         await repo.updateLikeStatus(
@@ -166,4 +176,3 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   //   add(Addlikestatusevent(product));
   // }
 
-}

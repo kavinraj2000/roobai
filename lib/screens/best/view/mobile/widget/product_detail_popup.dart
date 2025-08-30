@@ -320,7 +320,6 @@ class _SmallProductPopupState extends State<SmallProductPopup>
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Drag handle
               Container(
                 width: 40,
                 height: 4,
@@ -368,15 +367,7 @@ class _SmallProductPopupState extends State<SmallProductPopup>
                             size: 18,
                           ),
                           const SizedBox(width: 6),
-                          const Text(
-                            'G.O.A.T',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                              letterSpacing: 0.5,
-                            ),
-                          ),
+                       
                         ],
                       ),
                     ),
@@ -390,7 +381,6 @@ class _SmallProductPopupState extends State<SmallProductPopup>
 
               const SizedBox(height: 20),
 
-              // Product Image with enhanced styling
               if (widget.product.productImage != null)
                 Container(
                   decoration: BoxDecoration(
