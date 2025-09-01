@@ -1,56 +1,94 @@
-import 'dart:convert';
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
-import 'package:roobai/comman/repo/app_api_repository.dart';
 import 'package:roobai/comman/model/base_model.dart';
+import 'package:roobai/comman/repo/app_api_repository.dart';
 
-class Apidatabase {
-  final _log = Logger();
+class ApiDatabase {
+  final Dio _dio = Dio(BaseOptions(
+    baseUrl: APIS.mainurl,
+    headers: APIS.headers,
+    connectTimeout: const Duration(seconds: 10),
+    receiveTimeout: const Duration(seconds: 10),
+  ));
+
+  final Logger _log = Logger();
   final _storage = const FlutterSecureStorage();
 
   Future<BaseModel> getPageData() async {
     try {
-      final response = await http.get(
-        Uri.parse(APIS.mainurl),
-        headers: APIS.headers,
-      );
+      final response = await _dio.get(""); // put actual endpoint
 
       if (response.statusCode == 200) {
-        final baseModel = BaseModel.fromJson(jsonDecode(response.body));
-        _log.i("Response Code: ${response.statusCode}");
+        final baseModel = BaseModel.fromJson(response.data);
 
+        _log.i("Response Code: ${response.statusCode}");
         await _storeData(baseModel);
 
         return baseModel;
       } else {
         throw Exception(
-          ' Failed to fetch PageData: ${response.statusCode} ${response.body}',
+          '❌ Failed to fetch PageData: ${response.statusCode} ${response.data}',
         );
       }
-    } on SocketException catch (_) {
-      _log.e("🚫 No Internet connection");
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionError) {
+        _log.e("🚫 No Internet connection");
+      } else {
+        _log.e("ApiDatabase::getPageData::${e.message}");
+      }
       rethrow;
     } catch (e, stack) {
-      _log.e("Apidatabase::getPageData::$e", stackTrace: stack);
+      _log.e("ApiDatabase::getPageData::$e", stackTrace: stack);
       rethrow;
     }
   }
 
   Future<String> getBaseUrl() async {
     try {
-      final baseModel = await getPageData();
+      final storedBaseUrl = await _storage.read(
+        key: 'base_api_url',
+        iOptions: _getIOSOptions(),
+        aOptions: _getAndroidOptions(),
+      );
 
-      return Platform.isAndroid
-          ? baseModel.baseApiUrl ?? ''
-          : baseModel.ios_base_api_url ?? '';
+      if (storedBaseUrl != null && storedBaseUrl.isNotEmpty) {
+        _log.i("✅ Using stored BaseUrl: $storedBaseUrl");
+        return storedBaseUrl;
+      }
+
+      final fallbackUrl =
+          Platform.isAndroid ? APIS.mainurl : APIS.mainurl;
+      _log.w("⚠️ No stored BaseUrl found, using fallback: $fallbackUrl");
+      return fallbackUrl;
     } catch (e, stack) {
-      _log.e("Apidatabase::getBaseUrl::$e", stackTrace: stack);
+      _log.e("ApiDatabase::getBaseUrl::$e", stackTrace: stack);
       rethrow;
     }
   }
+  Future<String> getbannerurl() async {
+    try {
+      final storedBaseUrl = await _storage.read(
+        key: 'bannerlist',
+        iOptions: _getIOSOptions(),
+        aOptions: _getAndroidOptions(),
+      );
 
+      if (storedBaseUrl != null && storedBaseUrl.isNotEmpty) {
+        _log.i("✅ Using stored BaseUrl: $storedBaseUrl");
+        return storedBaseUrl;
+      }
+
+      final fallbackUrl =
+          Platform.isAndroid ? APIS.mainurl : APIS.mainurl;
+      _log.w("⚠️ No stored BaseUrl found, using fallback: $fallbackUrl");
+      return fallbackUrl;
+    } catch (e, stack) {
+      _log.e("ApiDatabase::getBaseUrl::$e", stackTrace: stack);
+      rethrow;
+    }
+  }
   Future<void> _storeData(BaseModel baseModel) async {
     await _storage.write(
       key: 'website',
@@ -106,34 +144,28 @@ class Apidatabase {
       iOptions: _getIOSOptions(),
       aOptions: _getAndroidOptions(),
     );
-    await _storage.write(
-      key: 'banner_url_1',
-      value: baseModel.bannerUrl1 ?? '',
-      iOptions: _getIOSOptions(),
-      aOptions: _getAndroidOptions(),
-    );
-    await _storage.write(
-      key: 'banner_image_1',
-      value: baseModel.bannerImage1 ?? '',
-      iOptions: _getIOSOptions(),
-      aOptions: _getAndroidOptions(),
-    );
 
-    if (Platform.isAndroid) {
-      await _storage.write(
-        key: 'base_api_url',
-        value: baseModel.baseApiUrl ?? '',
-        iOptions: _getIOSOptions(),
-        aOptions: _getAndroidOptions(),
-      );
-    } else if (Platform.isIOS) {
-      await _storage.write(
-        key: 'base_api_url',
-        value: baseModel.ios_base_api_url ?? '',
-        iOptions: _getIOSOptions(),
-        aOptions: _getAndroidOptions(),
-      );
-    }
+    final baseUrlToSave = Platform.isAndroid
+        ? (baseModel.baseApiUrl ?? APIS.mainurl)
+        : (baseModel.ios_base_api_url ?? APIS.mainurl);
+
+    await _storage.write(
+      key: 'base_api_url',
+      value: baseUrlToSave,
+      iOptions: _getIOSOptions(),
+      aOptions: _getAndroidOptions(),
+    );
+    final bannerUrlToSave = Platform.isAndroid
+        ? (baseModel.baseApiUrl ?? APIS.bannerurl)
+        : (baseModel.ios_base_api_url ?? APIS.bannerurl);
+await _storage.write(
+      key: 'bannerlist',
+      value: bannerUrlToSave,
+      iOptions: _getIOSOptions(),
+      aOptions: _getAndroidOptions(),
+    );
+    _log.i("💾 Stored BaseUrl: $baseUrlToSave");
+    _log.i("💾 Stored bannerlist: $baseUrlToSave");
   }
 
   IOSOptions _getIOSOptions() =>

@@ -10,7 +10,7 @@ import 'package:roobai/screens/product/view/widget/product_detail_popup.dart';
 
 class ProductCard extends StatefulWidget {
   final Product product;
-  final List<HomeModel>? homemodel;
+  // final List<HomeModel>? homemodel;
   final VoidCallback? onTap;
   final bool showStoreName;
   final bool showDiscountBadge;
@@ -21,7 +21,7 @@ class ProductCard extends StatefulWidget {
     super.key,
     required this.product,
     this.onTap,
-    this.homemodel,
+    // this.homemodel,
     this.showStoreName = true,
     this.showDiscountBadge = true,
     this.showDateTime = true,
@@ -37,8 +37,8 @@ class _ProductCardState extends State<ProductCard> {
 
   @override
   Widget build(BuildContext context) {
-    log.d('homemodel::data:ProductCard:${widget.homemodel!.first.data!.first.itext}');
-    final itext=widget.homemodel!.first.data!.first.itext;
+    // log.d('homemodel::data:ProductCard:${widget.homemodel!.first.data!.first.itext}');
+    // final itext=widget.homemodel!.first.data!.first.itext;
     final offerPrice =
         double.tryParse(widget.product.productOfferPrice?.toString() ?? '0') ?? 0;
     final salePrice =
@@ -74,7 +74,7 @@ class _ProductCardState extends State<ProductCard> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildImageSection(discountPercentage,itext!),
+            _buildImageSection(discountPercentage),
             _buildContentSection(offerPrice, salePrice, discountPercentage),
           ],
         ),
@@ -94,7 +94,7 @@ class _ProductCardState extends State<ProductCard> {
     );
   }
 
-  Widget _buildImageSection(int discountPercentage,String itext) {
+  Widget _buildImageSection(int discountPercentage) {
     final bool isExpired = widget.product.stockStatus?.toString() == '1';
 
     return AspectRatio(
@@ -170,7 +170,7 @@ class _ProductCardState extends State<ProductCard> {
             ),
           ),
           GestureDetector(
-            onTap: () => _showSmartProductDialog(context, itext),
+            onTap: () => _showSmartProductDialog(context),
             child: const Padding(
               padding: EdgeInsets.all(6),
               child: Icon(
@@ -192,13 +192,13 @@ class _ProductCardState extends State<ProductCard> {
 
 
 
-   void _showSmartProductDialog(BuildContext context, String apiText) {
+   void _showSmartProductDialog(BuildContext context,) {
     showDialog(
       context: context,
       builder: (context) {
         return SmartProductInfoDialog(
           title: "disclaimer",
-          description: apiText,
+          description: 'apiText',
         );
       },
     );

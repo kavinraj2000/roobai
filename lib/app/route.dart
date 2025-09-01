@@ -9,7 +9,6 @@ import 'package:roobai/screens/homepage/view/homepage_view.dart';
 import 'package:roobai/screens/product/model/products.dart';
 import 'package:roobai/screens/product/view/products.dart';
 import 'package:roobai/screens/joinus/view/mobile/joinus_mobile_view.dart';
-import 'package:roobai/screens/homepage/view/mobile/home.dart';
 
 import 'package:roobai/screens/search/view/search_view.dart';
 import 'package:roobai/screens/setting/setting.dart';
@@ -18,7 +17,7 @@ class Routes {
   final log = Logger();
 
   GoRouter router = GoRouter(
-    initialLocation: RouteName.mainScreen,
+    initialLocation: RouteName.splashScreen,
     routes: [
       GoRoute(
         name: RouteName.splashScreen,
@@ -32,7 +31,6 @@ class Routes {
         path: RouteName.mainScreen,
         builder: (BuildContext context, GoRouterState state) {
           return HomepageView();
-          // return HomepageView();
         },
       ),
       GoRoute(

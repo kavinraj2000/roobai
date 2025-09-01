@@ -11,7 +11,7 @@ import 'package:roobai/comman/repo/storage_repository.dart';
 import 'package:roobai/screens/product/model/products.dart';
 
 class Searchrepository {
-  final api = Apidatabase();
+  final api = ApiDatabase();
   final log = Logger();
   final Dio dio = Dio();
 
@@ -55,7 +55,7 @@ class Searchrepository {
   Future<List<HomeModel>> gethomepagedata() async {
     try {
       final baseUrl = await api.getBaseUrl();
-      final url = "${baseUrl + Constansts.api.homepage}/";
+      final url = "${baseUrl + Constansts.api.salecategorylist}/";
       log.d('HomepageRepository:gethomepagedata:url:$url');
       final response = await dio.get(
         url,

@@ -86,7 +86,7 @@ class BestProductGrid extends StatelessWidget {
       },
       child: Hero(
         tag: "product_${product.pid}",
-        child: ProductCard(product: product,homemodel: homemodel,),
+        child: ProductCard(product: product,),
       ),
     );
   }

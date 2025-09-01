@@ -6,7 +6,6 @@ class ProductState extends Equatable {
   final DealfinderStatus status;
   final String message;
   final List<Product>? dealModel;
-  final List<HomeModel>? homemodel;
   final int? page;
   final bool isFavorite;
 
@@ -14,7 +13,6 @@ class ProductState extends Equatable {
     required this.status,
     required this.dealModel,
     required this.message,
-    this.homemodel,
     required this.page,
     required this.isFavorite,
     
@@ -25,7 +23,6 @@ class ProductState extends Equatable {
       status: DealfinderStatus.initial,
       dealModel: null,
       message: '',
-      homemodel: null,
       page: 0,
       isFavorite: false
     );
@@ -35,7 +32,6 @@ class ProductState extends Equatable {
     DealfinderStatus? status,
     String? message,
     List<Product>? dealModel,
-    List<HomeModel>? homemodel,
     int? page,
     bool? isFavorite,
   }) {
@@ -43,12 +39,11 @@ class ProductState extends Equatable {
       dealModel: dealModel ?? this.dealModel,
       message: message ?? this.message,
       status: status ?? this.status,
-      homemodel: homemodel ?? this.homemodel,
       page: page ??this.page,
       isFavorite: isFavorite ?? this.isFavorite,
     );
   }
 
   @override
-  List<Object?> get props => [status, message, dealModel, homemodel,page,isFavorite];
+  List<Object?> get props => [status, message, dealModel,page,isFavorite];
 }

@@ -31,32 +31,14 @@ class BestProductBloc extends Bloc<BestProductEvent, BestProductState> {
       Logger().d('BestProductBloc::_onFetchproductrData::${event.runtimeType}');
 
       final List<Product> products = await repo.getDealData();
-      final List<HomeModel> homeModels = await homerepo!.getProducts();
 
       Logger().d('_onFetchproductrData::data count::$products ');
-      Logger().d('_onFetchproductrData::homemodel::$homeModels ');
 
-  final List<Product> filteredProducts = products.where((product) {
-  return homeModels.any((homeModel) {
-    return homeModel.data?.any((homeItem) {
-      final itext = homeItem.itext ?? '';
-      return product.productName != null && itext.contains(product.productName!);
-    }) ?? false;
-  });
-}).toList();
-
-Logger().d('Filtered Products: $filteredProducts');
-
-
-        Logger().d(
-          '_onFetchproductrData::filteredProducts::$filteredProducts ',
-        );
 
         emit(
           state.copyWith(
             status: BestProductStatus.loaded,
             dealModel: products,
-            homemodel: homeModels,
             message: null,
           ),
         );

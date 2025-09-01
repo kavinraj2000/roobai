@@ -6,14 +6,14 @@ import 'package:roobai/comman/constants/constansts.dart';
 import 'package:roobai/comman/model/category_model.dart';
 
 class CategoryRepository {
-  final api = Apidatabase();
+  final api = ApiDatabase();
   final dio = Dio();
   final log = Logger();
 
   Future<List<CategoryModel>> getCategoryData() async {
     try {
       final baseUrl = await api.getBaseUrl(); 
-      final url = '$baseUrl/${Constansts.api.categoryList}';
+      final url = '$baseUrl/${Constansts.api.salecategorylist}';
 
       log.d('CategoryRepository:getCategoryData::Requesting URL: $url');
 

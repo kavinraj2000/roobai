@@ -16,7 +16,7 @@ class Productpage extends StatelessWidget {
 
     return BlocProvider<ProductBloc>(
       create: (context) =>
-          ProductBloc(DealRepository(),HomepageRepository())..add(FetchDealFinderData()),
+          ProductBloc(DealRepository())..add(FetchDealFinderData()),
       child: DealFinderView(),
     );
   }

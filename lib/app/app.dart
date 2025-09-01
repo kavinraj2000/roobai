@@ -12,7 +12,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider(
-      create: (_) => Apidatabase(),
+      create: (_) => ApiDatabase(),
       child: MaterialApp.router(
         builder: (context, child) => ResponsiveBreakpoints.builder(
           child: child!,

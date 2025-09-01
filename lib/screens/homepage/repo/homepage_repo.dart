@@ -6,14 +6,14 @@ import 'package:roobai/comman/repo/storage_repository.dart';
 import 'package:roobai/comman/model/home_model.dart';
 
 class HomepageRepository {
-  final Apidatabase api = Apidatabase();
+  final ApiDatabase api = ApiDatabase();
   final Dio _dio = Dio();
   final log = Logger();
 
   Future<List<HomeModel>> getProducts() async {
     try {
-      final baseUrl = await api.getBaseUrl();
-      final url = "${baseUrl + Constansts.api.homepage}/";
+      final baseUrl = await api.getbannerurl();
+      final url = baseUrl + Constansts.api.bannerlist;
       log.d('HomepageRepository:url:$url');
       final response = await _dio.get(
         url,

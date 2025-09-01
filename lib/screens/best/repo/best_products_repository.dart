@@ -7,7 +7,7 @@ import 'package:roobai/comman/repo/storage_repository.dart';
 import 'package:roobai/screens/product/model/products.dart';
 
 class BestproductRepository {
-  final Apidatabase api = Apidatabase();
+  final ApiDatabase api = ApiDatabase();
   final log = Logger();
   final Dio dio = Dio();
 
