@@ -10,8 +10,8 @@ abstract class HomepageEvent extends Equatable {
 class LoadHomepageData extends HomepageEvent {}
 
 class Livenowdata extends HomepageEvent {
-  final List<HomeModel> homemodel;
-  const Livenowdata(this.homemodel);
+  final List<ProductModel> product;
+  const Livenowdata(this.product);
 }
 
 class LoadBanners extends HomepageEvent {}
@@ -23,4 +23,14 @@ class LoadCategories extends HomepageEvent {
 class NavigateToProductEvent extends HomepageEvent {
   final String? productUrl;
   NavigateToProductEvent(this.productUrl);
+}
+// Add this new event to your existing homepage_event.dart file
+
+class OpenWhatsAppEvent extends HomepageEvent {
+  final String? whatsappUrl;
+
+  const OpenWhatsAppEvent({
+    required this.whatsappUrl,
+  });
+
 }

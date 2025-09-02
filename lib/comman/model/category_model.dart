@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class CategoryModel {
   String? cid;
   String? category;
@@ -41,4 +43,8 @@ class CategoryModel {
     data['url'] = url;
     return data;
   }
+    @override
+
+    String toString() => jsonEncode(toJson());
+
 }

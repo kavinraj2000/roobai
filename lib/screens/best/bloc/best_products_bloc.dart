@@ -13,9 +13,8 @@ part 'best_products_state.dart';
 
 class BestProductBloc extends Bloc<BestProductEvent, BestProductState> {
   final BestproductRepository repo;
-  final HomepageRepository? homerepo;
 
-  BestProductBloc(this.repo, this.homerepo)
+  BestProductBloc(this.repo)
     : super(BestProductState.initial()) {
     on<FetchproductrData>(_onFetchproductrData);
     // on<Addlikestatusevent>(_onLikeStatusChange);
@@ -28,7 +27,7 @@ class BestProductBloc extends Bloc<BestProductEvent, BestProductState> {
     try {
       emit(state.copyWith(status: BestProductStatus.loading));
 
-      Logger().d('BestProductBloc::_onFetchproductrData::${event.runtimeType}');
+      Logger().d('BestProductBloc::_onFetchproductrData::$event');
 
       final List<Product> products = await repo.getDealData();
 

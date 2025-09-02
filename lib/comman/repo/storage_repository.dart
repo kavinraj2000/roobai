@@ -1,29 +1,30 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:roobai/comman/model/base_model.dart';
 import 'package:roobai/comman/repo/app_api_repository.dart';
 
 class ApiDatabase {
-  final Dio _dio = Dio(BaseOptions(
-    baseUrl: APIS.mainurl,
-    headers: APIS.headers,
-    connectTimeout: const Duration(seconds: 10),
-    receiveTimeout: const Duration(seconds: 10),
-  ));
+  final Dio _dio = Dio(
+    BaseOptions(
+      baseUrl: APIS.mainurl,
+      headers: APIS.headers,
+      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 10),
+    ),
+  );
 
   final Logger _log = Logger();
-  final _storage = const FlutterSecureStorage();
 
   Future<BaseModel> getPageData() async {
     try {
-      final response = await _dio.get(""); // put actual endpoint
-
+      final response = await _dio.get("");
       if (response.statusCode == 200) {
         final baseModel = BaseModel.fromJson(response.data);
+        _log.i("✅ Response Code: ${response.statusCode}");
 
-        _log.i("Response Code: ${response.statusCode}");
+        // Store important values
         await _storeData(baseModel);
 
         return baseModel;
@@ -45,132 +46,55 @@ class ApiDatabase {
     }
   }
 
-  Future<String> getBaseUrl() async {
-    try {
-      final storedBaseUrl = await _storage.read(
-        key: 'base_api_url',
-        iOptions: _getIOSOptions(),
-        aOptions: _getAndroidOptions(),
-      );
-
-      if (storedBaseUrl != null && storedBaseUrl.isNotEmpty) {
-        _log.i("✅ Using stored BaseUrl: $storedBaseUrl");
-        return storedBaseUrl;
-      }
-
-      final fallbackUrl =
-          Platform.isAndroid ? APIS.mainurl : APIS.mainurl;
-      _log.w("⚠️ No stored BaseUrl found, using fallback: $fallbackUrl");
-      return fallbackUrl;
-    } catch (e, stack) {
-      _log.e("ApiDatabase::getBaseUrl::$e", stackTrace: stack);
-      rethrow;
-    }
-  }
-  Future<String> getbannerurl() async {
-    try {
-      final storedBaseUrl = await _storage.read(
-        key: 'bannerlist',
-        iOptions: _getIOSOptions(),
-        aOptions: _getAndroidOptions(),
-      );
-
-      if (storedBaseUrl != null && storedBaseUrl.isNotEmpty) {
-        _log.i("✅ Using stored BaseUrl: $storedBaseUrl");
-        return storedBaseUrl;
-      }
-
-      final fallbackUrl =
-          Platform.isAndroid ? APIS.mainurl : APIS.mainurl;
-      _log.w("⚠️ No stored BaseUrl found, using fallback: $fallbackUrl");
-      return fallbackUrl;
-    } catch (e, stack) {
-      _log.e("ApiDatabase::getBaseUrl::$e", stackTrace: stack);
-      rethrow;
-    }
-  }
+  /// Store important values in SharedPreferences
   Future<void> _storeData(BaseModel baseModel) async {
-    await _storage.write(
-      key: 'website',
-      value: baseModel.website ?? '',
-      iOptions: _getIOSOptions(),
-      aOptions: _getAndroidOptions(),
-    );
-    await _storage.write(
-      key: 'ios_version',
-      value: baseModel.iosVersion ?? '',
-      iOptions: _getIOSOptions(),
-      aOptions: _getAndroidOptions(),
-    );
-    await _storage.write(
-      key: 'android_version',
-      value: baseModel.androidVersion ?? '',
-      iOptions: _getIOSOptions(),
-      aOptions: _getAndroidOptions(),
-    );
-    await _storage.write(
-      key: 'giveaway_token',
-      value: baseModel.giveawayToken ?? '',
-      iOptions: _getIOSOptions(),
-      aOptions: _getAndroidOptions(),
-    );
-    await _storage.write(
-      key: 'refcode1',
-      value: baseModel.refcode1 ?? '',
-      iOptions: _getIOSOptions(),
-      aOptions: _getAndroidOptions(),
-    );
-    await _storage.write(
-      key: 'refcode2',
-      value: baseModel.refcode2 ?? '',
-      iOptions: _getIOSOptions(),
-      aOptions: _getAndroidOptions(),
-    );
-    await _storage.write(
-      key: 'reftitle',
-      value: baseModel.reftitle ?? '',
-      iOptions: _getIOSOptions(),
-      aOptions: _getAndroidOptions(),
-    );
-    await _storage.write(
-      key: 'affiliate_disclosure',
-      value: baseModel.affiliateDisclosure ?? '',
-      iOptions: _getIOSOptions(),
-      aOptions: _getAndroidOptions(),
-    );
-    await _storage.write(
-      key: 'banner',
-      value: baseModel.banner ?? '',
-      iOptions: _getIOSOptions(),
-      aOptions: _getAndroidOptions(),
-    );
+    final prefs = await SharedPreferences.getInstance();
 
-    final baseUrlToSave = Platform.isAndroid
+    await prefs.setString("website", baseModel.website ?? '');
+    await prefs.setString("ios_version", baseModel.iosVersion ?? '');
+    await prefs.setString("android_version", baseModel.androidVersion ?? '');
+    await prefs.setString("giveaway_token", baseModel.giveawayToken ?? '');
+    await prefs.setString("refcode1", baseModel.refcode1 ?? '');
+    await prefs.setString("refcode2", baseModel.refcode2 ?? '');
+    await prefs.setString("reftitle", baseModel.reftitle ?? '');
+    await prefs.setString("affiliate_disclosure", baseModel.affiliateDisclosure ?? '');
+    await prefs.setString("banner", baseModel.banner ?? '');
+
+    // Base URL
+    final baseUrl = Platform.isAndroid
         ? (baseModel.baseApiUrl ?? APIS.mainurl)
-        : (baseModel.ios_base_api_url ?? APIS.mainurl);
+        : (baseModel.iosBaseApiUrl ?? APIS.mainurl);
+    await prefs.setString("base_api_url", baseUrl);
+    _log.i("💾 Stored BaseUrl: $baseUrl");
 
-    await _storage.write(
-      key: 'base_api_url',
-      value: baseUrlToSave,
-      iOptions: _getIOSOptions(),
-      aOptions: _getAndroidOptions(),
-    );
-    final bannerUrlToSave = Platform.isAndroid
+    // Banner URL
+    final bannerUrl = Platform.isAndroid
         ? (baseModel.baseApiUrl ?? APIS.bannerurl)
-        : (baseModel.ios_base_api_url ?? APIS.bannerurl);
-await _storage.write(
-      key: 'bannerlist',
-      value: bannerUrlToSave,
-      iOptions: _getIOSOptions(),
-      aOptions: _getAndroidOptions(),
-    );
-    _log.i("💾 Stored BaseUrl: $baseUrlToSave");
-    _log.i("💾 Stored bannerlist: $baseUrlToSave");
+        : (baseModel.iosBaseApiUrl ?? APIS.bannerurl);
+    await prefs.setString("bannerlist", bannerUrl);
+    _log.i("💾 Stored BannerUrl: $bannerUrl");
   }
 
-  IOSOptions _getIOSOptions() =>
-      const IOSOptions(accessibility: KeychainAccessibility.first_unlock);
+  /// Get Base URL
+  Future<String> getBaseUrl() async {
+    final prefs = await SharedPreferences.getInstance();
+    final url = prefs.getString("base_api_url") ?? APIS.mainurl;
+    _log.i("✅ Using BaseUrl: $url");
+    return url;
+  }
 
-  AndroidOptions _getAndroidOptions() =>
-      const AndroidOptions(encryptedSharedPreferences: true);
+  /// Get Banner URL
+  Future<String> getBannerUrl() async {
+    final prefs = await SharedPreferences.getInstance();
+    final url = prefs.getString("bannerlist") ?? APIS.bannerurl;
+    _log.i("✅ Using BannerUrl: $url");
+    return url;
+  }
+
+  /// Optional: Clear stored data
+  Future<void> clearStoredData() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+    _log.i("🗑️ Cleared all stored data");
+  }
 }

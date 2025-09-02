@@ -15,7 +15,7 @@ class BestProductpage extends StatelessWidget {
 
     return BlocProvider<BestProductBloc>(
       create: (context) =>
-          BestProductBloc(BestproductRepository(),HomepageRepository())..add(FetchproductrData()),
+          BestProductBloc(BestproductRepository())..add(FetchproductrData()),
       child: Bestproductview(),
     );
   }

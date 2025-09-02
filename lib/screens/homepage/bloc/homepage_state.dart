@@ -1,47 +1,78 @@
 part of 'homepage_bloc.dart';
 
-enum HomepageStatus { initial, loading, loaded, error }
+enum HomepageStatus { 
+  initial, 
+  loading, 
+  loaded, 
+  error 
+}
+// Add this property to your existing HomepageState class
 
 class HomepageState extends Equatable {
   final HomepageStatus status;
-  final List<HomeModel> homeModel;
-  final List<dynamic> banners;
-  final List<dynamic> categories;
-  final List<dynamic> justin;
-  final List<dynamic> livenow;
-  final String errorMessage;
+  final List<BannerModel>? banner;
+  final List<ProductModel>? justscroll;
+  final List<CategoryModel>? category;
+  final List<BannerModel>? bigCatBanners;
+  final List<BannerModel>? whatsappBanners; 
+  final String? errorMessage;
+  final List<dynamic>? categories;
 
   const HomepageState({
-    this.status = HomepageStatus.initial,
-    this.homeModel = const [],
-    this.banners = const [],
-    this.livenow=const[],
-    this.justin = const [],
-    this.categories = const [],
-    this.errorMessage = '',
+    required this.status,
+    this.banner,
+    this.justscroll,
+    this.category,
+    this.bigCatBanners,
+    this.whatsappBanners,
+    this.errorMessage,
+    this.categories,
   });
+
+  factory HomepageState.initial() {
+    return const HomepageState(
+      status: HomepageStatus.initial,
+      banner: null,
+      justscroll: null,
+      category: null,
+      bigCatBanners: null,
+      whatsappBanners: null,
+      errorMessage: null,
+      categories: null,
+    );
+  }
 
   HomepageState copyWith({
     HomepageStatus? status,
-    List<HomeModel>? homeModel,
-    List<dynamic>? livenow,
-    List<dynamic>? banners,
-    List<dynamic>? justin,
-    List<dynamic>? categories,
+    List<BannerModel>? banner,
+    List<ProductModel>? justscroll,
+    List<CategoryModel>? category,
+    List<BannerModel>? bigCatBanners,
+    List<BannerModel>? whatsappBanners, // Add this line
     String? errorMessage,
+    List<dynamic>? categories,
   }) {
     return HomepageState(
       status: status ?? this.status,
-      homeModel: homeModel ?? this.homeModel,
-      livenow: livenow ?? this.livenow,
-      banners: banners ?? this.banners,
-      justin: justin ?? this.justin,
-      categories: categories ?? this.categories,
+      banner: banner ?? this.banner,
+      justscroll: justscroll ?? this.justscroll,
+      category: category ?? this.category,
+      bigCatBanners: bigCatBanners ?? this.bigCatBanners,
+      whatsappBanners: whatsappBanners ?? this.whatsappBanners,
       errorMessage: errorMessage ?? this.errorMessage,
+      categories: categories ?? this.categories,
     );
   }
 
   @override
-  List<Object?> get props =>
-      [status, homeModel, banners, categories,justin, errorMessage,livenow];
+  List<Object?> get props => [
+    status,
+    banner,
+    justscroll,
+    category,
+    bigCatBanners,
+    whatsappBanners,
+    errorMessage,
+    categories,
+  ];
 }

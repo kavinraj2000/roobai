@@ -1,20 +1,17 @@
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:go_router/go_router.dart';
+import 'package:logger/web.dart';
+import 'package:roobai/app/route_names.dart';
 import 'package:roobai/comman/constants/app_constansts.dart';
-import 'package:roobai/comman/constants/color_constansts.dart';
-import 'package:roobai/comman/constants/constansts.dart';
-import 'package:roobai/comman/model/home_model.dart';
+import 'package:roobai/comman/model/bannar_model.dart';
+import 'package:roobai/comman/model/product_model.dart';
 import 'package:roobai/comman/widgets/appbarwidget.dart';
-import 'package:roobai/comman/widgets/itext.dart';
 import 'package:roobai/comman/widgets/navbarwidget.dart';
-import 'package:roobai/comman/widgets/no_data.dart';
 import 'package:roobai/screens/homepage/bloc/homepage_bloc.dart';
-import 'package:roobai/screens/product/view/widget/Product_datetime.dart';
+import 'package:roobai/screens/homepage/view/mobile/card.dart';
+import 'package:roobai/screens/homepage/view/mobile/categories.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -23,655 +20,193 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
-      appBar: CustomAppBar(),
-      bottomNavigationBar: BottomNavBarWidget(selectedIndex: 0),
-      body: BlocBuilder<HomepageBloc, HomepageState>(
-        builder: (context, state) {
-          if (state.status == HomepageStatus.loading) {
-            return const Center(
-              child: CircularProgressIndicator(color: Colors.blue),
-            );
-          }
-
-          if (state.status == HomepageStatus.error) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.error_outline,
-                    size: 80,
-                    color: Colors.red.shade300,
+      appBar: const CustomAppBar(),
+      bottomNavigationBar: const BottomNavBarWidget(selectedIndex: 0),
+      body: SafeArea(
+        child: BlocBuilder<HomepageBloc, HomepageState>(
+          builder: (context, state) {
+            switch (state.status) {
+              case HomepageStatus.loading:
+                return const Center(
+                  child: CircularProgressIndicator(color: Colors.blue),
+                );
+              case HomepageStatus.error:
+                return const Center(
+                  child: Text(
+                    "Failed to load data",
+                    style: TextStyle(color: Colors.red),
                   ),
-                  const SizedBox(height: 24),
-                  const Padding(
-                    padding: EdgeInsets.all(16),
-                    child: NoDataWidget(),
-                  ),
-                  const SizedBox(height: 8),
-                  const SizedBox(height: 24),
-                ],
-              ),
-            );
-          }
+                );
+              case HomepageStatus.loaded:
+                final products = state.justscroll ?? [];
+                final categories = state.category ?? [];
+                final banners = state.banner ?? [];
 
-          if (state.status == HomepageStatus.loaded) {
-            return RefreshIndicator(
-              onRefresh: () async {
-                context.read<HomepageBloc>().add(LoadHomepageData());
-              },
-              color: Colors.blue,
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 8),
-                    ...state.homeModel
-                        .map((homeModel) => _buildSection(context, homeModel))
-                        .toList(),
-                    const SizedBox(height: 20),
-                  ],
-                ),
-              ),
-            );
-          }
-
-          return const SizedBox.shrink();
-        },
-      ),
-    );
-  }
-
-  Widget _buildSection(BuildContext context, HomeModel homeModel) {
-    switch (homeModel.type) {
-      case 'big_cat':
-        return _buildBigCategorySection(homeModel);
-      case 'banner':
-        return _buildBannerSection(homeModel);
-      case 'category':
-        return _buildCategorySection(homeModel);
-      default:
-        return _buildDefaultSection(homeModel);
-    }
-  }
-
-  Widget _buildBigCategorySection(HomeModel homeModel) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 220,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            itemCount: homeModel.data?.length ?? 0,
-            itemBuilder: (context, index) {
-              final data = homeModel.data![index];
-              return Container(
-                width: 280,
-                margin: const EdgeInsets.only(right: 16),
-                child: Card(
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  clipBehavior: Clip.antiAlias,
-                  child: InkWell(
-                    onTap: () {},
-                    child: Stack(
+                return RefreshIndicator(
+                  onRefresh: () async =>
+                      context.read<HomepageBloc>().add(LoadHomepageData()),
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CachedNetworkImage(
-                          imageUrl: data.img_url ?? '',
-                          width: double.infinity,
-                          height: double.infinity,
-                          fit: BoxFit.contain,
-                          placeholder: (context, url) =>
-                              const Center(child: CircularProgressIndicator()),
-                          errorWidget: (context, url, error) => Container(
-                            color: Colors.grey.shade300,
-                            child: const Center(
-                              child: Icon(Icons.error, size: 50),
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          left: 0,
-                          right: 0,
-                          child: Container(
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.bottomCenter,
-                                end: Alignment.topCenter,
-                                colors: [
-                                  Colors.black.withOpacity(0.8),
-                                  Colors.black.withOpacity(0.4),
-                                  Colors.transparent,
-                                ],
-                              ),
-                            ),
-                            child: Text(
-                              data.category ?? '',
-                              style: AppConstants.headerblack,
-                            ),
-                          ),
-                        ),
+                        if (banners.isNotEmpty) _buildBannerCarousel(banners),
+                        const SizedBox(height: 16),
+                        _buildCategorySection(categories),
+                        const SizedBox(height: 20),
+                        if (products.isNotEmpty)
+                          _buildProductHorizontalList(context,products),
+                        const SizedBox(
+                          height: 80,
+                        ), // Extra space to avoid overflow
                       ],
                     ),
                   ),
-                ),
-              );
-            },
-          ),
-        ),
-        const SizedBox(height: 10),
-      ],
-    );
-  }
-
-  Widget _buildBannerSection(HomeModel homeModel) {
-    if (homeModel.data == null || homeModel.data!.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
-    final imageUrls = homeModel.data!
-        .map((data) => data.image1 ?? data.image ?? '')
-        .where((url) => url.isNotEmpty)
-        .toList();
-
-    if (imageUrls.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
-    return Column(
-      children: [
-        const SizedBox(height: 8),
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16),
-          child: CarouselSlider(
-            options: CarouselOptions(
-              height: 180,
-              autoPlay: true,
-              enlargeCenterPage: true,
-              viewportFraction: 1.0,
-              autoPlayCurve: Curves.fastOutSlowIn,
-              enableInfiniteScroll: imageUrls.length > 1,
-              autoPlayAnimationDuration: const Duration(milliseconds: 800),
-              autoPlayInterval: const Duration(seconds: 4),
-            ),
-            items: imageUrls.map((url) {
-              return Builder(
-                builder: (BuildContext context) {
-                  return Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: const EdgeInsets.symmetric(horizontal: 2),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 8,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: CachedNetworkImage(
-                        imageUrl: url,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Container(
-                          color: Colors.grey.shade200,
-                          child: const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        ),
-                        errorWidget: (context, error, stackTrace) {
-                          return Container(
-                            color: Colors.grey.shade300,
-                            child: const Center(
-                              child: Icon(
-                                Icons.broken_image,
-                                size: 50,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  );
-                },
-              );
-            }).toList(),
-          ),
-        ),
-        const SizedBox(height: 10),
-      ],
-    );
-  }
-
-  Widget _buildCategorySection(HomeModel homeModel) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 100,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            itemCount: homeModel.data?.length ?? 0,
-            separatorBuilder: (context, _) => const SizedBox(width: 12),
-            itemBuilder: (context, index) {
-              final data = homeModel.data![index];
-              return Column(
-                children: [
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundColor: Colors.transparent,
-                    backgroundImage:
-                        (data.category_image != null &&
-                            data.category_image!.isNotEmpty)
-                        ? NetworkImage(data.category_image!)
-                        : null,
-                    child:
-                        (data.category_image == null ||
-                            data.category_image!.isEmpty)
-                        ? const Icon(
-                            Icons.category,
-                            size: 24,
-                            color: Colors.grey,
-                          )
-                        : null,
-                  ),
-                  const SizedBox(height: 6),
-                  SizedBox(
-                    width: 60,
-                    child: Text(
-                      data.category ?? '',
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppConstants.textblack,
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
-        // const SizedBox(height: 15),
-      ],
-    );
-  }
-
-  Widget _buildbuttonslide(BuildContext context,HomeModel homeModel){
-    return 
-    Row(
-      children: [
-       Container(
-  padding: const EdgeInsets.all(16),
-  decoration: BoxDecoration(
-    color: Colors.white,
-    boxShadow: [
-      BoxShadow(
-        blurRadius: 20,
-        color: Colors.black26,
-        offset: Offset(0, 4),
-      ),
-    ],
-    borderRadius: BorderRadius.circular(12),
-  ),
-  child: Row(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly, // space between buttons
-    children: [
-      Expanded(
-        child: ElevatedButton(
-          onPressed: () {
-            // Action for button 1
+                );
+              default:
+                return const SizedBox.shrink();
+            }
           },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blue, // button color
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-          child: const Text("Button 1"),
         ),
       ),
-      const SizedBox(width: 16), // space between buttons
-      Expanded(
-        child: ElevatedButton(
-          onPressed: () {
-            // Action for button 2
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.green, // button color
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-          child: const Text("Button 2"),
-        ),
-      ),
-    ],
+    );
+  }
+
+  // ✅ Banner carousel
+  Widget _buildBannerCarousel(List<BannerModel> banners) {
+  if (banners.isEmpty) return const SizedBox.shrink();
+  return SizedBox(
+    height: 180,
+    child: ListView.separated(
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      itemCount: banners.length,
+      separatorBuilder: (_, __) => const SizedBox(width: 12),
+      itemBuilder: (context, index) {
+        final banner = banners[index];
+        final url = banner.image ?? ''; 
+        final producturl = banner.url ?? ''; 
+final bannerUrl = banner.url != null
+    ? 'https://roobai.com/assets/images/banner/collage/new/$url'
+    : '';
+Logger().d('_buildBannerCarousel::$bannerUrl');
+
+       return InkWell(
+        onTap: (){
+          context.read<HomepageBloc>().add(NavigateToProductEvent(producturl));
+        },
+         child: ClipRRect(
+  borderRadius: BorderRadius.circular(12),
+  child: CachedNetworkImage(
+    imageUrl: bannerUrl,
+    width: 300,
+    fit: BoxFit.cover,
+    placeholder: (_, __) => Container(
+      color: Colors.grey.shade200,
+      child: const Center(child: CircularProgressIndicator()),
+    ),
+    errorWidget: (_, __, ___) => Container(
+      color: Colors.grey.shade200,
+      child: const Icon(Icons.broken_image, size: 50),
+    ),
   ),
 )
 
-      ],
-    );
-  }
+       );
 
-  Widget _buildDefaultSection(HomeModel homeModel) {
-    final showDateTimeSections = ['just in'];
-    final type = homeModel.type?.toLowerCase();
-    final title = homeModel.title?.toLowerCase();
-    final shouldShowDateTime =
-        showDateTimeSections.contains(type) ||
-        showDateTimeSections.contains(title);
+      },
+    ),
+  );
+}
+
+
+  Widget _buildCategorySection(List categories) {
+    if (categories.isEmpty) return const SizedBox.shrink();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (homeModel.title != null && homeModel.title!.isNotEmpty)
-          _buildSectionHeader(homeModel.title!),
-        const SizedBox(height: 8),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text('View More', style: AppConstants.textblack),
+                  const Icon(Icons.arrow_right, color: Colors.black),
+                ],
+              ),
+            ],
+          ),
+        ),
         SizedBox(
-          height: shouldShowDateTime ? 271 : 250,
+          height: 110,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            itemCount: homeModel.data?.length ?? 0,
+            shrinkWrap: true,
+            physics: const ClampingScrollPhysics(),
+            padding: const EdgeInsets.all(8),
+            itemCount: categories.length,
             separatorBuilder: (_, __) => const SizedBox(width: 12),
             itemBuilder: (context, index) {
-              final data = homeModel.data![index];
-
-              final mrp = double.tryParse(data.productSalePrice ?? '') ?? 0;
-              final offerPrice =
-                  double.tryParse(data.productOfferPrice ?? '') ?? 0;
-              final discount = (mrp > 0)
-                  ? (((mrp - offerPrice) / mrp) * 100).round()
-                  : 0;
-              final bool isExpired = data.flag?.toString() == '1';
-
-              return Container(
-                width: 180,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey.shade200),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.04),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Stack(
-                      children: [
-                        Container(
-                          height: 140,
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(8),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: CachedNetworkImage(
-                              imageUrl: data.productImage ?? '',
-                              fit: BoxFit.contain,
-                              placeholder: (_, __) => Container(
-                                color: Colors.grey.shade100,
-                                child: const Center(
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ),
-                              errorWidget: (_, __, ___) => Container(
-                                color: Colors.grey.shade100,
-                                child: const Center(
-                                  child: Icon(
-                                    Icons.broken_image,
-                                    color: Colors.grey,
-                                    size: 40,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        if (isExpired)
-                          Positioned(
-                            top: 0,
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            child: Align(
-                              alignment: Alignment.topCenter,
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 1,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  borderRadius: const BorderRadius.only(
-                                    bottomLeft: Radius.circular(6),
-                                    bottomRight: Radius.circular(6),
-                                  ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.25),
-                                      blurRadius: 4,
-                                      offset: const Offset(0, 2),
-                                    ),
-                                  ],
-                                ),
-                                child: const Text(
-                                  'Expired',
-                                  style: AppConstants.headerwhite,
-                                ),
-                              ),
-                            ),
-                          ),
-
-                        if (!isExpired && discount >= 80)
-                          Positioned(
-                            top: 0,
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            child: Align(
-                              alignment: Alignment.topCenter,
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 1,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.deepPurple,
-                                  borderRadius: const BorderRadius.only(
-                                    bottomLeft: Radius.circular(6),
-                                    bottomRight: Radius.circular(6),
-                                  ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.25),
-                                      blurRadius: 4,
-                                      offset: const Offset(0, 2),
-                                    ),
-                                  ],
-                                ),
-                                child: const Text(
-                                  'G.O.A.T',
-                                  style: AppConstants.headerwhite,
-                                ),
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-
-                    if (data.storeName != null)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Flexible(
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 6,
-                                  vertical: 2,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFF5DC02),
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: Text(
-                                  data.storeName!,
-                                  style: GoogleFonts.sora(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.black,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () =>
-                                  _showSmartProductDialog(context, data.itext!),
-                              child: const Padding(
-                                padding: EdgeInsets.all(6),
-                                child: Icon(
-                                  Icons.info,
-                                  size: 16,
-                                  color: Color.fromARGB(255, 207, 206, 206),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(6),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              data.productName ?? 'Product',
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: AppConstants.headerblack,
-                            ),
-                            const SizedBox(height: 10),
-                            Row(
-                              children: [
-                                Text(
-                                  '₹${data.productOfferPrice ?? ''}',
-                                  style: AppConstants.headerblack,
-                                ),
-                                const SizedBox(width: 6),
-                                if (mrp > 0)
-                                  Text(
-                                    '₹${data.productSalePrice}',
-                                    style: AppConstants.offer,
-                                  ),
-                                if (discount > 0) ...[
-                                  const SizedBox(width: 40),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "$discount%",
-                                        style: AppConstants.textblack,
-                                      ),
-                                      const SizedBox(width: 2),
-                                      Image.asset(
-                                        'assets/icons/thunder.png',
-                                        width: 12,
-                                        height: 12,
-                                        color: _getDiscountBadgeColor(discount),
-                                      ),
-
-                                      // size: 12,
-                                      // color: Colors.white,
-                                    ],
-                                  ),
-                                ],
-                              ],
-                            ),
-
-                            if (shouldShowDateTime && data.dateTime != null)
-                              Padding(
-                                padding: const EdgeInsets.only(top: 6),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Datetimewidget(dateTime: data.dateTime),
-                                  ],
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+              final category = categories[index];
+              return SizedBox(
+                child: CategoryCard(
+                  category: category,
+                  onTap: () {
+                    // Handle category tap
+                  },
                 ),
               );
             },
           ),
         ),
-        const SizedBox(height: 15),
       ],
     );
   }
 
-  Widget _buildSectionHeader(String title) {
+  Widget _buildProductHorizontalList(BuildContext context,List<ProductModel> products) {
     return Padding(
-      padding: const EdgeInsets.all(8),
-      child: Row(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
         children: [
-          Expanded(child: Text(title, style: AppConstants.headerblack)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Justin scroll', style: AppConstants.textblack),
+              InkWell(
+                onTap: () {
+                  context.goNamed(RouteName.product);
+                },
+                child: Row(
+                  children: [
+                    Text('View More', style: AppConstants.textblack),
+                
+                    const Icon(Icons.arrow_right, color: Colors.black),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 10),
+          SizedBox(
+            height: 270,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
+              physics: const ClampingScrollPhysics(),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: products.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 12),
+              itemBuilder: (context, index) =>
+                  ProductCard(product: products[index]),
+            ),
+          ),
         ],
       ),
     );
   }
-
-  Color _getDiscountBadgeColor(int discount) {
-    if (discount < 25) {
-      return Colors.red;
-    } else if (discount >= 50 && discount <= 80) {
-      return Colors.blue;
-    } else if (discount >= 50 && discount <= 24) {
-      return Colors.orange;
-    } else {
-      return Colors.green.shade600;
-    }
-  }
-
-  void _showSmartProductDialog(BuildContext context, String apiText) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return SmartProductInfoDialog(
-          title: "disclaimer",
-          description: apiText,
-        );
-      },
-    );
-  }
-
 }
