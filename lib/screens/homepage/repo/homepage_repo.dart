@@ -41,8 +41,8 @@ class HomepageRepository {
 
   Future<List<ProductModel>> getJustScrollProducts() async {
     try {
-      final baseUrl = await api.getBaseUrl(); 
-      final url = baseUrl + Constansts.api.jusinscroll; 
+      final baseUrl = await api.getBaseUrl();
+      final url = baseUrl + Constansts.api.jusinscroll;
       log.d('getJustScrollProducts URL: $url');
 
       final response = await _dio.get(
@@ -68,10 +68,11 @@ class HomepageRepository {
       throw Exception("Unexpected error while fetching products: $e");
     }
   }
+
   Future<List<CategoryModel>> getcategories() async {
     try {
-      final baseUrl = await api.getBaseUrl(); 
-      final url = baseUrl + Constansts.api.salecategorylist; 
+      final baseUrl = await api.getBaseUrl();
+      final url = baseUrl + Constansts.api.salecategorylist;
       log.d('getcategories URL: $url');
 
       final response = await _dio.get(
@@ -97,8 +98,71 @@ class HomepageRepository {
       throw Exception("Unexpected error while fetching products: $e");
     }
   }
+
+  Future<List<ProductModel>> gethorsdeal() async {
+    try {
+      final baseUrl = await api.getBaseUrl();
+      final url = baseUrl + Constansts.api.hourdeals;
+      log.d('gethorsdeal URL: $url');
+
+      final response = await _dio.get(
+        url,
+        options: Options(headers: APIS.headers),
+      );
+
+      log.d('gethorsdeal statusCode: ${response.statusCode}');
+      log.d('gethorsdeal data: ${response.data}');
+
+      return _parseListResponse<ProductModel>(
+        response,
+        (json) => ProductModel.fromJson(json),
+      );
+    } on DioException catch (e) {
+      log.e("DioError gethorsdeal: ${e.message}");
+      if (e.response?.statusCode == 404) {
+        throw Exception("API endpoint not found: ${e.requestOptions.uri}");
+      }
+      throw Exception("Network error while fetching products: ${e.message}");
+    } catch (e) {
+      log.e("Error gethorsdeal: $e");
+      throw Exception("Unexpected error while fetching products: $e");
+    }
+  }
+
+  Future<List<ProductModel>> getMobilecategory() async {
+    try {
+      final baseUrl = await api.getBaseUrl();
+      final url = baseUrl + Constansts.api.mobilecategory;
+      log.d('getMobilecategory URL: $url');
+
+      final response = await _dio.get(
+        url,
+        options: Options(headers: APIS.headers),
+      );
+
+      log.d('getMobilecategory statusCode: ${response.statusCode}');
+      log.d('getMobilecategory data: ${response.data}');
+
+      return _parseListResponse<ProductModel>(
+        response,
+        (json) => ProductModel.fromJson(json),
+      );
+    } on DioException catch (e) {
+      log.e("DioError getMobilecategory: ${e.message}");
+      if (e.response?.statusCode == 404) {
+        throw Exception("API endpoint not found: ${e.requestOptions.uri}");
+      }
+      throw Exception("Network error while fetching products: ${e.message}");
+    } catch (e) {
+      log.e("Error getMobilecategory: $e");
+      throw Exception("Unexpected error while fetching products: $e");
+    }
+  }
+
   List<T> _parseListResponse<T>(
-      Response response, T Function(Map<String, dynamic>) fromJson) {
+    Response response,
+    T Function(Map<String, dynamic>) fromJson,
+  ) {
     if (response.statusCode == 200) {
       try {
         if (response.data is List) {

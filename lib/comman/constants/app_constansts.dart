@@ -15,6 +15,7 @@ class AppConstants {
   final String nameNullError = "Please enter your name";
   final String phoneNumberNullError = "Please enter your phone number";
   final String addressNullError = "Please enter your address";
+  static const url = "http://";
 
   static const TextStyle headerblack = TextStyle(
     fontFamily: 'Figtree',

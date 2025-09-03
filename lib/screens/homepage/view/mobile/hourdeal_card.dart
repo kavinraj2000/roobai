@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:logger/web.dart';
 import 'package:roobai/comman/constants/app_constansts.dart';
 import 'package:roobai/comman/model/product_model.dart';
 import 'package:roobai/screens/homepage/bloc/homepage_bloc.dart';
 import 'package:roobai/screens/product/view/widget/Product_datetime.dart';
 
-class ProductCard extends StatelessWidget {
+class HoursdealCard extends StatelessWidget {
   final ProductModel product;
+  final VoidCallback? onTap;
 
-  const ProductCard({super.key, required this.product, });
+  const HoursdealCard({super.key, required this.product, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,8 @@ class ProductCard extends StatelessWidget {
 
     return InkWell(
       onTap: (){
-        context.read<HomepageBloc>().add(NavigateToProductEvent(product.productUrl));
+                context.read<HomepageBloc>().add(NavigateToProductEvent(product.productPageUrl));
+Logger().d('product.productPageUrl::hourdeal::${product.productUrl}');
       },
       child: Container(
         width: 180,
@@ -32,7 +35,7 @@ class ProductCard extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.04),
-              blurRadius: 6,
+              blurRadius: 8,
               offset: const Offset(0, 2),
             ),
           ],
@@ -41,7 +44,7 @@ class ProductCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AspectRatio(
-              aspectRatio: 1.1,
+              aspectRatio: 1.2,
               child: Stack(
                 children: [
                   ClipRRect(
@@ -188,7 +191,6 @@ class ProductCard extends StatelessWidget {
     );
   }
 
-  // Placeholder for product image
   Widget _placeholder() {
     return Container(
       width: double.infinity,

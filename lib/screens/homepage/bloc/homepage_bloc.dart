@@ -37,15 +37,20 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
       log.d('HomepageBloc::getJustScrollProducts::fetched $justscroll');
       final category = await homeRepository.getcategories();
       log.d('HomepageBloc::getcategories::fetched $category');
-      
+      final hourdeal = await homeRepository.gethorsdeal();
+      log.d('HomepageBloc::gethorsdeal::hourdeal $hourdeal');
+       final mobilelist = await homeRepository.getMobilecategory();
+      log.d('HomepageBloc::getMobilecategory::mobilelist $mobilelist');
+
       emit(
         state.copyWith(
           status: HomepageStatus.loaded,
           banner: bannerlist,
           justscroll: justscroll,
-        category: category  
-          // categories: categories,
-          // livenow: livedata, // ✅ Add this to actually use livedata
+          category: category,
+          hourdeals: hourdeal,
+          mobileList: mobilelist,
+        
         ),
       );
     } catch (e) {
@@ -82,36 +87,36 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
     }
   }
 
-  Future<void> _onNavigateToProduct(
-    NavigateToProductEvent event,
-    Emitter<HomepageState> emit,
-  ) async {
-    try {
-      emit(state.copyWith(status: HomepageStatus.loading));
+Future<void> _onNavigateToProduct(
+  NavigateToProductEvent event,
+  Emitter<HomepageState> emit,
+) async {
+  try {
+    final productUrl = event.productUrl;
 
-      final productUrl = event.productUrl;
-
-      if (productUrl == null || productUrl.isEmpty) {
-        emit(state.copyWith(status: HomepageStatus.error));
-        return;
-      }
-
-      final url = productUrl.startsWith("http")
-          ? productUrl
-          : "https://$productUrl";
-      final uri = Uri.parse(url);
-
-      HapticFeedback.mediumImpact();
-
-      final launched = await launchUrl(uri, mode: LaunchMode.inAppWebView);
-
-      if (!launched) {
-        emit(state.copyWith(status: HomepageStatus.loading));
-      } else {
-        emit(state.copyWith(status: HomepageStatus.error));
-      }
-    } catch (e) {
-      emit(state.copyWith(status: HomepageStatus.error, errorMessage: '$e'));
+    if (productUrl == null || productUrl.isEmpty) {
+      emit(state.copyWith(status: HomepageStatus.error, errorMessage: "Invalid product URL"));
+      return;
     }
+
+    final url = productUrl.startsWith("http")
+        ? productUrl
+        : "https://$productUrl";
+    final uri = Uri.parse(url);
+    log.i('_onNavigateToProduct:uri:::::$uri');
+
+    HapticFeedback.mediumImpact();
+
+    final launched = await launchUrl(uri, mode: LaunchMode.inAppWebView);
+
+    if (!launched) {
+      emit(state.copyWith(status: HomepageStatus.error, errorMessage: "Could not open the URL"));
+    }
+
+    // Don't emit any state if launched successfully; nothing needs to change
+  } catch (e) {
+    emit(state.copyWith(status: HomepageStatus.error, errorMessage: e.toString()));
   }
+}
+
 }

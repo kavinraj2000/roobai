@@ -109,7 +109,6 @@ class _ProductCardState extends State<ProductCard> {
           children: [
             Center(child: _buildProductImage()),
 
-            // Expired or GOAT Badge
             if (isExpired || (!isExpired && discountPercentage >= 80))
               Positioned(
                 top: 0,

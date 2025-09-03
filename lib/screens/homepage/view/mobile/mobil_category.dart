@@ -6,10 +6,10 @@ import 'package:roobai/comman/model/product_model.dart';
 import 'package:roobai/screens/homepage/bloc/homepage_bloc.dart';
 import 'package:roobai/screens/product/view/widget/Product_datetime.dart';
 
-class ProductCard extends StatelessWidget {
+class MobileCard extends StatelessWidget {
   final ProductModel product;
 
-  const ProductCard({super.key, required this.product, });
+  const MobileCard({super.key, required this.product, });
 
   @override
   Widget build(BuildContext context) {
@@ -140,13 +140,11 @@ class ProductCard extends StatelessWidget {
               ),
             ),
 
-            // Product details section
             Padding(
               padding: const EdgeInsets.all(6),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Product name
                   Text(
                     product.productName ?? 'Product',
                     maxLines: 2,
@@ -173,7 +171,6 @@ class ProductCard extends StatelessWidget {
                     ],
                   ),
 
-                  // Date/time widget
                   if (product.dateTime != null)
                     Padding(
                       padding: const EdgeInsets.only(top: 4),
