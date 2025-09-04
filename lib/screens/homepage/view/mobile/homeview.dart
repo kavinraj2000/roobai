@@ -5,6 +5,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:roobai/app/route_names.dart';
 import 'package:roobai/comman/constants/app_constansts.dart';
+import 'package:roobai/comman/drawer/view/drawer.dart';
+import 'package:roobai/comman/drawer/view/drawer_cat.dart';
+import 'package:roobai/comman/helper/drawercategory.dart';
 import 'package:roobai/comman/model/bannar_model.dart';
 import 'package:roobai/comman/model/product_model.dart';
 import 'package:roobai/comman/widgets/appbarwidget.dart';
@@ -22,8 +25,23 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
       appBar: const CustomAppBar(),
+      
+      drawer: Drawerwidget(),
+       floatingActionButton: FloatingActionButton(
+    backgroundColor: const Color(0xFF8B5CF6),
+    onPressed: () {
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        builder: (_) => const Drawerwidget(),
+      );
+    },
+       ),
+      
       bottomNavigationBar: const BottomNavBarWidget(selectedIndex: 0),
       body: SafeArea(
         child: BlocBuilder<HomepageBloc, HomepageState>(
@@ -68,7 +86,7 @@ class HomeView extends StatelessWidget {
                         if (hourdeal.isNotEmpty)
                           _buildHourDeals(context, hourdeal),
                         const SizedBox(height: 20),
-                         if (mobile.isNotEmpty)
+                        if (mobile.isNotEmpty)
                           _buildMobileHorizontalList(context, mobile),
                         const SizedBox(height: 20),
                       ],
@@ -166,7 +184,6 @@ class HomeView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-     
         const SizedBox(height: 12),
         SizedBox(
           height: 110,
@@ -248,7 +265,7 @@ class HomeView extends StatelessWidget {
     );
   }
 
-    Widget _buildMobileHorizontalList(
+  Widget _buildMobileHorizontalList(
     BuildContext context,
     List<ProductModel> products,
   ) {
@@ -311,104 +328,108 @@ class HomeView extends StatelessWidget {
     );
   }
 
+  Widget _buildHourDeals(BuildContext context, List<ProductModel> products) {
+    if (products.isEmpty) return const SizedBox.shrink();
 
-Widget _buildHourDeals(BuildContext context, List<ProductModel> products) {
-  if (products.isEmpty) return const SizedBox.shrink();
+    final dealEndTime = getDealEndTime(products.first);
 
-  final dealEndTime = getDealEndTime(products.first);
-
-  return Container(
-    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16), // Balanced padding for the content
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(12),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.2),
-          blurRadius: 6,
-          offset: const Offset(0, 3),
-        ),
-      ],
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Stack to position the timer badge at the top of the container
-        Stack(
-          children: [
-            // Background content for the Hour Deal section (optional for styling)
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0), // Reduced vertical padding to remove space
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const SizedBox(
-                height: 0, // No extra height
-              ),
-            ),
-            
-            // Timer Badge (HourDealHeader) positioned at the top of the container
-            Align(
-              alignment: Alignment.topCenter,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0), // No padding, directly at the top
-                decoration: BoxDecoration(
-                  color: Colors.deepPurple,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(12),
-                    topRight: Radius.circular(12), // Rounded top corners for a neat look
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.25),
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: HourDealHeader(endTime: dealEndTime), // Timer widget
-              ),
-            ),
-          ],
-        ),
-
-        const SizedBox(height: 12), // Adjusted space between the timer and products (you can remove if no gap needed)
-
-        // Product Grid
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
-          child: GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: products.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 10,
-              childAspectRatio: 0.72,
-            ),
-            itemBuilder: (context, index) {
-              final product = products[index];
-              return HoursdealCard(
-                product: product,
-                onTap: () {},
-              );
-            },
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            blurRadius: 6,
+            offset: const Offset(0, 3),
           ),
+        ],
+        image: const DecorationImage(
+          image: AssetImage("assets/icons/background.jpg"),
+          fit: BoxFit.cover,
+          // opacity: 0.15,
         ),
-      ],
-    ),
-  );
-}
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                height: 30, // smaller base height
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              Positioned(
+                top: -11,
+                left: 0,
+                right: 0,
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Colors.red, Colors.redAccent],
+                        tileMode: TileMode.mirror,
+                      ),
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(10),
+                        bottomRight: Radius.circular(10),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.25),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: HourDealHeader(endTime: dealEndTime),
+                  ),
+                ),
+              ),
+            ],
+          ),
 
-DateTime getDealEndTime(ProductModel product) {
-  try {
-    if (product.dateTime != null && product.dateTime!.isNotEmpty) {
-      return DateTime.parse(product.dateTime!);
-    }
-  } catch (_) {}
-  // Fallback to 1 hour from now
-  return DateTime.now().add(const Duration(hours: 1));
-}
+          const SizedBox(height: 12),
 
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: products.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 10,
+                childAspectRatio: 0.72,
+              ),
+              itemBuilder: (context, index) {
+                final product = products[index];
+                return HoursdealCard(product: product, onTap: () {});
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  DateTime getDealEndTime(ProductModel product) {
+    try {
+      if (product.dateTime != null && product.dateTime!.isNotEmpty) {
+        return DateTime.parse(product.dateTime!);
+      }
+    } catch (_) {}
+    // Fallback to 1 hour from now
+    return DateTime.now().add(const Duration(hours: 1));
+  }
 }

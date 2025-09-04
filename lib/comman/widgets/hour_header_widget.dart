@@ -43,22 +43,31 @@ class _HourDealHeaderState extends State<HourDealHeader> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    String twoDigits(int n) => n.toString().padLeft(2, '0'); 
+Widget build(BuildContext context) {
+  String twoDigits(int n) => n.toString().padLeft(2, '0');
 
-    final hours = twoDigits(_remaining.inHours.remainder(24));
-    final minutes = twoDigits(_remaining.inMinutes.remainder(60));
-    final seconds = twoDigits(_remaining.inSeconds.remainder(60));
+  final hours = twoDigits(_remaining.inHours.remainder(24));
+  final minutes = twoDigits(_remaining.inMinutes.remainder(60));
+  final seconds = twoDigits(_remaining.inSeconds.remainder(60));
 
-    return Row(
-      children: [
-        const Icon(Icons.timer, color:ColorConstants.white),
-        const SizedBox(width: 8),
-        Text(
-          'Hour deal $hours:$minutes:$seconds',
-          style: AppConstants.headerwhite
+  return Row(
+    mainAxisSize: MainAxisSize.min, // shrink wrap
+    children: [
+      const Icon(
+        Icons.timer,
+        color: ColorConstants.white,
+        size: 16, // smaller icon
+      ),
+      const SizedBox(width: 4), // tighter spacing
+      Text(
+        'Hour Deal $hours:$minutes:$seconds',
+        style: AppConstants.headerwhite.copyWith(
+          fontSize: 12,  // smaller font size
+          fontWeight: FontWeight.w600,
         ),
-      ],
-    );
-  }
+      ),
+    ],
+  );
+}
+
 }

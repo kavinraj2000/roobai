@@ -82,6 +82,7 @@ dependencies:
   share_plus: ^11.1.0
   cached_network_image: ^3.4.1
   circular_reveal_animation: ^2.0.2
+  flutter_speed_dial: ^7.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

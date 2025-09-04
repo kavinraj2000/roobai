@@ -40,19 +40,24 @@ class _ProductCardState extends State<ProductCard> {
     // log.d('homemodel::data:ProductCard:${widget.homemodel!.first.data!.first.itext}');
     // final itext=widget.homemodel!.first.data!.first.itext;
     final offerPrice =
-        double.tryParse(widget.product.productOfferPrice?.toString() ?? '0') ?? 0;
+        double.tryParse(widget.product.productOfferPrice?.toString() ?? '0') ??
+        0;
     final salePrice =
-        double.tryParse(widget.product.productSalePrice?.toString() ?? '0') ?? 0;
+        double.tryParse(widget.product.productSalePrice?.toString() ?? '0') ??
+        0;
 
     final discountPercentage = salePrice > 0
         ? ((salePrice - offerPrice) / salePrice * 100).round()
         : 0;
 
     return InkWell(
-      onTap: widget.onTap ??
+      onTap:
+          widget.onTap ??
           () {
             if (widget.enableBottomSheet) {
-              log.d('BottomSheet opened with product ::${widget.product.toMap()}');
+              log.d(
+                'BottomSheet opened with product ::${widget.product.toMap()}',
+              );
               _showProductBottomSheet(context, widget.product);
             }
           },
@@ -117,7 +122,10 @@ class _ProductCardState extends State<ProductCard> {
                 child: Align(
                   alignment: Alignment.topCenter,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 2,
+                    ),
                     decoration: BoxDecoration(
                       color: isExpired ? Colors.red : Colors.deepPurple,
                       borderRadius: const BorderRadius.only(
@@ -143,55 +151,52 @@ class _ProductCardState extends State<ProductCard> {
             if (widget.showStoreName &&
                 widget.product.storeName != null &&
                 widget.product.storeName!.isNotEmpty)
-             Positioned(
-      bottom: 0, // distance from bottom
-      left: 4,
-      right: 4,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Flexible(
-            child: Container(
-              // padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF5DC02),
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Text(
-                widget.product.storeName!,
-                style: GoogleFonts.sora(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
+              Positioned(
+                bottom: 0, // distance from bottom
+                left: 4,
+                right: 4,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      child: Container(
+                        // padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF5DC02),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          widget.product.storeName!,
+                          style: GoogleFonts.sora(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => _showSmartProductDialog(context),
+                      child: const Padding(
+                        padding: EdgeInsets.all(6),
+                        child: Icon(
+                          Icons.info,
+                          size: 16,
+                          color: Color.fromARGB(255, 207, 206, 206),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                overflow: TextOverflow.ellipsis,
               ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () => _showSmartProductDialog(context),
-            child: const Padding(
-              padding: EdgeInsets.all(6),
-              child: Icon(
-                Icons.info,
-                size: 16,
-                color: Color.fromARGB(255, 207, 206, 206),
-              ),
-            ),
-          ),
-        ],
-      ),
-    ),
           ],
         ),
       ),
     );
   }
 
-
-
-
-   void _showSmartProductDialog(BuildContext context,) {
+  void _showSmartProductDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) {
@@ -204,22 +209,35 @@ class _ProductCardState extends State<ProductCard> {
   }
 
   Widget _buildContentSection(
-      double offerPrice, double salePrice, int discountPercentage) {
+    double offerPrice,
+    double salePrice,
+    int discountPercentage,
+  ) {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (widget.product.productName != null)
-            Text(widget.product.productName!,
-                maxLines: 2, overflow: TextOverflow.ellipsis, style: AppConstants.headerblack),
+            Text(
+              widget.product.productName!,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: AppConstants.headerblack,
+            ),
           const SizedBox(height: 4),
           Row(
             children: [
-              Text("₹${offerPrice.toStringAsFixed(0)}", style: AppConstants.headerblack),
+              Text(
+                "₹${offerPrice.toStringAsFixed(0)}",
+                style: AppConstants.headerblack,
+              ),
               const SizedBox(width: 10),
               if (salePrice > 0)
-                Text("₹${salePrice.toStringAsFixed(0)}", style: AppConstants.offer),
+                Text(
+                  "₹${salePrice.toStringAsFixed(0)}",
+                  style: AppConstants.offer,
+                ),
               const Spacer(),
               if (widget.showDiscountBadge && discountPercentage > 0)
                 Row(
@@ -260,7 +278,7 @@ class _ProductCardState extends State<ProductCard> {
                 child: CircularProgressIndicator(
                   value: loadingProgress.expectedTotalBytes != null
                       ? loadingProgress.cumulativeBytesLoaded /
-                          loadingProgress.expectedTotalBytes!
+                            loadingProgress.expectedTotalBytes!
                       : null,
                   strokeWidth: 2,
                   color: Colors.blue.shade300,
