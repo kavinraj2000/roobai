@@ -291,4 +291,4 @@ class CategoryViewPage extends StatelessWidget {
       ),
     );
   }
-}
+
