@@ -14,7 +14,7 @@ class DrawerRepository {
   /// Fetch categories
   Future<List<CategoryModel>> getcategory() async {
     try {
-      final baseUrl = await api.getBaseUrl();
+      final baseUrl = await api.getBannerUrl();
       final url = baseUrl + Constansts.api.salecategorylist;
       log.d('getcategory URL: $url');
 

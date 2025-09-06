@@ -121,6 +121,7 @@ class CategoryViewPage extends StatelessWidget {
       ),
     );
   }
+}
 
   Widget _productCard(BuildContext context, ProductModel product) {
     final mrp = double.tryParse(product.productSalePrice ?? '') ?? 0;
@@ -171,7 +172,6 @@ class CategoryViewPage extends StatelessWidget {
                           )
                         : _placeholder(),
                   ),
-
                   if (isExpired || discount >= 80)
                     Positioned(
                       top: 0,
