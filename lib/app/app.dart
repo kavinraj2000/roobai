@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:roobai/app/route.dart';
 import 'package:roobai/comman/constants/color_constansts.dart';
-import 'package:roobai/comman/theme/theme.dart';
 import 'package:roobai/comman/repo/storage_repository.dart';
 
 class App extends StatelessWidget {

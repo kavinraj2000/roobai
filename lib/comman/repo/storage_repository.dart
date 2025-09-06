@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
@@ -15,14 +16,14 @@ class ApiDatabase {
     ),
   );
 
-  final Logger _log = Logger();
+  final Logger log = Logger();
 
   Future<BaseModel> getPageData() async {
     try {
       final response = await _dio.get("");
       if (response.statusCode == 200) {
         final baseModel = BaseModel.fromJson(response.data);
-        _log.i("✅ Response Code: ${response.statusCode}");
+        log.i("✅ Response Code: ${response.statusCode}");
 
         // Store important values
         await _storeData(baseModel);
@@ -35,15 +36,95 @@ class ApiDatabase {
       }
     } on DioException catch (e) {
       if (e.type == DioExceptionType.connectionError) {
-        _log.e("🚫 No Internet connection");
+        log.e("🚫 No Internet connection");
       } else {
-        _log.e("ApiDatabase::getPageData::${e.message}");
+        log.e("ApiDatabase::getPageData::${e.message}");
       }
       rethrow;
     } catch (e, stack) {
-      _log.e("ApiDatabase::getPageData::$e", stackTrace: stack);
+      log.e("ApiDatabase::getPageData::$e", stackTrace: stack);
       rethrow;
     }
+  }
+
+    Future<dynamic> getRequest({
+    required String url,
+    Map<String, dynamic>? queryParams,
+  }) async {
+    try {
+      final baseUrl = await getBannerUrl();
+      final fullUrl = baseUrl + url;
+
+      log.d("ApiRepository::getRequest::URL: $fullUrl, Query: $queryParams");
+
+      final response = await _dio.get(
+        fullUrl,
+        queryParameters: queryParams,
+      );
+
+      return _handleResponse(response);
+    } on DioException catch (dioError) {
+      log.e("ApiRepository::getRequest::DioException: ${dioError.message}");
+      throw _handleError(dioError);
+    }
+  }
+/// Handle API response
+  dynamic _handleResponse(Response response) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
+      final data = response.data;
+      if (data is Map) {
+        return data;
+      } else if (data is String) {
+        try {
+          return jsonDecode(data);
+        } catch (error) {
+          log.e("ApiRepository::_handleResponse::JSON decode error: $error");
+          throw Exception("Failed to decode response JSON: $error");
+        }
+      } else {
+        return data;
+      }
+    } else {
+      log.e(
+        "ApiRepository::_handleResponse::HTTP error ${response.statusCode} - ${response.statusMessage}",
+      );
+      throw Exception(
+        "HTTP error: ${response.statusCode} - ${response.statusMessage}",
+      );
+    }
+  }
+
+  /// Handle Dio errors
+  Exception _handleError(DioException error) {
+    log.e("ApiRepository::_handleError::Error message: ${error.message}");
+    String errormessage;
+    switch (error.type) {
+      case DioExceptionType.connectionError:
+        errormessage = "Connection error.";
+        break;
+      case DioExceptionType.connectionTimeout:
+        errormessage = "Connection timed out.";
+        break;
+      case DioExceptionType.receiveTimeout:
+        errormessage = "Receive timeout.";
+        break;
+      case DioExceptionType.sendTimeout:
+        errormessage = "Send timeout.";
+        break;
+      case DioExceptionType.cancel:
+        errormessage = "Request cancelled.";
+        break;
+      case DioExceptionType.badResponse:
+        errormessage =
+            "Response Error: ${error.response?.statusCode} - ${error.response?.statusMessage}";
+        break;
+      case DioExceptionType.unknown:
+      default:
+        errormessage = "Unknown error: ${error.message}";
+    }
+    return Exception(errormessage);
   }
 
   /// Store important values in SharedPreferences
@@ -65,21 +146,21 @@ class ApiDatabase {
         ? (baseModel.baseApiUrl ?? APIS.mainurl)
         : (baseModel.iosBaseApiUrl ?? APIS.mainurl);
     await prefs.setString("base_api_url", baseUrl);
-    _log.i("💾 Stored BaseUrl: $baseUrl");
+    log.i("💾 Stored BaseUrl: $baseUrl");
 
     // Banner URL
     final bannerUrl = Platform.isAndroid
         ? (baseModel.baseApiUrl ?? APIS.bannerurl)
         : (baseModel.iosBaseApiUrl ?? APIS.bannerurl);
     await prefs.setString("bannerlist", bannerUrl);
-    _log.i("💾 Stored BannerUrl: $bannerUrl");
+    log.i("💾 Stored BannerUrl: $bannerUrl");
   }
 
   /// Get Base URL
   Future<String> getBaseUrl() async {
     final prefs = await SharedPreferences.getInstance();
     final url = prefs.getString("base_api_url") ?? APIS.mainurl;
-    _log.i("✅ Using BaseUrl: $url");
+    log.i("✅ Using BaseUrl: $url");
     return url;
   }
 
@@ -87,7 +168,7 @@ class ApiDatabase {
   Future<String> getBannerUrl() async {
     final prefs = await SharedPreferences.getInstance();
     final url = prefs.getString("bannerlist") ?? APIS.bannerurl;
-    _log.i("✅ Using BannerUrl: $url");
+    log.i("✅ Using BannerUrl: $url");
     return url;
   }
 
@@ -95,6 +176,6 @@ class ApiDatabase {
   Future<void> clearStoredData() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
-    _log.i("🗑️ Cleared all stored data");
+    log.i("🗑️ Cleared all stored data");
   }
 }

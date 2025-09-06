@@ -52,21 +52,20 @@ class CustomDrawerWidget extends StatelessWidget {
     );
   }
 
-Widget _buildHeader(BuildContext context, DrawerState state) {
-  return Container(
-    padding: const EdgeInsets.only(top: 40, bottom: 12),
-    child: Column(
-      children: [
-        Image.asset(
-          'assets/icons/logo.png',
-          height: 40, // Reduce logo size if needed
-        ),
-        const SizedBox(height: 8),
-      ],
-    ),
-  );
-}
-
+  Widget _buildHeader(BuildContext context, DrawerState state) {
+    return Container(
+      padding: const EdgeInsets.only(top: 40, bottom: 12),
+      child: Column(
+        children: [
+          Image.asset(
+            'assets/icons/logo.png',
+            height: 40, // Reduce logo size if needed
+          ),
+          const SizedBox(height: 8),
+        ],
+      ),
+    );
+  }
 
   Widget _buildContent(BuildContext context, DrawerState state) {
     if (state.status == Drawerstatus.loading) {
@@ -121,7 +120,7 @@ Widget _buildHeader(BuildContext context, DrawerState state) {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 20),
-           
+
             _buildCategoriesSection(context, state),
           ],
         ),
@@ -130,8 +129,6 @@ Widget _buildHeader(BuildContext context, DrawerState state) {
 
     return const SizedBox.shrink();
   }
-
-
 
   Widget _buildCategoriesSection(BuildContext context, DrawerState state) {
     return Column(
@@ -150,10 +147,7 @@ Widget _buildHeader(BuildContext context, DrawerState state) {
             ),
             Text(
               '${state.category.length} items',
-              style: const TextStyle(
-                fontSize: 12,
-                color: Color(0xFF9CA3AF),
-              ),
+              style: const TextStyle(fontSize: 12, color: Color(0xFF9CA3AF)),
             ),
           ],
         ),
@@ -186,7 +180,7 @@ Widget _buildHeader(BuildContext context, DrawerState state) {
         borderRadius: BorderRadius.circular(12),
         onTap: () {
           context.read<DraweBloc>().add(SelectCategory(category));
-context.goNamed(RouteName.category);
+          context.goNamed(RouteName.category);
           String route = category.url != null && category.url!.isNotEmpty
               ? category.url!
               : '/category/${category.cat_slug ?? category.cid}';
@@ -215,7 +209,8 @@ context.goNamed(RouteName.category);
                   color: const Color(0xFF8B5CF6).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: category.categoryImage != null &&
+                child:
+                    category.categoryImage != null &&
                         category.categoryImage!.isNotEmpty
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(10),
@@ -316,10 +311,7 @@ context.goNamed(RouteName.category);
           const SizedBox(height: 8),
           Text(
             'Try adjusting your search terms',
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey[500],
-            ),
+            style: TextStyle(fontSize: 12, color: Colors.grey[500]),
           ),
         ],
       ),

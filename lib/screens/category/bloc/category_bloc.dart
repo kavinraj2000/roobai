@@ -21,7 +21,7 @@ final log=Logger();
     emit(state.copyWith(status: CategoryStatus.loading));
     try {
       final page=state.page;
-      final products = await repo.getCategoryData(id: event.initialvalue,page: page!);
+      final products = await repo.getCategoryData(id: '',page: page!);
 log.d('CategoryBloc::_onInitialvalueevent:products::$products');
       emit(state.copyWith(
         status: CategoryStatus.loaded,

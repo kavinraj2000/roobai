@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 import 'package:roobai/comman/constants/constansts.dart';
@@ -10,6 +11,7 @@ class DrawerRepository {
   final Dio _dio = Dio();
   final Logger log = Logger();
 
+  /// Fetch categories
   Future<List<CategoryModel>> getcategory() async {
     try {
       final baseUrl = await api.getBannerUrl();
@@ -37,6 +39,7 @@ class DrawerRepository {
     }
   }
 
+  /// Generic parser for list responses
   List<T> _parseListResponse<T>(
     Response response,
     T Function(Map<String, dynamic>) fromJson,
@@ -63,4 +66,7 @@ class DrawerRepository {
       throw Exception("Failed to load data: ${response.statusCode}");
     }
   }
+
+
+  
 }

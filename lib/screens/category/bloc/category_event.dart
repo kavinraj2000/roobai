@@ -3,8 +3,7 @@ part of 'category_bloc.dart';
 abstract class CategoryEvent {}
 
 class Initialvalueevent extends CategoryEvent {
-  final String initialvalue;
-  Initialvalueevent(this.initialvalue);
+  Initialvalueevent();
 }
 
 class LoadProductsEvent extends CategoryEvent {

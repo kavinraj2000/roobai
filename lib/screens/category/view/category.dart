@@ -6,18 +6,15 @@ import 'package:roobai/screens/best/view/mobile/best_products_view.dart';
 import 'package:roobai/screens/category/bloc/category_bloc.dart';
 import 'package:roobai/screens/category/repo/category_repo.dart';
 
-
 class CategoryPage extends StatelessWidget {
-  final Map<dynamic,String> initalvalue;
-  const CategoryPage({super.key,required this.initalvalue});
+  final Map<dynamic, String> initalvalue;
+  const CategoryPage({super.key, required this.initalvalue});
 
   @override
   Widget build(BuildContext context) {
-   
-
     return BlocProvider<CategoryBloc>(
       create: (context) =>
-          CategoryBloc(CategoryRepository())..add(Initialvalueevent(initialvalue)),
+          CategoryBloc(CategoryRepository())..add(Initialvalueevent()),
       child: Bestproductview(),
     );
   }

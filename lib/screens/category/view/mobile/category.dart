@@ -63,7 +63,6 @@ class CategoryViewPage extends StatelessWidget {
   }
 }
 
-/// Reusable Product Card
 class ProductCard extends StatelessWidget {
   final ProductModel product;
 
@@ -79,8 +78,8 @@ class ProductCard extends StatelessWidget {
     return InkWell(
       onTap: () {
         context.read<HomepageBloc>().add(
-              NavigateToProductEvent(product.productUrl),
-            );
+          NavigateToProductEvent(product.productUrl),
+        );
       },
       child: Container(
         decoration: BoxDecoration(
@@ -104,8 +103,12 @@ class ProductCard extends StatelessWidget {
               child: Stack(
                 children: [
                   ClipRRect(
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                    child: product.productImage != null && product.productImage!.isNotEmpty
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(12),
+                    ),
+                    child:
+                        product.productImage != null &&
+                            product.productImage!.isNotEmpty
                         ? Image.network(
                             product.productImage!,
                             width: double.infinity,
@@ -121,7 +124,10 @@ class ProductCard extends StatelessWidget {
                       left: 0,
                       right: 0,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
                         decoration: BoxDecoration(
                           color: isExpired ? Colors.red : Colors.deepPurple,
                           borderRadius: const BorderRadius.only(
@@ -136,23 +142,34 @@ class ProductCard extends StatelessWidget {
                             ),
                           ],
                         ),
-                        child: Text(isExpired ? 'Expired' : 'G.O.A.T', style: AppConstants.headerwhite),
+                        child: Text(
+                          isExpired ? 'Expired' : 'G.O.A.T',
+                          style: AppConstants.headerwhite,
+                        ),
                       ),
                     ),
-                  if (product.storeName != null && product.storeName!.isNotEmpty)
+                  if (product.storeName != null &&
+                      product.storeName!.isNotEmpty)
                     Positioned(
                       bottom: 4,
                       left: 4,
                       right: 4,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 4,
+                          vertical: 2,
+                        ),
                         decoration: BoxDecoration(
                           color: const Color(0xFFF5DC02),
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(
                           product.storeName!,
-                          style: GoogleFonts.sora(fontSize: 10, fontWeight: FontWeight.w600, color: Colors.black),
+                          style: GoogleFonts.sora(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                          ),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -167,18 +184,35 @@ class ProductCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(product.productName ?? 'Product', maxLines: 2, overflow: TextOverflow.ellipsis, style: AppConstants.headerblack),
+                  Text(
+                    product.productName ?? 'Product',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppConstants.headerblack,
+                  ),
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      Text('₹${offer.toStringAsFixed(0)}', style: AppConstants.headerblack),
+                      Text(
+                        '₹${offer.toStringAsFixed(0)}',
+                        style: AppConstants.headerblack,
+                      ),
                       const SizedBox(width: 6),
-                      if (mrp > 0) Text('₹${mrp.toStringAsFixed(0)}', style: AppConstants.offer),
+                      if (mrp > 0)
+                        Text(
+                          '₹${mrp.toStringAsFixed(0)}',
+                          style: AppConstants.offer,
+                        ),
                       const Spacer(),
-                      if (discount > 0) Text('$discount%', style: AppConstants.textblack),
+                      if (discount > 0)
+                        Text('$discount%', style: AppConstants.textblack),
                     ],
                   ),
-                  if (product.dateTime != null) Padding(padding: const EdgeInsets.only(top: 4), child: Datetimewidget(dateTime: product.dateTime)),
+                  if (product.dateTime != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Datetimewidget(dateTime: product.dateTime),
+                    ),
                 ],
               ),
             ),
@@ -193,7 +227,9 @@ class ProductCard extends StatelessWidget {
       width: double.infinity,
       height: double.infinity,
       color: Colors.grey.shade100,
-      child: const Center(child: Icon(Icons.image_outlined, size: 28, color: Colors.grey)),
+      child: const Center(
+        child: Icon(Icons.image_outlined, size: 28, color: Colors.grey),
+      ),
     );
   }
 }
