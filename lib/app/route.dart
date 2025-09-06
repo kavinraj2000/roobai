@@ -61,13 +61,13 @@ class Routes {
           return Productpage();
         },
       ),
-           GoRoute(
-        name: RouteName.category,
-        path: RouteName.category,
-        builder: (BuildContext context, GoRouterState state) {
-          return CategoryPage();
-        },
-      ),
+      //      GoRoute(
+      //   name: RouteName.category,
+      //   path: RouteName.category,
+      //   builder: (BuildContext context, GoRouterState state) {
+      //     return CategoryPage();
+      //   },
+      // ),
       // GoRoute(
       //   name: RouteName.productdetail,
       //   path: RouteName.productdetail,
