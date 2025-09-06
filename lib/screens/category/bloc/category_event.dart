@@ -3,7 +3,8 @@ part of 'category_bloc.dart';
 abstract class CategoryEvent {}
 
 class Initialvalueevent extends CategoryEvent {
-  Initialvalueevent();
+  final Map<String, dynamic>? intialvalue;
+  Initialvalueevent(this.intialvalue);
 }
 
 class LoadProductsEvent extends CategoryEvent {
@@ -18,12 +19,14 @@ class LoadProductsEvent extends CategoryEvent {
   });
 }
 
-class RefreshProductsEvent extends CategoryEvent {}
+class RefreshProductsEvent extends CategoryEvent {
+  final Map<String, dynamic> cid;
+  RefreshProductsEvent(this.cid);
+}
 
 class LoadMoreProductsEvent extends CategoryEvent {}
 
 class FilterProductsEvent extends CategoryEvent {
   final Map<String, dynamic> filters;
-  
   FilterProductsEvent(this.filters);
 }

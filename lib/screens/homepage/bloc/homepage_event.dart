@@ -7,22 +7,40 @@ abstract class HomepageEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class LoadHomepageData extends HomepageEvent {}
+class LoadHomepageData extends HomepageEvent {
+  const LoadHomepageData();
+}
 
 class LoadCategories extends HomepageEvent {
   final List<HomeModel> homeModels;
+
   const LoadCategories(this.homeModels);
 
   @override
-  List<Object?> get props => [homeModels];
+  List<Object> get props => [homeModels];
 }
 
 class NavigateToProductEvent extends HomepageEvent {
   final String? productUrl;
+
   const NavigateToProductEvent(this.productUrl);
 
   @override
   List<Object?> get props => [productUrl];
 }
 
+class LoadMoreJustScroll extends HomepageEvent {}
 
+// NEW EVENTS
+class SetCurrentViewProducts extends HomepageEvent {
+  final List<ProductModel> products;
+
+  const SetCurrentViewProducts(this.products);
+
+  @override
+  List<Object> get props => [products];
+}
+
+class NavigateToMobileProducts extends HomepageEvent {}
+
+class NavigateToJustScrollProducts extends HomepageEvent {}

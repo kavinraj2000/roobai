@@ -39,10 +39,10 @@ class HomepageRepository {
     }
   }
 
-  Future<List<ProductModel>> getJustScrollProducts() async {
+  Future<List<ProductModel>> getJustScrollProducts({required int page}) async {
     try {
       final baseUrl = await api.getBaseUrl();
-      final url = baseUrl + Constansts.api.jusinscroll;
+      final url = '${baseUrl + Constansts.api.jusinscroll}$page/';
       log.d('getJustScrollProducts URL: $url');
 
       final response = await _dio.get(

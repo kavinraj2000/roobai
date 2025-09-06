@@ -3,11 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logger/web.dart';
 import 'package:roobai/app/route_names.dart';
 import 'package:roobai/comman/constants/app_constansts.dart';
 import 'package:roobai/comman/drawer/view/drawer.dart';
-import 'package:roobai/comman/drawer/view/drawer_cat.dart';
-import 'package:roobai/comman/helper/drawercategory.dart';
 import 'package:roobai/comman/model/bannar_model.dart';
 import 'package:roobai/comman/model/product_model.dart';
 import 'package:roobai/comman/widgets/appbarwidget.dart';
@@ -26,22 +25,9 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(),
-      
+
       drawer: Drawerwidget(),
-       floatingActionButton: FloatingActionButton(
-    backgroundColor: const Color(0xFF8B5CF6),
-    onPressed: () {
-      showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        builder: (_) => const Drawerwidget(),
-      );
-    },
-       ),
-      
+
       bottomNavigationBar: const BottomNavBarWidget(selectedIndex: 0),
       body: SafeArea(
         child: BlocBuilder<HomepageBloc, HomepageState>(
@@ -103,7 +89,6 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  // 1. BANNER SECTION
   Widget _buildBannerCarousel(List<BannerModel> banners, BuildContext context) {
     if (banners.isEmpty) {
       return Container(
@@ -177,7 +162,6 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  // 2. CATEGORY SECTION
   Widget _buildCategorySection(List categories) {
     if (categories.isEmpty) return const SizedBox.shrink();
 
@@ -206,6 +190,12 @@ class HomeView extends StatelessWidget {
     BuildContext context,
     List<ProductModel> products,
   ) {
+    // Add this debug print
+    print('_buildProductHorizontalList - Products: ${products.length}');
+    print(
+      '_buildProductHorizontalList - Products type: ${products.runtimeType}',
+    );
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -227,7 +217,27 @@ class HomeView extends StatelessWidget {
                     ),
               ),
               InkWell(
-                onTap: () => context.goNamed(RouteName.product),
+                onTap: () {
+                  // Safety checks before navigation
+                  if (products.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('No products to show')),
+                    );
+                    return;
+                  }
+
+                  print('Navigating with ${products.length} products');
+                  print('Products type: ${products.runtimeType}');
+
+                  try {
+                    context.goNamed(RouteName.product, extra: products);
+                  } catch (e) {
+                    print('Navigation error: $e');
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Navigation failed: $e')),
+                    );
+                  }
+                },
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
                   padding: const EdgeInsets.all(8),
@@ -269,6 +279,11 @@ class HomeView extends StatelessWidget {
     BuildContext context,
     List<ProductModel> products,
   ) {
+    print('_buildMobileHorizontalList - Products: ${products.length}');
+    print(
+      '_buildMobileHorizontalList - Products type: ${products.runtimeType}',
+    );
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -290,7 +305,29 @@ class HomeView extends StatelessWidget {
                     ),
               ),
               InkWell(
-                onTap: () => context.goNamed(RouteName.product),
+                onTap: () {
+                  if (products.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('No mobile products to show'),
+                      ),
+                    );
+                    return;
+                  }
+
+                  print('Mobile navigation with ${products.length} products');
+                  print('Mobile products type: ${products.runtimeType}');
+
+                  try {
+                    context.goNamed(RouteName.product, extra: products);
+                    Logger().d('Homepage::Mobile data navigation successful');
+                  } catch (e) {
+                    print('Mobile navigation error: $e');
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Navigation failed: $e')),
+                    );
+                  }
+                },
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
                   padding: const EdgeInsets.all(8),
@@ -348,7 +385,6 @@ class HomeView extends StatelessWidget {
         image: const DecorationImage(
           image: AssetImage("assets/icons/background.jpg"),
           fit: BoxFit.cover,
-          // opacity: 0.15,
         ),
       ),
       child: Column(
@@ -429,7 +465,6 @@ class HomeView extends StatelessWidget {
         return DateTime.parse(product.dateTime!);
       }
     } catch (_) {}
-    // Fallback to 1 hour from now
     return DateTime.now().add(const Duration(hours: 1));
   }
 }

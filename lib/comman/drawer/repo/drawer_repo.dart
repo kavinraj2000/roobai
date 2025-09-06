@@ -14,7 +14,7 @@ class DrawerRepository {
   /// Fetch categories
   Future<List<CategoryModel>> getcategory() async {
     try {
-      final baseUrl = await api.getBannerUrl();
+      final baseUrl = await api.getBaseUrl();
       final url = baseUrl + Constansts.api.salecategorylist;
       log.d('getcategory URL: $url');
 
@@ -39,7 +39,6 @@ class DrawerRepository {
     }
   }
 
-  /// Generic parser for list responses
   List<T> _parseListResponse<T>(
     Response response,
     T Function(Map<String, dynamic>) fromJson,

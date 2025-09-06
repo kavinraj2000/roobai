@@ -4,8 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/web.dart';
 import 'package:roobai/comman/constants/app_constansts.dart';
 import 'package:roobai/comman/model/product_model.dart';
+import 'package:roobai/comman/widgets/datatime_widget.dart';
 import 'package:roobai/screens/homepage/bloc/homepage_bloc.dart';
-import 'package:roobai/screens/product/view/widget/Product_datetime.dart';
 
 class HoursdealCard extends StatelessWidget {
   final ProductModel product;
@@ -21,9 +21,11 @@ class HoursdealCard extends StatelessWidget {
     final isExpired = product.stockStatus?.toString() == '1';
 
     return InkWell(
-      onTap: (){
-                context.read<HomepageBloc>().add(NavigateToProductEvent(product.productPageUrl));
-Logger().d('product.productPageUrl::hourdeal::${product.productUrl}');
+      onTap: () {
+        context
+            .read<HomepageBloc>()
+            .add(NavigateToProductEvent(product.productUrl));
+        Logger().d('Hoursdeal productUrl: ${product.productUrl}');
       },
       child: Container(
         width: 180,
@@ -48,11 +50,9 @@ Logger().d('product.productPageUrl::hourdeal::${product.productUrl}');
               child: Stack(
                 children: [
                   ClipRRect(
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(12),
-                    ),
-                    child:
-                        product.productImage != null &&
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(12)),
+                    child: product.productImage != null &&
                             product.productImage!.isNotEmpty
                         ? Image.network(
                             product.productImage!,
@@ -73,9 +73,7 @@ Logger().d('product.productPageUrl::hourdeal::${product.productUrl}');
                         alignment: Alignment.topCenter,
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 2,
-                          ),
+                              horizontal: 8, vertical: 2),
                           decoration: BoxDecoration(
                             color: isExpired ? Colors.red : Colors.deepPurple,
                             borderRadius: const BorderRadius.only(
@@ -105,11 +103,9 @@ Logger().d('product.productPageUrl::hourdeal::${product.productUrl}');
                       left: 4,
                       right: 4,
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Flexible(
                             child: Container(
-                              // padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                               decoration: BoxDecoration(
                                 color: const Color(0xFFF5DC02),
                                 borderRadius: BorderRadius.circular(2),
@@ -125,17 +121,6 @@ Logger().d('product.productPageUrl::hourdeal::${product.productUrl}');
                               ),
                             ),
                           ),
-                          // GestureDetector(
-                          //   onTap: () => _showSmartProductDialog(context),
-                          //   child: const Padding(
-                          //     padding: EdgeInsets.all(6),
-                          //     child: Icon(
-                          //       Icons.info,
-                          //       size: 16,
-                          //       color: Color.fromARGB(255, 207, 206, 206),
-                          //     ),
-                          //   ),
-                          // ),
                         ],
                       ),
                     ),
@@ -143,13 +128,11 @@ Logger().d('product.productPageUrl::hourdeal::${product.productUrl}');
               ),
             ),
 
-            // Product details section
             Padding(
               padding: const EdgeInsets.all(6),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Product name
                   Text(
                     product.productName ?? 'Product',
                     maxLines: 2,
@@ -176,7 +159,6 @@ Logger().d('product.productPageUrl::hourdeal::${product.productUrl}');
                     ],
                   ),
 
-                  // Date/time widget
                   if (product.dateTime != null)
                     Padding(
                       padding: const EdgeInsets.only(top: 4),

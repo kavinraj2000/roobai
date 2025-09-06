@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:roobai/comman/constants/app_constansts.dart';
 import 'package:roobai/comman/model/product_model.dart';
+import 'package:roobai/comman/widgets/datatime_widget.dart';
 import 'package:roobai/screens/homepage/bloc/homepage_bloc.dart';
-import 'package:roobai/screens/product/view/widget/Product_datetime.dart';
 
 class MobileCard extends StatelessWidget {
   final ProductModel product;

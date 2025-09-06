@@ -14,22 +14,13 @@ class CategoryCard extends StatelessWidget {
     this.onTap,
   });
 
-  // Enhanced color palette with more vibrant but still light colors
   static const List<Color> backgroundColors = [
-    Color(0xFFE8F5E9), // Light green
-    Color(0xFFE3F2FD), // Light blue
-    Color(0xFFFFF8E1), // Light amber
-    Color(0xFFF3E5F5), // Light purple
-    Color(0xFFFFEBEE), // Light pink
-    Color(0xFFE0F7FA), // Light cyan
-    Color(0xFFE8F5E8), // Pale green
-    Color(0xFFFFF3E0), // Light orange
-    Color(0xFFE0F2F1), // Light teal
-    Color(0xFFF1F8E9), // Light lime
-    Color(0xFFEDE7F6), // Light deep purple
-    Color(0xFFFFFDE7), // Light yellow
-    Color(0xFFEFEBE9), // Light brown
-    Color(0xFFE8EAF6), // Light indigo
+    Color(0xFFE8F5E9), 
+    Color(0xFFE3F2FD), Color(0xFFFFF8E1),  Color(0xFFF3E5F5),   Color(0xFFFFEBEE), Color(0xFFE0F7FA), Color(0xFFE8F5E8), // Pale green
+    Color(0xFFFFF3E0),   Color(0xFFE0F2F1), Color(0xFFF1F8E9), Color(0xFFEDE7F6), 
+    Color(0xFFFFFDE7),
+    Color(0xFFEFEBE9), 
+    Color(0xFFE8EAF6), 
   ];
 
   @override

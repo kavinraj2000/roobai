@@ -57,10 +57,7 @@ class CustomDrawerWidget extends StatelessWidget {
       padding: const EdgeInsets.only(top: 40, bottom: 12),
       child: Column(
         children: [
-          Image.asset(
-            'assets/icons/logo.png',
-            height: 40, // Reduce logo size if needed
-          ),
+          Image.asset('assets/icons/logo.png', height: 40),
           const SizedBox(height: 8),
         ],
       ),
@@ -120,7 +117,6 @@ class CustomDrawerWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 20),
-
             _buildCategoriesSection(context, state),
           ],
         ),
@@ -180,11 +176,7 @@ class CustomDrawerWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         onTap: () {
           context.read<DraweBloc>().add(SelectCategory(category));
-          context.goNamed(RouteName.category);
-          String route = category.url != null && category.url!.isNotEmpty
-              ? category.url!
-              : '/category/${category.cat_slug ?? category.cid}';
-          context.push(route);
+          context.goNamed(RouteName.category, extra: category);
           Logger().d('_buildCategoryItem::InkWell::$category');
         },
         child: Container(
@@ -199,93 +191,87 @@ class CustomDrawerWidget extends StatelessWidget {
               ),
             ],
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: Stack(
             children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF8B5CF6).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child:
-                    category.categoryImage != null &&
-                        category.categoryImage!.isNotEmpty
-                    ? ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.network(
-                          'https://roobai.com/assets/img/sale_cat_img/${category.categoryImage}',
-                          width: 40,
-                          height: 40,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Icon(
-                              Icons.category,
-                              color: Color(0xFF8B5CF6),
-                              size: 20,
-                            );
-                          },
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return const Center(
-                              child: SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    Color(0xFF8B5CF6),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      )
-                    : const Icon(
-                        Icons.category,
-                        color: Color(0xFF8B5CF6),
-                        size: 20,
-                      ),
-              ),
-              const SizedBox(height: 8),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4),
-                child: Text(
-                  category.category ?? 'Unknown',
-                  style: const TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF374151),
-                  ),
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              if (category.flag != null && category.flag!.isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.only(top: 4),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 6,
-                      vertical: 2,
-                    ),
+              // Category content
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 40,
+                    height: 40,
                     decoration: BoxDecoration(
-                      color: Colors.red[100],
-                      borderRadius: BorderRadius.circular(8),
+                      color: const Color(0xFF8B5CF6).withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(10),
                     ),
+                    child:
+                        (category.categoryImage != null &&
+                            category.categoryImage!.isNotEmpty)
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              'https://roobai.com/assets/img/sale_cat_img/${category.categoryImage}',
+                              width: 40,
+                              height: 40,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return const Icon(
+                                  Icons.category,
+                                  color: Color(0xFF8B5CF6),
+                                  size: 20,
+                                );
+                              },
+                            ),
+                          )
+                        : const Icon(
+                            Icons.category,
+                            color: Color(0xFF8B5CF6),
+                            size: 20,
+                          ),
+                  ),
+                  const SizedBox(height: 8),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
                     child: Text(
-                      category.flag!,
-                      style: TextStyle(
-                        fontSize: 8,
+                      category.category ?? 'Unknown',
+                      style: const TextStyle(
+                        fontSize: 10,
                         fontWeight: FontWeight.w500,
-                        color: Colors.red[700],
+                        color: Color(0xFF374151),
+                      ),
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+
+                if (category.flag != null && category.flag!.isNotEmpty)
+                  Positioned(
+                    top: 0,
+                    right: 0, // 
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 2,
+                      ),
+                      decoration: const BoxDecoration(
+                        color: Colors.purple,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(6),
+                        ),
+                      ),
+                      child: Text(
+                        category.flag!,
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
-                ),
             ],
           ),
         ),

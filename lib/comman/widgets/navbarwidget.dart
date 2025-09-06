@@ -61,10 +61,10 @@ class BottomNavBarWidget extends StatelessWidget {
           icon: Icon(LucideIcons.tag100),
           label: 'Justin',
         ),
-        BottomNavigationBarItem(
-          icon: Icon(LucideIcons.menu100),
-          label: 'Category',
-        ),
+        // BottomNavigationBarItem(
+        //   icon: Icon(LucideIcons.menu100),
+        //   label: 'Category',
+        // ),
       ],
     );
   }

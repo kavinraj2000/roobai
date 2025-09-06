@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:roobai/comman/constants/app_constansts.dart';
 import 'package:roobai/comman/model/product_model.dart';
+import 'package:roobai/comman/widgets/datatime_widget.dart';
 import 'package:roobai/screens/homepage/bloc/homepage_bloc.dart';
-import 'package:roobai/screens/product/view/widget/Product_datetime.dart';
 
 class ProductCard extends StatelessWidget {
   final ProductModel product;
 
-  const ProductCard({super.key, required this.product, });
+  const ProductCard({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -19,12 +18,14 @@ class ProductCard extends StatelessWidget {
     final isExpired = product.stockStatus?.toString() == '1';
 
     return InkWell(
-      onTap: (){
-        context.read<HomepageBloc>().add(NavigateToProductEvent(product.productUrl));
+      onTap: () {
+        context.read<HomepageBloc>().add(
+              NavigateToProductEvent(product.productUrl),
+            );
       },
       child: Container(
         width: 180,
-        margin: const EdgeInsets.only(bottom: 8),
+        margin: const EdgeInsets.all(6),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
@@ -48,19 +49,17 @@ class ProductCard extends StatelessWidget {
                     borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(12),
                     ),
-                    child:
-                        product.productImage != null &&
+                    child: product.productImage != null &&
                             product.productImage!.isNotEmpty
                         ? Image.network(
                             product.productImage!,
+                            fit: BoxFit.contain,
                             width: double.infinity,
                             height: double.infinity,
-                            fit: BoxFit.contain,
                             errorBuilder: (_, __, ___) => _placeholder(),
                           )
                         : _placeholder(),
                   ),
-
                   if (isExpired || discount >= 80)
                     Positioned(
                       top: 0,
@@ -94,59 +93,14 @@ class ProductCard extends StatelessWidget {
                         ),
                       ),
                     ),
-
-                  if (product.storeName != null &&
-                      product.storeName!.isNotEmpty)
-                    Positioned(
-                      bottom: 4,
-                      left: 4,
-                      right: 4,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: Container(
-                              // padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFF5DC02),
-                                borderRadius: BorderRadius.circular(2),
-                              ),
-                              child: Text(
-                                product.storeName!,
-                                style: GoogleFonts.sora(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ),
-                          // GestureDetector(
-                          //   onTap: () => _showSmartProductDialog(context),
-                          //   child: const Padding(
-                          //     padding: EdgeInsets.all(6),
-                          //     child: Icon(
-                          //       Icons.info,
-                          //       size: 16,
-                          //       color: Color.fromARGB(255, 207, 206, 206),
-                          //     ),
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                    ),
                 ],
               ),
             ),
-
-            // Product details section
             Padding(
               padding: const EdgeInsets.all(6),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Product name
                   Text(
                     product.productName ?? 'Product',
                     maxLines: 2,
@@ -154,7 +108,6 @@ class ProductCard extends StatelessWidget {
                     style: AppConstants.headerblack,
                   ),
                   const SizedBox(height: 4),
-
                   Row(
                     children: [
                       Text(
@@ -172,8 +125,6 @@ class ProductCard extends StatelessWidget {
                         Text('$discount%', style: AppConstants.textblack),
                     ],
                   ),
-
-                  // Date/time widget
                   if (product.dateTime != null)
                     Padding(
                       padding: const EdgeInsets.only(top: 4),
@@ -188,11 +139,8 @@ class ProductCard extends StatelessWidget {
     );
   }
 
-  // Placeholder for product image
   Widget _placeholder() {
     return Container(
-      width: double.infinity,
-      height: double.infinity,
       color: Colors.grey.shade100,
       child: const Center(
         child: Icon(Icons.image_outlined, size: 28, color: Colors.grey),

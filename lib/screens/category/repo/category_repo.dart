@@ -7,88 +7,70 @@ import 'package:roobai/comman/model/product_model.dart';
 
 class CategoryRepository {
   final api = ApiDatabase();
-  final dio = Dio();
   final log = Logger();
 
-  /// Get products for a category
+  static const String _baseUrl = "https://roo.bi/api/website/v10.1";
+
   Future<List<ProductModel>> getCategoryData({
     required String id,
-    String? subCategory, // instead of hardcoded `cat = null`
+    String? subCategory,
     required int page,
   }) async {
+    final url = "$_baseUrl/product/getcategory/$id/${subCategory ?? 'null'}/$page/";
+    log.i("➡️ CategoryRepository:getCategoryData::Requesting URL: $url");
+
     try {
-      final url =
-          "https://roo.bi/api/website/v10.1/product/getcategory/$id/${subCategory ?? 'null'}/$page/";
+      final response = await api.getRequest(url: url, queryParams: APIS.headers);
 
-      log.d('CategoryRepository:getCategoryData::Requesting URL: $url');
-
-      final response = await dio.get(
-        url,
-        options: Options(headers: APIS.headers),
-      );
-
-      if (response.statusCode == 200) {
-        final data = response.data;
-        log.d('Response Data: ${jsonEncode(data)}');
-
-        // Case 1: Direct List
-        if (data is List) {
-          return data
-              .map<ProductModel>((json) => ProductModel.fromJson(json))
-              .toList();
-        }
-
-        // Case 2: Wrapped inside { data: [...] }
-        if (data is Map && data['data'] is List) {
-          final List dataList = data['data'];
-          return dataList
-              .map<ProductModel>((json) => ProductModel.fromJson(json))
-              .toList();
-        }
-
-        throw Exception("Unexpected response format: ${jsonEncode(data)}");
-      } else {
-        throw Exception(
-          'Failed to load category data. Status code: ${response.statusCode}',
-        );
+      if (response is List) {
+        return response.map<ProductModel>((json) => ProductModel.fromJson(json)).toList();
       }
+
+      if (response is Map && response['data'] is List) {
+        final List dataList = response['data'];
+        return dataList.map<ProductModel>((json) => ProductModel.fromJson(json)).toList();
+      }
+
+      throw Exception("Unexpected response format: ${jsonEncode(response)}");
     } on DioException catch (e, stackTrace) {
-      log.e(
-        'DioException in getCategoryData: ${e.message}',
-        stackTrace: stackTrace,
-      );
-      throw Exception("Network error: ${e.message}");
+      log.e("❌ DioException in getCategoryData: ${e.message}, "
+          "status: ${e.response?.statusCode}, data: ${e.response?.data}",
+          stackTrace: stackTrace);
+      throw Exception("Network error: ${e.response?.statusCode} - ${e.message}");
     } catch (e, stackTrace) {
-      log.e('Exception in getCategoryData: $e', stackTrace: stackTrace);
+      log.e("❌ Exception in getCategoryData: $e", stackTrace: stackTrace);
       rethrow;
     }
   }
 
-  Future<List<Map<String, dynamic>>> getSaleDeals({
+  Future<List<ProductModel>> getSaleDeals({
     required String cid,
     String? subCategory,
     required int page,
   }) async {
-    try {
-      final url =
-          "https://roo.bi/api/website/v10.1/product/getcategory/$cid/${subCategory ?? 'null'}/$page/";
-      log.d("CategoryRepository:getSaleDeals::Requesting URL: $url");
+    final url = "$_baseUrl/saledeal/$cid/${subCategory ?? 'null'}/$page/";
+    log.i("➡️ CategoryRepository:getSaleDeals::Requesting URL: $url");
 
-      final res = await api.getRequest(url: url);
+    try {
+      final res = await api.getRequest(url: url, queryParams: APIS.headers);
 
       if (res is List) {
-        return List<Map<String, dynamic>>.from(res);
+        return res.map<ProductModel>((json) => ProductModel.fromJson(json)).toList();
       } else if (res is Map && res.containsKey("data")) {
-        return List<Map<String, dynamic>>.from(res["data"]);
+        return (res["data"] as List)
+            .map<ProductModel>((json) => ProductModel.fromJson(json))
+            .toList();
       } else {
-        log.w("CategoryRepository:getSaleDeals::Unexpected response $res");
+        log.w("⚠️ CategoryRepository:getSaleDeals::Unexpected response $res");
         return [];
       }
-    } on DioException catch (e) {
-      log.e("DioException in getSaleDeals: ${e.message}");
-      throw Exception("Network error: ${e.message}");
-    } catch (e) {
-      log.e("Exception in getSaleDeals: $e");
+    } on DioException catch (e, stackTrace) {
+      log.e("❌ DioException in getSaleDeals: ${e.message}, "
+          "status: ${e.response?.statusCode}, data: ${e.response?.data}",
+          stackTrace: stackTrace);
+      throw Exception("Network error: ${e.response?.statusCode} - ${e.message}");
+    } catch (e, stackTrace) {
+      log.e("❌ Exception in getSaleDeals: $e", stackTrace: stackTrace);
       throw Exception("Unexpected error: $e");
     }
   }

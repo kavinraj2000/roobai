@@ -53,7 +53,7 @@ class ApiDatabase {
   }) async {
     try {
       final baseUrl = await getBannerUrl();
-      final fullUrl = baseUrl + url;
+      final fullUrl =  url;
 
       log.d("ApiRepository::getRequest::URL: $fullUrl, Query: $queryParams");
 

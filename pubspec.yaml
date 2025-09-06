@@ -84,6 +84,7 @@ dependencies:
   circular_reveal_animation: ^2.0.2
   flutter_speed_dial: ^7.0.0
   infinite_scroll_pagination: ^5.1.1
+  bloc_concurrency: ^0.3.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

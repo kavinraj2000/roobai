@@ -4,72 +4,125 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
 import 'package:roobai/comman/constants/app_constansts.dart';
 import 'package:roobai/comman/constants/color_constansts.dart';
+import 'package:roobai/comman/model/category_model.dart';
 import 'package:roobai/comman/model/product_model.dart';
 import 'package:roobai/comman/widgets/appbarwidget.dart';
+import 'package:roobai/comman/widgets/datatime_widget.dart';
 import 'package:roobai/comman/widgets/loader.dart';
 import 'package:roobai/comman/widgets/navbarwidget.dart';
 import 'package:roobai/comman/widgets/no_data.dart';
 import 'package:roobai/screens/category/bloc/category_bloc.dart';
 import 'package:roobai/screens/homepage/bloc/homepage_bloc.dart';
-import 'package:roobai/screens/product/view/widget/Product_datetime.dart';
 
 class CategoryViewPage extends StatelessWidget {
-  final String categoryName;
+  final CategoryModel? category;
 
-  const CategoryViewPage({super.key, required this.categoryName});
+  const CategoryViewPage({super.key, this.category});
 
   @override
   Widget build(BuildContext context) {
+    final ScrollController scrollController = ScrollController();
+
+    scrollController.addListener(() {
+      if (scrollController.position.pixels >=
+          scrollController.position.maxScrollExtent * 0.9) {
+        context.read<CategoryBloc>().add(LoadMoreProductsEvent());
+      }
+    });
+
     return Scaffold(
-      appBar: CustomAppBar(title: categoryName),
+      appBar: CustomAppBar(
+        title: category?.category ?? "Category",
+      ),
       bottomNavigationBar: BottomNavBarWidget(selectedIndex: 1),
       backgroundColor: ColorConstants.white,
       body: BlocBuilder<CategoryBloc, CategoryState>(
         builder: (context, state) {
-          if (state.status == CategoryStatus.loading) {
+          if (state.status == CategoryStatus.initial) {
+            context.read<CategoryBloc>().add(
+                  Initialvalueevent({'cid': category?.cid}),
+                );
+          }
+
+          if (state.status == CategoryStatus.loading &&
+              (state.dealModel == null || state.dealModel!.isEmpty)) {
             return const Center(child: LoadingPage());
           }
 
-          if (state.status == CategoryStatus.loaded) {
+          Logger().d('CategoryViewPage::state:${state.dealModel}');
+
+          if (state.status == CategoryStatus.loaded ||
+              (state.status == CategoryStatus.loading &&
+                  state.dealModel != null)) {
             final products = state.dealModel ?? [];
-            if (products.isEmpty) {
+
+            if (products.isEmpty && !state.isFetching) {
               return const Center(child: NoDataWidget());
             }
 
-            return GridView.builder(
-              padding: const EdgeInsets.all(8),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisExtent: 260,
-                crossAxisSpacing: 8,
-                mainAxisSpacing: 8,
-              ),
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                final product = products[index];
-                return ProductCard(product: product);
+            return RefreshIndicator(
+              onRefresh: () async {
+                context.read<CategoryBloc>().add(
+                      RefreshProductsEvent({'cid': category?.cid}),
+                    );
               },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Category Title
+                  if (category?.category != null)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
+                      child: Text(
+                        category!.category!,
+                        style: GoogleFonts.sora(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ),
+
+                  Expanded(
+                    child: GridView.builder(
+                      controller: scrollController,
+                      padding: const EdgeInsets.all(8),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisExtent: 255,
+                        crossAxisSpacing: 6,
+                        mainAxisSpacing: 3,
+                      ),
+                      itemCount: products.length,
+                      itemBuilder: (context, index) {
+                        final product = products[index];
+                        return _productCard(context, product);
+                      },
+                    ),
+                  ),
+
+                  // Loading indicator at bottom
+                  if (state.isFetching)
+                    const Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                ],
+              ),
             );
           }
 
-          if (state.status == CategoryStatus.failure) {
-            return const Center(child: NoDataWidget());
-          }
-
-          return const SizedBox.shrink();
+          return const Center(child: NoDataWidget());
         },
       ),
     );
   }
-}
 
-class ProductCard extends StatelessWidget {
-  final ProductModel product;
-
-  const ProductCard({super.key, required this.product});
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _productCard(BuildContext context, ProductModel product) {
     final mrp = double.tryParse(product.productSalePrice ?? '') ?? 0;
     final offer = double.tryParse(product.productOfferPrice ?? '') ?? 0;
     final discount = mrp > 0 ? (((mrp - offer) / mrp) * 100).round() : 0;
@@ -78,10 +131,12 @@ class ProductCard extends StatelessWidget {
     return InkWell(
       onTap: () {
         context.read<HomepageBloc>().add(
-          NavigateToProductEvent(product.productUrl),
-        );
+              NavigateToProductEvent(product.productUrl),
+            );
       },
       child: Container(
+        width: 180,
+        padding: const EdgeInsets.all(4),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
@@ -97,7 +152,6 @@ class ProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image + Badge + Store
             AspectRatio(
               aspectRatio: 1.1,
               child: Stack(
@@ -106,8 +160,7 @@ class ProductCard extends StatelessWidget {
                     borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(12),
                     ),
-                    child:
-                        product.productImage != null &&
+                    child: product.productImage != null &&
                             product.productImage!.isNotEmpty
                         ? Image.network(
                             product.productImage!,
@@ -118,102 +171,108 @@ class ProductCard extends StatelessWidget {
                           )
                         : _placeholder(),
                   ),
+
                   if (isExpired || discount >= 80)
                     Positioned(
                       top: 0,
                       left: 0,
                       right: 0,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 2,
-                        ),
-                        decoration: BoxDecoration(
-                          color: isExpired ? Colors.red : Colors.deepPurple,
-                          borderRadius: const BorderRadius.only(
-                            bottomLeft: Radius.circular(10),
-                            bottomRight: Radius.circular(10),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.25),
-                              blurRadius: 4,
-                              offset: const Offset(0, 2),
+                      child: Align(
+                        alignment: Alignment.topCenter,
+                        child: Container(
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 8),
+                          decoration: BoxDecoration(
+                            color: isExpired ? Colors.red : Colors.deepPurple,
+                            borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10),
                             ),
-                          ],
-                        ),
-                        child: Text(
-                          isExpired ? 'Expired' : 'G.O.A.T',
-                          style: AppConstants.headerwhite,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.25),
+                                blurRadius: 4,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: Text(
+                            isExpired ? 'Expired' : 'G.O.A.T',
+                            style: AppConstants.headerwhite,
+                          ),
                         ),
                       ),
                     ),
+
                   if (product.storeName != null &&
                       product.storeName!.isNotEmpty)
-                    Positioned(
+                     Positioned(
                       bottom: 4,
                       left: 4,
                       right: 4,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 4,
-                          vertical: 2,
-                        ),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF5DC02),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Text(
-                          product.storeName!,
-                          style: GoogleFonts.sora(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black,
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF5DC02),
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                              child: Text(
+                                product.storeName!,
+                                style: GoogleFonts.sora(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
                           ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                        ],
                       ),
                     ),
                 ],
               ),
             ),
 
-            // Product info
-            Padding(
-              padding: const EdgeInsets.all(6),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    product.productName ?? 'Product',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppConstants.headerblack,
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      Text(
-                        '₹${offer.toStringAsFixed(0)}',
-                        style: AppConstants.headerblack,
-                      ),
-                      const SizedBox(width: 6),
-                      if (mrp > 0)
-                        Text(
-                          '₹${mrp.toStringAsFixed(0)}',
-                          style: AppConstants.offer,
-                        ),
-                      const Spacer(),
-                      if (discount > 0)
-                        Text('$discount%', style: AppConstants.textblack),
-                    ],
-                  ),
-                  if (product.dateTime != null)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Datetimewidget(dateTime: product.dateTime),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(2),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      product.productName ?? 'Product',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppConstants.headerblack,
                     ),
-                ],
+                    const SizedBox(height: 4),
+
+                    Row(
+                      children: [
+                        Text(
+                          '₹${offer.toStringAsFixed(0)}',
+                          style: AppConstants.headerblack,
+                        ),
+                        const SizedBox(width: 6),
+                        if (mrp > 0)
+                          Text(
+                            '₹${mrp.toStringAsFixed(0)}',
+                            style: AppConstants.offer,
+                          ),
+                        const Spacer(),
+                        if (discount > 0)
+                          Text('$discount%',
+                              style: AppConstants.textblack),
+                      ],
+                    ),
+
+                    if (product.dateTime != null)
+                      Datetimewidget(dateTime: product.dateTime),
+                  ],
+                ),
               ),
             ),
           ],

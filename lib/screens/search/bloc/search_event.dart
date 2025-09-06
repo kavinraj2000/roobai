@@ -1,25 +1,25 @@
-part of 'search_bloc.dart';
+// part of 'search_bloc.dart';
 
-abstract class SearchEvent {}
+// abstract class SearchEvent {}
 
-class SearchQueryChanged extends SearchEvent {
-  final String query;
+// class SearchQueryChanged extends SearchEvent {
+//   final String query;
   
-  SearchQueryChanged(this.query);
+//   SearchQueryChanged(this.query);
   
-  @override
-  String toString() => 'SearchQueryChanged(query: $query)';
-}
+//   @override
+//   String toString() => 'SearchQueryChanged(query: $query)';
+// }
 
-class LoadAllProducts extends SearchEvent {}
+// class LoadAllProducts extends SearchEvent {}
 
-class ToggleShowSelectedOnly extends SearchEvent {}
+// class ToggleShowSelectedOnly extends SearchEvent {}
 
-class SelectProduct extends SearchEvent {
-  final Product product;
+// class SelectProduct extends SearchEvent {
+//   final Product product;
   
-  SelectProduct(this.product);
+//   SelectProduct(this.product);
   
-  @override
-  String toString() => 'SelectProduct(product: ${product.productName})';
-}
+//   @override
+//   String toString() => 'SelectProduct(product: ${product.productName})';
+// }

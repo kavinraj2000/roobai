@@ -2,7 +2,7 @@ import 'package:logger/logger.dart';
 
 class APIS {
   static var mainurl = "https://roo.bi/api/flutter/v13.0/";
-  static var bannerurl='https://roo.bi/api/flutter/v10.0/';
+  static var bannerurl='https://roo.bi/api/website/v10.1/';
   // static var header = {
   //   "Content-Type": "application/json",
   //   "AppMode": "flutter",
