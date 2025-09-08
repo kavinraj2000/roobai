@@ -47,8 +47,8 @@ class CategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final String? imageUrl =
         (category.categoryImage != null && category.categoryImage!.isNotEmpty)
-        ? 'https://roobai.com/assets/img/sale_cat_img/${category.categoryImage}'
-        : null;
+            ? 'https://roobai.com/assets/img/sale_cat_img/${category.categoryImage}'
+            : null;
 
     Logger().d('Image URL: $imageUrl');
 
@@ -58,54 +58,62 @@ class CategoryCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        height: 160,
-        decoration: BoxDecoration(
-          gradient: cardGradient,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                category.category ?? 'Unnamed',
-                style: AppConstants.headerwhite,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-
-              const Spacer(),
-
-              // Fixed size image/placeholder area
-              Container(
-                width: 70,
-                height: 70,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  // color: Colors.white.withOpacity(0.1),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: imageUrl != null
-                      ? CachedNetworkImage(
-                          imageUrl: imageUrl,
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => _loadingPlaceholder(),
-                          errorWidget: (context, url, error) => _placeholder(),
-                        )
-                      : _placeholder(),
-                ),
+      child: SizedBox(
+        width: 100, 
+        height: 120, 
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: cardGradient,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.08),
+                blurRadius: 6,
+                offset: const Offset(0, 3),
               ),
             ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              // crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+
+              children: [
+                Flexible(
+                  child: Text(
+                    category.category ?? 'Unnamed',
+                    style: AppConstants.headerwhite.copyWith(fontSize: 12),
+                    maxLines: 2,
+                  ),
+                ),
+
+                // const Spacer(),
+
+                SizedBox(
+                  width: 60,
+                  height: 60,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: imageUrl != null
+                            ? CachedNetworkImage(
+                                imageUrl: imageUrl,
+                                fit: BoxFit.contain,
+                                placeholder: (context, url) =>
+                                    _loadingPlaceholder(),
+                                errorWidget: (context, url, error) =>
+                                    _placeholder(),
+                              )
+                            : _placeholder(),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -116,7 +124,7 @@ class CategoryCard extends StatelessWidget {
     return Container(
       color: Colors.white.withOpacity(0.9),
       child: Center(
-        child: Icon(Icons.category_outlined, size: 28, color: Colors.grey[600]),
+        child: Icon(Icons.category_outlined, size: 22, color: Colors.grey[600]),
       ),
     );
   }

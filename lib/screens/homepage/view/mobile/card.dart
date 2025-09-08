@@ -42,7 +42,7 @@ class ProductCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AspectRatio(
-              aspectRatio: 1.1,
+              aspectRatio: 1.05,
               child: Stack(
                 children: [
                   ClipRRect(
@@ -122,7 +122,27 @@ class ProductCard extends StatelessWidget {
                         ),
                       const Spacer(),
                       if (discount > 0)
-                        Text('$discount%', style: AppConstants.textblack),
+                         Stack(
+                          alignment: AlignmentGeometry.centerLeft,
+
+                          children: [
+                            
+                            Row(
+                              children: [
+                                Text(
+                                  '$discount%',
+                                  style: AppConstants.textblack,
+                                ),
+                                const SizedBox(width: 4),
+                                Image.asset(
+                                  'assets/icons/thunder.png',
+                                  height: 14,
+                                  color: _getThunderColor(discount),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                     ],
                   ),
                   if (product.dateTime != null)
@@ -146,5 +166,16 @@ class ProductCard extends StatelessWidget {
         child: Icon(Icons.image_outlined, size: 28, color: Colors.grey),
       ),
     );
+  }
+}
+Color _getThunderColor(int discount) {
+  if (discount >= 80) {
+    return Colors.green;
+  } else if (discount >= 50) {
+    return Colors.blue;
+  } else if (discount >= 25) {
+    return Colors.orange;
+  } else {
+    return Colors.red;
   }
 }

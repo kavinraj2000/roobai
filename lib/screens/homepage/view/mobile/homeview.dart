@@ -11,6 +11,7 @@ import 'package:roobai/comman/model/bannar_model.dart';
 import 'package:roobai/comman/model/product_model.dart';
 import 'package:roobai/comman/widgets/appbarwidget.dart';
 import 'package:roobai/comman/widgets/hour_header_widget.dart';
+import 'package:roobai/comman/widgets/loader.dart';
 import 'package:roobai/comman/widgets/navbarwidget.dart';
 import 'package:roobai/screens/homepage/bloc/homepage_bloc.dart';
 import 'package:roobai/screens/homepage/view/mobile/card.dart';
@@ -35,7 +36,7 @@ class HomeView extends StatelessWidget {
             switch (state.status) {
               case HomepageStatus.loading:
                 return const Center(
-                  child: CircularProgressIndicator(color: Colors.blue),
+                  child: LoadingPage(),
                 );
 
               case HomepageStatus.error:
@@ -62,7 +63,7 @@ class HomeView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // _buildBannerCarousel(banners, context),
+                        _buildBannerCarousel(banners, context),
                         const SizedBox(height: 16),
                         _buildCategorySection(categories),
                         const SizedBox(height: 20),
@@ -227,7 +228,7 @@ class HomeView extends StatelessWidget {
                   }
 
                   print('Navigating with ${products.length} products');
-                  print('Products type: ${products.runtimeType}');
+                  print('Products type: ${products}');
 
                   try {
                     context.goNamed(RouteName.product, extra: products);
@@ -263,9 +264,9 @@ class HomeView extends StatelessWidget {
             height: 270,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.only(left: 4, right: 4),
+              padding: const EdgeInsets.only(left: 2, right: 2),
               itemCount: products.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 12),
+              separatorBuilder: (_, __) => const SizedBox(width: 4),
               itemBuilder: (context, index) =>
                   ProductCard(product: products[index]),
             ),
@@ -319,7 +320,7 @@ class HomeView extends StatelessWidget {
                   print('Mobile products type: ${products.runtimeType}');
 
                   try {
-                    context.goNamed(RouteName.product, extra: products);
+                    context.goNamed(RouteName.mobile, );
                     Logger().d('Homepage::Mobile data navigation successful');
                   } catch (e) {
                     print('Mobile navigation error: $e');

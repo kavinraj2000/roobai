@@ -129,10 +129,12 @@ class HomepageRepository {
     }
   }
 
-  Future<List<ProductModel>> getMobilecategory() async {
+  Future<List<ProductModel>> getMobilecategory({
+    required int page,}) async {
     try {
-      final baseUrl = await api.getBaseUrl();
-      final url = baseUrl + Constansts.api.mobilecategory;
+      final baseUrl = 'https://roo.bi/api/website/v10.1';
+         final url = "$baseUrl/saledeal/$page/null/11/";
+
       log.d('getMobilecategory URL: $url');
 
       final response = await _dio.get(

@@ -18,6 +18,8 @@ class ApiDatabase {
 
   final Logger log = Logger();
 
+  // -------------------- API CALLS --------------------
+
   Future<BaseModel> getPageData() async {
     try {
       final response = await _dio.get("");
@@ -25,7 +27,10 @@ class ApiDatabase {
         final baseModel = BaseModel.fromJson(response.data);
         log.i("✅ Response Code: ${response.statusCode}");
 
-        // Store important values
+        // Clear old cache before storing new data
+        await clearStoredData();
+
+        // Store new data
         await _storeData(baseModel);
 
         return baseModel;
@@ -47,14 +52,12 @@ class ApiDatabase {
     }
   }
 
-    Future<dynamic> getRequest({
+  Future<dynamic> getRequest({
     required String url,
     Map<String, dynamic>? queryParams,
   }) async {
     try {
-      final baseUrl = await getBannerUrl();
-      final fullUrl =  url;
-
+      final fullUrl = url;
       log.d("ApiRepository::getRequest::URL: $fullUrl, Query: $queryParams");
 
       final response = await _dio.get(
@@ -68,7 +71,7 @@ class ApiDatabase {
       throw _handleError(dioError);
     }
   }
-/// Handle API response
+
   dynamic _handleResponse(Response response) {
     if (response.statusCode != null &&
         response.statusCode! >= 200 &&
@@ -96,7 +99,6 @@ class ApiDatabase {
     }
   }
 
-  /// Handle Dio errors
   Exception _handleError(DioException error) {
     log.e("ApiRepository::_handleError::Error message: ${error.message}");
     String errormessage;
@@ -127,10 +129,12 @@ class ApiDatabase {
     return Exception(errormessage);
   }
 
-  /// Store important values in SharedPreferences
+  // -------------------- CACHE MANAGEMENT --------------------
+
   Future<void> _storeData(BaseModel baseModel) async {
     final prefs = await SharedPreferences.getInstance();
 
+    // Store values
     await prefs.setString("website", baseModel.website ?? '');
     await prefs.setString("ios_version", baseModel.iosVersion ?? '');
     await prefs.setString("android_version", baseModel.androidVersion ?? '');
@@ -156,7 +160,7 @@ class ApiDatabase {
     log.i("💾 Stored BannerUrl: $bannerUrl");
   }
 
-  /// Get Base URL
+  /// Get stored base URL
   Future<String> getBaseUrl() async {
     final prefs = await SharedPreferences.getInstance();
     final url = prefs.getString("base_api_url") ?? APIS.mainurl;
@@ -164,7 +168,7 @@ class ApiDatabase {
     return url;
   }
 
-  /// Get Banner URL
+  /// Get stored banner URL
   Future<String> getBannerUrl() async {
     final prefs = await SharedPreferences.getInstance();
     final url = prefs.getString("bannerlist") ?? APIS.bannerurl;
@@ -172,10 +176,29 @@ class ApiDatabase {
     return url;
   }
 
-  /// Optional: Clear stored data
+  /// Clear all stored data
   Future<void> clearStoredData() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
     log.i("🗑️ Cleared all stored data");
+  }
+
+  /// Remove specific cached keys
+  Future<void> removeCachedKeys(List<String> keys) async {
+    final prefs = await SharedPreferences.getInstance();
+    for (var key in keys) {
+      if (prefs.containsKey(key)) {
+        await prefs.remove(key);
+        log.i("🗑️ Removed cached key: $key");
+      }
+    }
+  }
+
+  /// Reset cached data to defaults
+  Future<void> resetCachedData() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString("base_api_url", APIS.mainurl);
+    await prefs.setString("bannerlist", APIS.bannerurl);
+    log.i("🔄 Reset cached data to defaults");
   }
 }

@@ -11,9 +11,9 @@ class LoadingPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Lottie.asset(
-            'assets/animation/loading.json',
-            width: 100,
-            height: 100,
+            'assets/animation/Cart Icon Loader.json',
+            // width: 100,
+            // height: 100,
             fit: BoxFit.cover,
           ),
 

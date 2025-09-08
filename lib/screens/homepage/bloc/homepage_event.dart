@@ -31,11 +31,10 @@ class NavigateToProductEvent extends HomepageEvent {
 
 class LoadMoreJustScroll extends HomepageEvent {}
 
-// NEW EVENTS
-class SetCurrentViewProducts extends HomepageEvent {
+class Refershproducts extends HomepageEvent {
   final List<ProductModel> products;
 
-  const SetCurrentViewProducts(this.products);
+  const Refershproducts(this.products);
 
   @override
   List<Object> get props => [products];

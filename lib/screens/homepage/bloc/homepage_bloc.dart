@@ -21,9 +21,9 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
     on<LoadCategories>(_onCategoryLoaded);
     on<NavigateToProductEvent>(_onNavigateToProduct);
     on<LoadMoreJustScroll>(_onLoadMoreJustScroll);
-    on<SetCurrentViewProducts>(_onSetCurrentViewProducts);
-    on<NavigateToMobileProducts>(_onNavigateToMobileProducts);
-    on<NavigateToJustScrollProducts>(_onNavigateToJustScrollProducts);
+    on<Refershproducts>(_onRefreshProductsEvent);
+    // on<NavigateToMobileProducts>(_onNavigateToMobileProducts);
+    // on<NavigateToJustScrollProducts>(_onNavigateToJustScrollProducts);
   }
 
   Future<void> _onLoadHomepageData(
@@ -33,11 +33,11 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
     log.i('HomepageBloc::_onLoadHomepageData:event::$event');
     try {
       emit(state.copyWith(status: HomepageStatus.loading));
-      //  final banner =
-      // await homeRepository.getBanners();
-      // log.d('HomepageBloc::getJustScrollProducts::fetched $banner');
+       final banner =
+      await homeRepository.getBanners();
+      log.d('HomepageBloc::getJustScrollProducts::fetched $banner');
       final justscroll = await homeRepository.getJustScrollProducts(
-        page: state.page + 1,
+        page: 1,
       );
       log.d('HomepageBloc:justscroll:fetched $justscroll');
 
@@ -47,13 +47,14 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
       final hourdeal = await homeRepository.gethorsdeal();
       log.d('HomepageBloc::gethorsdeal::hourdeal $hourdeal');
 
-      final mobilelist = await homeRepository.getMobilecategory();
+      final mobilelist = await homeRepository.getMobilecategory(page: 1);
       log.d('HomepageBloc::getMobilecategory::mobilelist $mobilelist');
 
       emit(
         state.copyWith(
           status: HomepageStatus.loaded,
           justscroll: justscroll,
+          banner: banner,
           page: 1,
           hasReachedMax: false,
           category: category,
@@ -171,15 +172,43 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
     }
   }
 
-  void _onSetCurrentViewProducts(
-    SetCurrentViewProducts event,
+   Future<void> _onRefreshProductsEvent(
+    Refershproducts event,
     Emitter<HomepageState> emit,
-  ) {
-    emit(state.copyWith(currentViewProducts: event.products));
-    log.d(
-      'HomepageBloc::_onSetCurrentViewProducts::${event.products.length} products set',
+  ) async {
+    emit(
+      state.copyWith(
+        status: HomepageStatus.loading,
+      ),
     );
-  }
+
+    try {
+      final products = await homeRepository.getJustScrollProducts(page: 1);
+
+      log.d('_onRefreshProductsEvent::Homepagebloc:products::$products');
+
+      emit(
+        state.copyWith(
+          status: HomepageStatus.loaded,
+          justscroll: products,
+          page: 1,
+          hasReachedMax: products.isEmpty || products.length < 20,
+          // message: products.isEmpty ? "No products available." : null,
+        ),
+      );
+    } catch (e, stackTrace) {
+      Logger().e(
+        "CategoryBloc::_onRefreshProductsEvent::$e",
+        stackTrace: stackTrace,
+      );
+      emit(
+        state.copyWith(
+          status: HomepageStatus.error,
+          errorMessage: "Failed to refresh products. Please try again.",
+          justscroll: [],
+        ),
+      );
+    }
 
   void _onNavigateToMobileProducts(
     NavigateToMobileProducts event,
@@ -202,4 +231,5 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
       'HomepageBloc::_onNavigateToJustScrollProducts::${justScrollProducts.length} just scroll products set',
     );
   }
+}
 }

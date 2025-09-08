@@ -55,12 +55,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
       title: Row(
         children: [
            Image.asset(
-                      'assets/icons/logo.png',
+                      'assets/icons/New Roobai.png',
                       fit: BoxFit.contain,
                       height: 32,
                     ),
                     SizedBox(width: 8,),
-                    Text('Roobai',style: AppConstants.headerwhite,)
+                    // Text('Roobai',style: AppConstants.headerwhite,)
         ],
       ),
       actions: [
@@ -99,11 +99,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
       
         IconButton(
-          icon: const Icon(Icons.notifications, color: Colors.white),
-          onPressed: widget.onNotificationPressed,
+          icon: const Icon(Icons.settings, color: Colors.white),
+          onPressed: (){
+            context.goNamed(RouteName.setting);
+          },
         ),
 
-        // Profile avatar
         if (widget.isLoggedIn)
           GestureDetector(
             onTap: widget.onProfilePressed,
@@ -122,7 +123,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
             ),
           ),
 
-        // "Join Us" button if not logged in
         if (!widget.isLoggedIn)
           TextButton(
             onPressed: () => context.goNamed(RouteName.joinUs),

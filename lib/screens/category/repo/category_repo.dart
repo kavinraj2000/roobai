@@ -33,12 +33,12 @@ class CategoryRepository {
 
       throw Exception("Unexpected response format: ${jsonEncode(response)}");
     } on DioException catch (e, stackTrace) {
-      log.e("❌ DioException in getCategoryData: ${e.message}, "
+      log.e(" DioException in getCategoryData: ${e.message}, "
           "status: ${e.response?.statusCode}, data: ${e.response?.data}",
           stackTrace: stackTrace);
       throw Exception("Network error: ${e.response?.statusCode} - ${e.message}");
     } catch (e, stackTrace) {
-      log.e("❌ Exception in getCategoryData: $e", stackTrace: stackTrace);
+      log.e(" Exception in getCategoryData: $e", stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -49,7 +49,7 @@ class CategoryRepository {
     required int page,
   }) async {
     final url = "$_baseUrl/saledeal/$cid/${subCategory ?? 'null'}/$page/";
-    log.i("➡️ CategoryRepository:getSaleDeals::Requesting URL: $url");
+    log.i("CategoryRepository:getSaleDeals::Requesting URL: $url");
 
     try {
       final res = await api.getRequest(url: url, queryParams: APIS.headers);
@@ -61,16 +61,16 @@ class CategoryRepository {
             .map<ProductModel>((json) => ProductModel.fromJson(json))
             .toList();
       } else {
-        log.w("⚠️ CategoryRepository:getSaleDeals::Unexpected response $res");
+        log.w(" CategoryRepository:getSaleDeals::Unexpected response $res");
         return [];
       }
     } on DioException catch (e, stackTrace) {
-      log.e("❌ DioException in getSaleDeals: ${e.message}, "
+      log.e(" DioException in getSaleDeals: ${e.message}, "
           "status: ${e.response?.statusCode}, data: ${e.response?.data}",
           stackTrace: stackTrace);
       throw Exception("Network error: ${e.response?.statusCode} - ${e.message}");
     } catch (e, stackTrace) {
-      log.e("❌ Exception in getSaleDeals: $e", stackTrace: stackTrace);
+      log.e(" Exception in getSaleDeals: $e", stackTrace: stackTrace);
       throw Exception("Unexpected error: $e");
     }
   }

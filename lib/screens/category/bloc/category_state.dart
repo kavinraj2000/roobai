@@ -11,7 +11,7 @@ class CategoryState extends Equatable {
   final int perPage;
   final bool isFetching;
   final bool hasReachedMax;
-  final String? currentCid; // Track current category ID
+  final String? currentCid;
 
   const CategoryState({
     required this.status,

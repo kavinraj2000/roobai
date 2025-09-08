@@ -9,6 +9,8 @@ import 'package:roobai/screens/category/view/category.dart';
 import 'package:roobai/screens/category/view/mobile/category.dart';
 import 'package:roobai/screens/homepage/view/homepage_view.dart';
 import 'package:roobai/screens/joinus/view/mobile/joinus_mobile_view.dart';
+import 'package:roobai/screens/mobilview/view/mobil_page.dart';
+import 'package:roobai/screens/mobilview/view/mobile/mobile_view_page.dart';
 import 'package:roobai/screens/product%20view/view/mobil/products_mobile_view.dart';
 import 'package:roobai/screens/product%20view/view/products_viewpage.dart';
 
@@ -56,56 +58,15 @@ class Routes {
       //     return SearchView();
       //   },
       // ),
-    GoRoute(
-  name: RouteName.product,
-  path: '/product',
-  builder: (context, state) {
-    print('Route builder called with extra: ${state.extra}');
-    print('Extra type: ${state.extra.runtimeType}');
-    
-    List<ProductModel> products = <ProductModel>[];
-    
-    if (state.extra != null) {
-      try {
-        // Check if it's already the right type
-        if (state.extra is List<ProductModel>) {
-          products = state.extra as List<ProductModel>;
-        }
-        // Check if it's a generic List that can be cast
-        else if (state.extra is List) {
-          final List genericList = state.extra as List;
-          print('Generic list length: ${genericList.length}');
-          
-          if (genericList.isNotEmpty) {
-            print('First item type: ${genericList.first.runtimeType}');
-            
-            // Try to filter ProductModel items
-            products = genericList.whereType<ProductModel>().toList();
-            
-            // If that didn't work, try manual casting
-            if (products.isEmpty) {
-              try {
-                products = genericList.cast<ProductModel>();
-              } catch (castError) {
-                print('Cast error: $castError');
-              }
-            }
-          }
-        }
-        // Handle other types
-        else {
-          print('Unexpected extra type: ${state.extra.runtimeType}');
-        }
-      } catch (e, stackTrace) {
-        print('Error processing route extra: $e');
-        print('Stack trace: $stackTrace');
-      }
-    }
-    
-    print('Final products count: ${products.length}');
-    return ProductmobileView(products: products);
-  },
-),
+      GoRoute(
+        name: RouteName.product,
+        path: '/product',
+        builder: (context, state) {
+        
+
+          return Productviewpage();
+        },
+      ),
       GoRoute(
         name: RouteName.category,
         path: RouteName.category,
@@ -117,16 +78,14 @@ class Routes {
         },
       ),
 
-      // GoRoute(
-      //   name: RouteName.productdetail,
-      //   path: RouteName.productdetail,
-      //   builder: (BuildContext context, GoRouterState state) {
-      //     final Map<String, dynamic> extraData =
-      //         state.extra as Map<String, dynamic>;
-      //     Logger().d('route::productdetail::$extraData');
-      //     return ProductDeatil(initialvalue: extraData);
-      //   },
-      // ),
+      GoRoute(
+        name: RouteName.mobile,
+        path: RouteName.mobile,
+        builder: (BuildContext context, GoRouterState state) {
+       
+          return Mobilpage();
+        },
+      ),
       GoRoute(
         name: RouteName.setting,
         path: RouteName.setting,
