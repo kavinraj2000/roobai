@@ -33,11 +33,12 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
     log.i('HomepageBloc::_onLoadHomepageData:event::$event');
     try {
       emit(state.copyWith(status: HomepageStatus.loading));
-   final banner =
-          await homeRepository.getBanners();
-      log.d('HomepageBloc::getJustScrollProducts::fetched $banner');
-      final justscroll =
-          await homeRepository.getJustScrollProducts(page: state.page + 1);
+      //  final banner =
+      // await homeRepository.getBanners();
+      // log.d('HomepageBloc::getJustScrollProducts::fetched $banner');
+      final justscroll = await homeRepository.getJustScrollProducts(
+        page: state.page + 1,
+      );
       log.d('HomepageBloc:justscroll:fetched $justscroll');
 
       final category = await homeRepository.getcategories();
@@ -71,10 +72,7 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
     }
   }
 
-  void _onCategoryLoaded(
-    LoadCategories event,
-    Emitter<HomepageState> emit,
-  ) {
+  void _onCategoryLoaded(LoadCategories event, Emitter<HomepageState> emit) {
     try {
       final categories = event.homeModels
           .where((hm) => hm.type == 'banner' || hm.cat_slug == 'just_in')
@@ -100,10 +98,12 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
       final productUrl = event.productUrl;
 
       if (productUrl == null || productUrl.isEmpty) {
-        emit(state.copyWith(
-          status: HomepageStatus.error,
-          errorMessage: "Invalid product URL",
-        ));
+        emit(
+          state.copyWith(
+            status: HomepageStatus.error,
+            errorMessage: "Invalid product URL",
+          ),
+        );
         return;
       }
 
@@ -118,16 +118,20 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
       final launched = await launchUrl(uri, mode: LaunchMode.inAppWebView);
 
       if (!launched) {
-        emit(state.copyWith(
-          status: HomepageStatus.error,
-          errorMessage: "Could not open the URL",
-        ));
+        emit(
+          state.copyWith(
+            status: HomepageStatus.error,
+            errorMessage: "Could not open the URL",
+          ),
+        );
       }
     } catch (e) {
-      emit(state.copyWith(
-        status: HomepageStatus.error,
-        errorMessage: e.toString(),
-      ));
+      emit(
+        state.copyWith(
+          status: HomepageStatus.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
@@ -141,7 +145,9 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
 
     try {
       final nextPage = state.page + 1;
-      final products = await homeRepository.getJustScrollProducts(page: nextPage);
+      final products = await homeRepository.getJustScrollProducts(
+        page: nextPage,
+      );
 
       final allProducts = List<ProductModel>.from(state.justscroll!)
         ..addAll(products);
