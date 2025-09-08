@@ -62,7 +62,7 @@ class HomeView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildBannerCarousel(banners, context),
+                        // _buildBannerCarousel(banners, context),
                         const SizedBox(height: 16),
                         _buildCategorySection(categories),
                         const SizedBox(height: 20),

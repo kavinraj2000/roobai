@@ -3,64 +3,24 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
 import 'package:roobai/app/route_names.dart';
+import 'package:roobai/comman/constants/app_constansts.dart';
 import 'package:roobai/comman/drawer/bloc/drawe_bloc.dart';
 import 'package:roobai/comman/model/category_model.dart';
 
 class CustomDrawerWidget extends StatelessWidget {
-  const CustomDrawerWidget({Key? key}) : super(key: key);
+  const CustomDrawerWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DraweBloc, DrawerState>(
       builder: (context, state) {
         return Drawer(
-          child: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xFF8B5CF6),
-                  Color(0xFF7C3AED),
-                  Color(0xFFE5E7EB),
-                ],
-                stops: [0.0, 0.6, 1.0],
-              ),
-            ),
-            child: Column(
-              children: [
-                _buildHeader(context, state),
-                Expanded(
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFE5E7EB),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20),
-                      ),
-                    ),
-                    child: _buildContent(context, state),
-                  ),
-                ),
-              ],
-            ),
+          backgroundColor: Colors.white,
+          child: Column(
+            children: [Expanded(child: _buildContent(context, state))],
           ),
         );
       },
-    );
-  }
-
-  Widget _buildHeader(BuildContext context, DrawerState state) {
-    return Container(
-      padding: const EdgeInsets.only(top: 40, bottom: 12),
-      child: Column(
-        children: [
-          Image.asset('assets/icons/logo.png', height: 40),
-          const SizedBox(height: 8),
-        ],
-      ),
     );
   }
 
@@ -68,7 +28,7 @@ class CustomDrawerWidget extends StatelessWidget {
     if (state.status == Drawerstatus.loading) {
       return const Center(
         child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF8B5CF6)),
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.purple),
         ),
       );
     }
@@ -78,7 +38,7 @@ class CustomDrawerWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.error_outline, size: 48, color: Colors.red[400]),
+            Icon(Icons.error_outline, size: 48, color: Colors.purple),
             const SizedBox(height: 16),
             Text(
               'Error loading categories',
@@ -100,8 +60,11 @@ class CustomDrawerWidget extends StatelessWidget {
                 context.read<DraweBloc>().add(Loadincategoryevent());
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF8B5CF6),
+                backgroundColor: Colors.purple,
                 foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),
+                ),
               ),
               child: const Text('Retry'),
             ),
@@ -111,12 +74,17 @@ class CustomDrawerWidget extends StatelessWidget {
     }
 
     if (state.status == Drawerstatus.loaded) {
-      return SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      return Container(
+        color: Colors.grey[50],
+        child: ListView(
+          padding: const EdgeInsets.all(20.0),
           children: [
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
+            Text(
+              'Category',
+              style: AppConstants.headerblack.copyWith(fontSize: 20),
+            ),
+            const SizedBox(height: 10),
             _buildCategoriesSection(context, state),
           ],
         ),
@@ -130,149 +98,133 @@ class CustomDrawerWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              'Categories',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF374151),
-              ),
-            ),
-            Text(
-              '${state.category.length} items',
-              style: const TextStyle(fontSize: 12, color: Color(0xFF9CA3AF)),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
         if (state.category.isEmpty)
           _buildEmptyState()
         else
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              childAspectRatio: 0.8,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 8,
-            ),
-            itemCount: state.category.length,
-            itemBuilder: (context, index) {
-              return _buildCategoryItem(context, state.category[index]);
-            },
-          ),
+          ...state.category
+              .map((category) => _buildCategoryItem(context, category))
+              .toList(),
       ],
     );
   }
 
   Widget _buildCategoryItem(BuildContext context, CategoryModel category) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: () {
-          context.read<DraweBloc>().add(SelectCategory(category));
-          context.goNamed(RouteName.category, extra: category);
-          Logger().d('_buildCategoryItem::InkWell::$category');
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.08),
-                blurRadius: 4,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Stack(
-            children: [
-              // Category content
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(20),
+          onTap: () {
+            context.read<DraweBloc>().add(SelectCategory(category));
+            context.goNamed(RouteName.category, extra: category);
+            Logger().d('_buildCategoryItem::InkWell::$category');
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              // color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              // boxShadow: [
+              //   BoxShadow(
+              //     color: Colors.black.withOpacity(0.08),
+              //     blurRadius: 10,
+              //     offset: const Offset(0, 4),
+              //   ),
+              // ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Row(
                 children: [
                   Container(
-                    width: 40,
-                    height: 40,
+                    width: 60,
+                    height: 60,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF8B5CF6).withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(10),
+                      //   color: const Color.fromARGB(
+                      //     255,
+                      //     128,
+                      //     21,
+                      //     182,
+                      //   ).withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(15),
                     ),
-                    child:
-                        (category.categoryImage != null &&
-                            category.categoryImage!.isNotEmpty)
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child:
+                          (category.categoryImage != null &&
+                              category.categoryImage!.isNotEmpty)
+                          ? Image.network(
                               'https://roobai.com/assets/img/sale_cat_img/${category.categoryImage}',
-                              width: 40,
-                              height: 40,
+                              width: 60,
+                              height: 60,
                               fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) {
                                 return const Icon(
-                                  Icons.category,
-                                  color: Color(0xFF8B5CF6),
-                                  size: 20,
+                                  Icons.restaurant,
+                                  color: Colors.purple,
+                                  size: 30,
                                 );
                               },
+                            )
+                          : const Icon(
+                              Icons.restaurant,
+                              color: Colors.purple,
+                              size: 30,
                             ),
-                          )
-                        : const Icon(
-                            Icons.category,
-                            color: Color(0xFF8B5CF6),
-                            size: 20,
-                          ),
+                    ),
                   ),
-                  const SizedBox(height: 8),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: Text(
-                      category.category ?? 'Unknown',
-                      style: const TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF374151),
-                      ),
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                  const SizedBox(width: 16),
+
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          category.category ?? 'Unknown',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF2D3748),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+
+                        if (category.flag != null && category.flag!.isNotEmpty)
+                          Container(
+                            margin: const EdgeInsets.only(top: 8),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.purple,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              category.flag!,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+
+                  // Arrow icon
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    child: const Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.purple,
+                      size: 16,
                     ),
                   ),
                 ],
               ),
-
-                if (category.flag != null && category.flag!.isNotEmpty)
-                  Positioned(
-                    top: 0,
-                    right: 0, // 
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 2,
-                      ),
-                      decoration: const BoxDecoration(
-                        color: Colors.purple,
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(6),
-                        ),
-                      ),
-                      child: Text(
-                        category.flag!,
-                        style: const TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-            ],
+            ),
           ),
         ),
       ),
@@ -282,9 +234,20 @@ class CustomDrawerWidget extends StatelessWidget {
   Widget _buildEmptyState() {
     return Container(
       padding: const EdgeInsets.all(32),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
       child: Column(
         children: [
-          Icon(Icons.search_off, size: 48, color: Colors.grey[400]),
+          Icon(Icons.restaurant_menu, size: 48, color: Colors.grey[400]),
           const SizedBox(height: 16),
           Text(
             'No categories found',
@@ -296,7 +259,7 @@ class CustomDrawerWidget extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Try adjusting your search terms',
+            'Check back later for new items',
             style: TextStyle(fontSize: 12, color: Colors.grey[500]),
           ),
         ],

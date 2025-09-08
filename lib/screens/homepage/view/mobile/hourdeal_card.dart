@@ -22,9 +22,9 @@ class HoursdealCard extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        context
-            .read<HomepageBloc>()
-            .add(NavigateToProductEvent(product.productUrl));
+        context.read<HomepageBloc>().add(
+          NavigateToProductEvent(product.productUrl),
+        );
         Logger().d('Hoursdeal productUrl: ${product.productUrl}');
       },
       child: Container(
@@ -50,9 +50,11 @@ class HoursdealCard extends StatelessWidget {
               child: Stack(
                 children: [
                   ClipRRect(
-                    borderRadius:
-                        const BorderRadius.vertical(top: Radius.circular(12)),
-                    child: product.productImage != null &&
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(12),
+                    ),
+                    child:
+                        product.productImage != null &&
                             product.productImage!.isNotEmpty
                         ? Image.network(
                             product.productImage!,
@@ -73,7 +75,9 @@ class HoursdealCard extends StatelessWidget {
                         alignment: Alignment.topCenter,
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 2),
+                            horizontal: 8,
+                            vertical: 2,
+                          ),
                           decoration: BoxDecoration(
                             color: isExpired ? Colors.red : Colors.deepPurple,
                             borderRadius: const BorderRadius.only(

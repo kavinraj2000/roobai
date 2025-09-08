@@ -8,94 +8,123 @@ class CategoryCard extends StatelessWidget {
   final CategoryModel category;
   final VoidCallback? onTap;
 
-  const CategoryCard({
-    super.key,
-    required this.category,
-    this.onTap,
-  });
+  const CategoryCard({super.key, required this.category, this.onTap});
 
-  static const List<Color> backgroundColors = [
-    Color(0xFFE8F5E9), 
-    Color(0xFFE3F2FD), Color(0xFFFFF8E1),  Color(0xFFF3E5F5),   Color(0xFFFFEBEE), Color(0xFFE0F7FA), Color(0xFFE8F5E8), // Pale green
-    Color(0xFFFFF3E0),   Color(0xFFE0F2F1), Color(0xFFF1F8E9), Color(0xFFEDE7F6), 
-    Color(0xFFFFFDE7),
-    Color(0xFFEFEBE9), 
-    Color(0xFFE8EAF6), 
+  static const List<LinearGradient> cardGradients = [
+    LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [Color(0xFFFF6B9D), Color(0xFFFF8BA7)],
+    ),
+    LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [Color(0xFF4ECDC4), Color(0xFF44A08D)],
+    ),
+    LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [Color(0xFF667EEA), Color(0xFF764BA2)],
+    ),
+    LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [Color(0xFF8BC34A), Color(0xFF689F38)],
+    ),
+    LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [Color(0xFFFFEB3B), Color(0xFFFBC02D)],
+    ),
+    LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [Color(0xFFFF9800), Color(0xFFE65100)],
+    ),
   ];
 
   @override
   Widget build(BuildContext context) {
-    final imageUrl = 'https://roobai.com/assets/img/sale_cat_img/${category.categoryImage}';
+    final String? imageUrl =
+        (category.categoryImage != null && category.categoryImage!.isNotEmpty)
+        ? 'https://roobai.com/assets/img/sale_cat_img/${category.categoryImage}'
+        : null;
+
     Logger().d('Image URL: $imageUrl');
-    
-    final colorIndex = (category.category?.hashCode ?? 0).abs() % backgroundColors.length;
-    final backgroundColor = backgroundColors[colorIndex];
-    
-    return InkWell(
+
+    final gradientIndex =
+        (category.category?.hashCode ?? 0).abs() % cardGradients.length;
+    final cardGradient = cardGradients[gradientIndex];
+
+    return GestureDetector(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Image container with better error handling
-          Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color:backgroundColor,
-                  blurRadius: 3,
-                  offset: const Offset(0, 2),
-                ),
-              ],
+      child: Container(
+        height: 160,
+        decoration: BoxDecoration(
+          gradient: cardGradient,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
-            child: ClipOval(
-              child: CachedNetworkImage(
-                imageUrl: imageUrl,
-                // width: 60,
-                // height: 60,
-                fit: BoxFit.contain, 
-                placeholder: (context, url) => Container(
-                  color: Colors.white.withOpacity(0.7),
-                  child: const Center(
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  ),
-                ),
-                errorWidget: (context, url, error) => _placeholder(),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                category.category ?? 'Unnamed',
+                style: AppConstants.headerwhite,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
-            ),
+
+              const Spacer(),
+
+              // Fixed size image/placeholder area
+              Container(
+                width: 70,
+                height: 70,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  // color: Colors.white.withOpacity(0.1),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: imageUrl != null
+                      ? CachedNetworkImage(
+                          imageUrl: imageUrl,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => _loadingPlaceholder(),
+                          errorWidget: (context, url, error) => _placeholder(),
+                        )
+                      : _placeholder(),
+                ),
+              ),
+            ],
           ),
-          // Text with improved styling
-          Container(
-            // height: 36,
-            padding: EdgeInsets.all(8),
-            alignment: Alignment.center,
-            child: Text(
-              category.category ?? 'Unnamed',
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: AppConstants.textblack
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
 
   Widget _placeholder() {
     return Container(
-      width: double.infinity,
-      height: double.infinity,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.grey[100],
-      ),
+      color: Colors.white.withOpacity(0.9),
       child: Center(
-        child: Icon(Icons.category_outlined, size: 28, color: Colors.grey[400]),
+        child: Icon(Icons.category_outlined, size: 28, color: Colors.grey[600]),
       ),
+    );
+  }
+
+  Widget _loadingPlaceholder() {
+    return Container(
+      color: Colors.white.withOpacity(0.8),
+      child: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
     );
   }
 }
