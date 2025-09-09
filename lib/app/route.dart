@@ -3,18 +3,15 @@ import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
 import 'package:roobai/app/route_names.dart';
 import 'package:roobai/comman/model/category_model.dart';
-import 'package:roobai/comman/model/product_model.dart';
 import 'package:roobai/comman/widgets/splash_screen.dart';
 import 'package:roobai/screens/category/view/category.dart';
-import 'package:roobai/screens/category/view/mobile/category.dart';
+import 'package:roobai/screens/deal_finder/body.dart';
 import 'package:roobai/screens/homepage/view/homepage_view.dart';
 import 'package:roobai/screens/joinus/view/mobile/joinus_mobile_view.dart';
 import 'package:roobai/screens/mobilview/view/mobil_page.dart';
-import 'package:roobai/screens/mobilview/view/mobile/mobile_view_page.dart';
-import 'package:roobai/screens/product%20view/view/mobil/products_mobile_view.dart';
 import 'package:roobai/screens/product%20view/view/products_viewpage.dart';
-
 import 'package:roobai/screens/search/view/search_view.dart';
+
 import 'package:roobai/screens/setting/setting.dart';
 
 class Routes {
@@ -44,20 +41,20 @@ class Routes {
           return JoinUsScreen();
         },
       ),
-      // GoRoute(
-      //   name: RouteName.best,
-      //   path: RouteName.best,
-      //   builder: (BuildContext context, GoRouterState state) {
-      //     return BestProductpage();
-      //   },
-      // ),
-      // GoRoute(
-      //   name: RouteName.search,
-      //   path: RouteName.search,
-      //   builder: (BuildContext context, GoRouterState state) {
-      //     return SearchView();
-      //   },
-      // ),
+      GoRoute(
+        name: RouteName.dealfinder,
+        path: RouteName.dealfinder,
+        builder: (BuildContext context, GoRouterState state) {
+          return DealFinder();
+        },
+      ),
+      GoRoute(
+        name: RouteName.search,
+        path: RouteName.search,
+        builder: (BuildContext context, GoRouterState state) {
+          return SearchView();
+        },
+      ),
       GoRoute(
         name: RouteName.product,
         path: '/product',

@@ -121,7 +121,7 @@ class HomeView extends StatelessWidget {
         itemBuilder: (context, index, realIndex) {
           final banner = banners[index];
           final imageUrl = banner.image?.isNotEmpty == true
-              ? 'https://roobai.com/assets/images/banner/collage/new/${banner.image}'
+              ? '${banner.image}'
               : '';
           final productUrl = banner.url ?? "";
 

@@ -1,5 +1,7 @@
 mixin RouteName {
   static const splashScreen='/';
+
+  //--screens---//
   static const mainScreen='/mainScreen';
   static const best='/best';
   static const category='/category';
@@ -11,4 +13,5 @@ mixin RouteName {
 //---view page----//
   static const product='/product';
   static const mobile='/mobile';
+  static const dealfinder='/dealfinder';
 }

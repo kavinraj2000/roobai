@@ -224,11 +224,11 @@ Widget _buildMobileCard(BuildContext context, ProductModel mobile) {
                       ),
                   ],
                 ),
-                if (mobile.dateTime != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4),
-                    child: Datetimewidget(dateTime: mobile.dateTime),
-                  ),
+                // if (mobile.dateTime != null)
+                  // Padding(
+                  //   padding: const EdgeInsets.only(top: 4),
+                  //   child: Datetimewidget(dateTime: mobile.dateTime),
+                  // ),
               ],
             ),
           ),

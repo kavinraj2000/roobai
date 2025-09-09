@@ -1,90 +1,70 @@
-// import 'dart:convert';
 
-// import 'package:dio/dio.dart';
-// import 'package:flutter/widgets.dart';
-// import 'package:logger/web.dart';
-// import 'package:roobai/comman/constants/api_contstansts.dart';
-// import 'package:roobai/comman/constants/constansts.dart';
-// import 'package:roobai/comman/model/home_model.dart';
-// import 'package:roobai/comman/repo/app_api_repository.dart';
-// import 'package:roobai/comman/repo/storage_repository.dart';
-// import 'package:roobai/screens/product/model/products.dart';
+import 'package:dio/dio.dart';
+import 'package:logger/web.dart';
+import 'package:roobai/comman/constants/constansts.dart';
+import 'package:roobai/comman/model/product_model.dart';
+import 'package:roobai/comman/repo/app_api_repository.dart';
+import 'package:roobai/comman/repo/storage_repository.dart';
 
-// class Searchrepository {
-//   final api = ApiDatabase();
-//   final log = Logger();
-//   final Dio dio = Dio();
+class Searchrepository {
+  final api = ApiDatabase();
+  final log = Logger();
+  final Dio _dio = Dio();
 
-//   Future<List<Product>> getProductdata() async {
-//     try {
-//       final baseUrl = await api.getBaseUrl();
-//       final url = "$baseUrl/deal/1/1/";
-//       final response = await dio.get(
-//         url,
-//         options: Options(headers: APIS.headers),
-//       );
+Future<List<ProductModel>> getJustScrollProducts({required int page}) async {
+    try {
+      final baseUrl = await api.getBaseUrl();
+      final url = '${baseUrl + Constansts.api.jusinscroll}$page/';
+      log.d('getJustScrollProducts URL: $url');
 
-//       if (response.statusCode == 200) {
-//         final data = response.data;
-//         log.d('response::${jsonEncode(data)}');
-//         log.d('baseUrl::${baseUrl.characters}/deal');
+      final response = await _dio.get(
+        url,
+        options: Options(headers: APIS.headers),
+      );
 
-//         if (data is List) {
-//           return data.map<Product>((json) => Product.fromMap(json)).toList();
-//         }
+      log.d('getJustScrollProducts statusCode: ${response.statusCode}');
+      log.d('getJustScrollProducts data: ${response.data}');
 
-//         if (data is Map && data['data'] is List) {
-//           final List dataList = data['data'];
-//           return dataList
-//               .map<Product>((json) => Product.fromMap(json))
-//               .toList();
-//         }
+      return _parseListResponse<ProductModel>(
+        response,
+        (json) => ProductModel.fromJson(json),
+      );
+    } on DioException catch (e) {
+      log.e("DioError getJustScrollProducts: ${e.message}");
+      if (e.response?.statusCode == 404) {
+        throw Exception("API endpoint not found: ${e.requestOptions.uri}");
+      }
+      throw Exception("Network error while fetching products: ${e.message}");
+    } catch (e) {
+      log.e("Error getJustScrollProducts: $e");
+      throw Exception("Unexpected error while fetching products: $e");
+    }
+  }
+    List<T> _parseListResponse<T>(
+    Response response,
+    T Function(Map<String, dynamic>) fromJson,
+  ) {
+    if (response.statusCode == 200) {
+      try {
+        if (response.data is List) {
+          return (response.data as List)
+              .map((e) => fromJson(e as Map<String, dynamic>))
+              .toList();
+        } else if (response.data is Map && response.data["data"] is List) {
+          return (response.data["data"] as List)
+              .map((e) => fromJson(e as Map<String, dynamic>))
+              .toList();
+        } else {
+          log.w('Unexpected response format: ${response.data}');
+          throw Exception("Unexpected response format: ${response.data}");
+        }
+      } catch (e) {
+        log.e('Parsing error: $e');
+        throw Exception("Failed to parse response: $e");
+      }
+    } else {
+      throw Exception("Failed to load data: ${response.statusCode}");
+    }
+  }
+}
 
-//         throw Exception("Unexpected response format: ${jsonEncode(data)}");
-//       } else {
-//         throw Exception(
-//           'Failed to load deal data. Status code: ${response.statusCode}',
-//         );
-//       }
-//     } catch (e, stackTrace) {
-//       log.e('Exception in getDealData: $e', stackTrace: stackTrace);
-//       rethrow;
-//     }
-//   }
-
-//   Future<List<HomeModel>> gethomepagedata() async {
-//     try {
-//       final baseUrl = await api.getBaseUrl();
-//       final url = "${baseUrl + Constansts.api.salecategorylist}/";
-//       log.d('HomepageRepository:gethomepagedata:url:$url');
-//       final response = await dio.get(
-//         url,
-//         options: Options(headers: APIS.headers),
-//       );
-
-//       log.d(
-//         "HomepageRepository::gethomepagedata::statusCode::${response.statusCode}",
-//       );
-//       log.d("HomepageRepository::gethomepagedata::data::${response.data}");
-
-//       if (response.statusCode == 200) {
-//         if (response.data is List) {
-//           return (response.data as List)
-//               .map((json) => HomeModel.fromJson(json as Map<String, dynamic>))
-//               .toList();
-//         } else if (response.data is Map && response.data["data"] is List) {
-//           return (response.data["data"] as List)
-//               .map((json) => HomeModel.fromJson(json as Map<String, dynamic>))
-//               .toList();
-//         } else {
-//           throw Exception("Unexpected response format: ${response.data}");
-//         }
-//       } else {
-//         throw Exception("Failed to load products: ${response.statusCode}");
-//       }
-//     } catch (e) {
-//       log.e("HomepageRepository::gethomepagedata::error::$e");
-//       throw Exception("Error fetching products: $e");
-//     }
-//   }
-// }

@@ -7,6 +7,7 @@ import 'package:roobai/comman/constants/color_constansts.dart';
 import 'package:roobai/comman/model/category_model.dart';
 import 'package:roobai/comman/model/product_model.dart';
 import 'package:roobai/comman/widgets/appbarwidget.dart';
+import 'package:roobai/comman/widgets/bottom_sheet.dart';
 import 'package:roobai/comman/widgets/datatime_widget.dart';
 import 'package:roobai/comman/widgets/loader.dart';
 import 'package:roobai/comman/widgets/navbarwidget.dart';
@@ -124,9 +125,11 @@ Widget _productCard(BuildContext context, ProductModel product) {
 
   return InkWell(
     onTap: () {
-      context.read<HomepageBloc>().add(
-        NavigateToProductEvent(product.productUrl),
-      );
+      // context.read<HomepageBloc>().add(
+      //   NavigateToProductEvent(product.productUrl),
+      // );
+                ProductDetailsBottomSheet.show(context, product);
+
     },
     child: Container(
       width: 180,

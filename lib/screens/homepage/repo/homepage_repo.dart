@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
+import 'package:roobai/comman/common.dart';
 import 'package:roobai/comman/constants/constansts.dart';
 import 'package:roobai/comman/model/bannar_model.dart';
 import 'package:roobai/comman/model/category_model.dart';
@@ -12,32 +15,46 @@ class HomepageRepository {
   final Dio _dio = Dio();
   final Logger log = Logger();
 
-  Future<List<BannerModel>> getBanners() async {
-    try {
-      final baseUrl = await api.getBannerUrl();
-      final url = baseUrl + Constansts.api.bannerlist;
-      log.d('getBanners URL: $url');
+Future<List<BannerModel>> getBanners() async {
+  try {
+    final baseUrl = await api.getBaseUrl();
+    final url = baseUrl + Constansts.api.bannerlist;
+    log.d('getBanners URL: $url');
 
-      final response = await _dio.get(
-        url,
-        options: Options(headers: APIS.headers),
-      );
+    final response = await _dio.get(
+      url,
+      options: Options(headers: APIS.headers),
+    );
 
-      log.d('getBanners statusCode: ${response.statusCode}');
-      log.d('getBanners data: ${response.data}');
+    log.d('getBanners statusCode: ${response.statusCode}');
+    log.d('getBanners data: ${response.data}');
 
-      return _parseListResponse<BannerModel>(
-        response,
-        (json) => BannerModel.fromJson(json),
-      );
-    } on DioException catch (e) {
-      log.e("DioError getBanners: ${e.message}");
-      throw Exception("Network error while fetching banners: ${e.message}");
-    } catch (e) {
-      log.e("Error getBanners: $e");
-      throw Exception("Unexpected error while fetching banners: $e");
-    }
+    final banners = _parseListResponse<BannerModel>(
+      response,
+      (json) => BannerModel.fromJson(json),
+    );
+
+    final filteredBanners = banners.where((banner) {
+      try {
+        final siteMap = jsonDecode(banner.site ?? '{}');
+        final List<dynamic> siteIds = siteMap['id'] ?? [];
+        return siteIds.contains("1");
+      } catch (e) {
+        log.e("Error parsing site for banner ${banner.bannerId}: $e");
+        return false;
+      }
+    }).toList();
+
+    log.d("Filtered banners count: ${filteredBanners.length}");
+    return filteredBanners;
+  } on DioException catch (e) {
+    log.e("DioError getBanners: ${e.message}");
+    throw Exception("Network error while fetching banners: ${e.message}");
+  } catch (e) {
+    log.e("Error getBanners: $e");
+    throw Exception("Unexpected error while fetching banners: $e");
   }
+}
 
   Future<List<ProductModel>> getJustScrollProducts({required int page}) async {
     try {
@@ -132,8 +149,11 @@ class HomepageRepository {
   Future<List<ProductModel>> getMobilecategory({
     required int page,}) async {
     try {
-      final baseUrl = 'https://roo.bi/api/website/v10.1';
-         final url = "$baseUrl/saledeal/$page/null/11/";
+      final baseUrl='https://roo.bi/api/website/v10.1/saledeal/11/null/';
+          final url = "$baseUrl/$page/";
+
+      // final baseUrl =await api.getBaseUrl();
+// final url = "${baseUrl+Constansts.api.mobilecategory}/$page/11/";
 
       log.d('getMobilecategory URL: $url');
 

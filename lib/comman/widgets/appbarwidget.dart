@@ -67,7 +67,9 @@ class _CustomAppBarState extends State<CustomAppBar> {
         // Search icon
         IconButton(
           icon: const Icon(Icons.search, color: Colors.white),
-          onPressed: _toggleSearch,
+          onPressed: (){
+            context.goNamed(RouteName.search);
+          },
         ),
 
         // Optional search field overlay
